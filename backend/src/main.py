@@ -1,20 +1,15 @@
 from typing import Any
 
-import markdown
 
-from pathlib import Path
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.domain.file_repository import FileRepository
 
-from src.exceptions import EntityNotFoundError
+from .presentation.post import post_router
 
-from src.infra.file.disk import DiskFileRepository
-from src.infra.post.inmemory import InMemoryPostRepository
+from .exceptions import EntityNotFoundError
 
-from src.domain.post_repository import PostRepository
 
 app = FastAPI()
 
@@ -32,22 +27,10 @@ def ping():
     return {"message": "CMS service is alive!"}
 
 
-repo: PostRepository = InMemoryPostRepository()
-file_repo: FileRepository = DiskFileRepository()
+app.include_router(post_router)
 
 
-@app.get("/{post_slug}", response_class=HTMLResponse)
-def get_post(post_slug: str):
-    post = repo.get_from_slug(post_slug)
-
-    content = file_repo.get_from_path(Path(post.file))
-    content = content.decode("utf-8")
-
-    html = markdown.markdown(content)
-
-    return html
-
-
+# --- ERROR HANDLERS ---
 def not_found_error_handler(_: Any, exc: Exception):
     return HTMLResponse(
         content="<h1>404 Not Found</h1>",

@@ -3,6 +3,7 @@ import "./post.css";
 import useBlogPost from "../hooks/useBlogPost";
 import usePostMetadata from "../hooks/usePostMetadata";
 import { useEffect } from "react";
+import getPostImage from "../lib/fetchPostImage";
 
 interface BlogPostContentProps {
   slug: string;
@@ -32,6 +33,8 @@ export default function BlogPostContent({ slug }: BlogPostContentProps) {
       {error && (
         <div className="error" dangerouslySetInnerHTML={{ __html: error }} />
       )}
+
+      <img className="image" src={getPostImage(slug)} />
 
       {metadata && (
         <TitleArea

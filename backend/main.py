@@ -25,6 +25,9 @@ def ping():
 def get_post(post_slug: str):
     file_path = Path(__file__).parent / "data" / f"{post_slug}.md"
 
+    if not file_path.exists():
+        return HTMLResponse(content="<h1>404 Not Found</h1>", status_code=404)
+
     with open(file_path, "r") as file:
         content = file.read()
 

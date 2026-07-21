@@ -4,7 +4,6 @@ from typing import Any
 
 from fastapi import FastAPI, APIRouter
 from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
-from fastapi.middleware.cors import CORSMiddleware
 
 from .infra.db.migrate import migrate_sqlite
 
@@ -15,14 +14,6 @@ from .exceptions import EntityNotFoundError
 migrate_sqlite()
 
 app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 api_router = APIRouter(prefix="/api")
 api_router.include_router(post_router)

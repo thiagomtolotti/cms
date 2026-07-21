@@ -7,8 +7,13 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 
+from src.domain.file_repository import FileRepository
+
 from src.exceptions import EntityNotFoundError
+
+from src.infra.file.disk import DiskFileRepository
 from src.infra.post.inmemory import InMemoryPostRepository
+
 from src.domain.post_repository import PostRepository
 
 app = FastAPI()
@@ -27,27 +32,23 @@ def ping():
     return {"message": "CMS service is alive!"}
 
 
-ROOT_PATH = Path(__file__).parent.parent
-DATA_PATH = ROOT_PATH / "data"
-
 repo: PostRepository = InMemoryPostRepository()
+file_repo: FileRepository = DiskFileRepository()
 
 
 @app.get("/{post_slug}", response_class=HTMLResponse)
 def get_post(post_slug: str):
     post = repo.get_from_slug(post_slug)
 
-    file_path = DATA_PATH / post.file
-
-    with open(file_path, "r") as file:
-        content = file.read()
+    content = file_repo.get_from_path(Path(post.file))
+    content = content.decode("utf-8")
 
     html = markdown.markdown(content)
 
     return html
 
 
-def entity_not_found_error_handler(_: Any, exc: Exception):
+def not_found_error_handler(_: Any, exc: Exception):
     return HTMLResponse(
         content="<h1>404 Not Found</h1>",
         status_code=404,
@@ -56,5 +57,9 @@ def entity_not_found_error_handler(_: Any, exc: Exception):
 
 app.add_exception_handler(
     EntityNotFoundError,
-    entity_not_found_error_handler,
+    not_found_error_handler,
+)
+app.add_exception_handler(
+    FileNotFoundError,
+    not_found_error_handler,
 )

@@ -1,4 +1,4 @@
-import BlogPostContent from "./contexts/blog-post/components/content";
+import BlogPostContainer from "./contexts/blog-post/components/content";
 
 function App() {
   return <BlogPage />;
@@ -11,7 +11,7 @@ function BlogPage() {
     return <h1>No slug provided</h1>;
   }
 
-  return <BlogPostContent slug={slug} />;
+  return <BlogPostContainer slug={slug} />;
 }
 
 export default App;

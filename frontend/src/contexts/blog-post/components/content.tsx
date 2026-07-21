@@ -9,23 +9,20 @@ interface BlogPostContentProps {
 export default function BlogPostContent({ slug }: BlogPostContentProps) {
   const { content, isPending, error } = useBlogPost(slug);
 
-  if (isPending) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return (
-      <section
-        className="blog-post-error"
-        dangerouslySetInnerHTML={{ __html: error }}
-      />
-    );
-  }
-
   return (
-    <section
-      className="blog-post"
-      dangerouslySetInnerHTML={{ __html: content || "" }}
-    />
+    <section className="blog-post">
+      {isPending && <p>Loading...</p>}
+
+      {error && (
+        <div className="error" dangerouslySetInnerHTML={{ __html: error }} />
+      )}
+
+      {content && (
+        <div
+          className="content"
+          dangerouslySetInnerHTML={{ __html: content }}
+        />
+      )}
+    </section>
   );
 }

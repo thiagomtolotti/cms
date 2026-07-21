@@ -1,17 +1,34 @@
+import useCreateBlogPost from "../hooks/useCreateBlogPost";
+
 export default function CreatePostForm() {
+  const { create } = useCreateBlogPost();
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+
+    create(formData);
+  }
+
   return (
-    <form className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <input
         type="text"
         placeholder="Título do post"
         className="p-4 w-full text-2xl"
+        name="title"
         required
       />
 
       <div className="flex gap-6">
-        <input type="text" placeholder="slug" required />
-        <input type="text" placeholder="Autor" required />
-        <input type="date" placeholder="Data de publicação" required />
+        <input type="text" placeholder="slug" name="slug" required />
+        <input type="text" placeholder="Autor" name="author" required />
+        <input
+          type="date"
+          placeholder="Data de publicação"
+          name="date"
+          required
+        />
       </div>
 
       <label
@@ -24,6 +41,8 @@ export default function CreatePostForm() {
         type="file"
         placeholder="Imagem de capa"
         id="cover-image"
+        name="coverImage"
+        accept="image/*"
         required
       />
 
@@ -37,6 +56,8 @@ export default function CreatePostForm() {
         type="file"
         placeholder="Markdown do post"
         id="markdown"
+        name="markdown"
+        accept=".md"
         required
       />
 

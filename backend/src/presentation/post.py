@@ -2,14 +2,18 @@ import markdown
 from pathlib import Path
 
 from fastapi import APIRouter
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 
+from src.presentation.types import PostMetadataResponseDTO
 from src.dependencies import repo, file_repo
 
 post_router = APIRouter(prefix="/posts")
 
 
-@post_router.get("/{post_slug}", response_class=HTMLResponse)
+@post_router.get(
+    "/{post_slug}",
+    response_class=HTMLResponse,
+)
 def get_post(post_slug: str):
     post = repo.get_from_slug(post_slug)
 
@@ -19,3 +23,13 @@ def get_post(post_slug: str):
     html = markdown.markdown(content)
 
     return html
+
+
+@post_router.get(
+    "/{post_slug}/metadata",
+    response_class=JSONResponse,
+)
+def get_post_metadata(post_slug: str):
+    post = repo.get_from_slug(post_slug)
+
+    return PostMetadataResponseDTO.from_domain(post)

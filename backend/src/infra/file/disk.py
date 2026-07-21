@@ -13,3 +13,11 @@ class DiskFileRepository(FileRepository):
 
         with open(file_path, "rb") as file:
             return file.read()
+
+    def get_complete_path(self, path: Path) -> Path:
+        file_path = DATA_PATH / path
+
+        if not file_path.exists():
+            raise FileNotFoundError(f"File not found: {path}")
+
+        return file_path

@@ -27,3 +27,6 @@ class InMemoryPostRepository(PostRepository):
                 return post
 
         raise EntityNotFoundError("Post not found")
+
+    def create(self, post: Post) -> None:
+        self.posts.append(post)

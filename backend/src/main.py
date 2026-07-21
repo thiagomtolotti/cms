@@ -21,9 +21,13 @@ def ping():
     return {"message": "CMS service is alive!"}
 
 
+ROOT_PATH = Path(__file__).parent.parent
+DATA_PATH = ROOT_PATH / "data"
+
+
 @app.get("/{post_slug}", response_class=HTMLResponse)
 def get_post(post_slug: str):
-    file_path = Path(__file__).parent / "data" / f"{post_slug}.md"
+    file_path = DATA_PATH / f"{post_slug}.md"
 
     if not file_path.exists():
         return HTMLResponse(content="<h1>404 Not Found</h1>", status_code=404)

@@ -5,11 +5,13 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 
+from .infra.db.migrate import migrate_sqlite
 
 from .presentation.post import post_router
 
 from .exceptions import EntityNotFoundError
 
+migrate_sqlite()
 
 app = FastAPI()
 

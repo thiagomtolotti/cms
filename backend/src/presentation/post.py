@@ -57,6 +57,7 @@ def get_post_image(post_slug: str):
     )
 
 
+@post_router.post("")
 @post_router.post("/")
 def create_post(
     data: Annotated[str, Form()],

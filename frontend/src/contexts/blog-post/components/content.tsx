@@ -28,7 +28,7 @@ export default function BlogPostContainer({ slug }: BlogPostContainerProps) {
   }, [metadata?.title]);
 
   return (
-    <section className="flex flex-col w-full max-w-5xl mx-auto my-16">
+    <section className="flex flex-col w-full mx-auto mb-16">
       {(isPending || isMetadataPending) && <p>Loading...</p>}
 
       {error && (

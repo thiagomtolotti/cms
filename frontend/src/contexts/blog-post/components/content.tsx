@@ -2,6 +2,7 @@ import "./post.css";
 
 import useBlogPost from "../hooks/useBlogPost";
 import usePostMetadata from "../hooks/usePostMetadata";
+import { useEffect } from "react";
 
 interface BlogPostContentProps {
   slug: string;
@@ -10,6 +11,19 @@ interface BlogPostContentProps {
 export default function BlogPostContent({ slug }: BlogPostContentProps) {
   const { content, isPending, error } = useBlogPost(slug);
   const { metadata } = usePostMetadata(slug);
+
+  useEffect(() => {
+    const title = window.document.querySelector("title");
+    const originalTitle = title?.textContent || "Blog Post";
+
+    if (!title) return;
+
+    title.textContent = metadata?.title || "Blog Post";
+
+    return () => {
+      title.textContent = originalTitle;
+    };
+  }, [metadata?.title]);
 
   return (
     <section className="blog-post">

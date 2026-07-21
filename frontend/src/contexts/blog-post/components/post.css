@@ -1,0 +1,13 @@
+.blog-post {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: left;
+  max-width: 800px;
+  margin: 4rem auto;
+}
+
+.blog-post h1 {
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+}

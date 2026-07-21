@@ -9,3 +9,10 @@ dependencies = [
     "markdown>=3.10.2",
     "python-multipart>=0.0.32",
 ]
+
+[project.scripts]
+start = "src.main:start"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]

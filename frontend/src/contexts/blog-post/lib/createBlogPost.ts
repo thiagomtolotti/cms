@@ -20,7 +20,7 @@ export default async function createBlogPost(data: CreateBlogPostDTO) {
   formData.append("image", data.coverImage);
   formData.append("markdown", data.markdown);
 
-  return await fetch("http://localhost:8000/posts", {
+  return await fetch("/api/posts", {
     method: "POST",
     body: formData,
   });

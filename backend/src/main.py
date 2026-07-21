@@ -13,7 +13,7 @@ from .exceptions import EntityNotFoundError
 
 migrate_sqlite()
 
-app = FastAPI()
+app = FastAPI(redirect_slashes=False)
 
 api_router = APIRouter(prefix="/api")
 api_router.include_router(post_router)

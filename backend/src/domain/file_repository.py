@@ -8,3 +8,6 @@ class FileRepository(ABC):
 
     @abstractmethod
     def get_complete_path(self, path: Path) -> Path: ...
+
+    @abstractmethod
+    def save(self, path: Path, content: bytes) -> None: ...

@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Self
 
 from pydantic import BaseModel
@@ -17,3 +18,10 @@ class PostMetadataResponseDTO(BaseModel):
             author=post.author,
             date=post.date.isoformat(),
         )
+
+class CreatePostRequestDTO(BaseModel):
+    title: str
+    author: str
+    date: datetime
+    slug: str
+    

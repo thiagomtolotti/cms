@@ -21,3 +21,9 @@ class DiskFileRepository(FileRepository):
             raise FileNotFoundError(f"File not found: {path}")
 
         return file_path
+
+    def save(self, path: Path, content: bytes) -> None:
+        file_path = DATA_PATH / path
+
+        with open(file_path, "wb") as file:
+            file.write(content)

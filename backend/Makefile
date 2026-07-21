@@ -1,4 +1,4 @@
 .PHONY: dev
 
 dev:
-	uv run main.py
+	uv run fastapi dev --reload --port 8000

@@ -24,3 +24,9 @@
   display: flex;
   gap: 1rem;
 }
+
+.blog-post .image {
+  aspect-ratio: 43 / 9;
+  object-fit: cover;
+  margin-bottom: 4rem;
+}

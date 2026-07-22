@@ -5,10 +5,12 @@ from typing import Any
 from fastapi import FastAPI, APIRouter
 from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 
+
 from .infra.db.migrate import migrate_sqlite
 
 from .presentation.post import post_router
 
+from .constants import DATA_PATH
 from .exceptions import EntityNotFoundError
 
 migrate_sqlite()
@@ -27,26 +29,32 @@ def ping():
 app.include_router(api_router)
 
 
+@app.get("/{catchall:path}")
+def serve_spa(catchall: str):
+    if catchall.startswith("api/"):
+        return JSONResponse({"detail": "Not Found"}, status_code=404)
+
+    FRONTEND_DIR = DATA_PATH / "frontend"
+
+    if not os.path.exists(FRONTEND_DIR):
+        return JSONResponse({"detail": "Not Found"}, status_code=404)
+
+    # Check if the requested file exists natively in the frontend folder (e.g., favicon.ico)
+    file_path = os.path.join(FRONTEND_DIR, catchall)
+
+    if os.path.exists(file_path) and os.path.isfile(file_path):
+        return FileResponse(file_path)
+
+    # Otherwise, return index.html so TanStack Router can handle the page route on the client side
+    return FileResponse("data/frontend/index.html")
+
+
 # --- ERROR HANDLERS ---
 def not_found_error_handler(_: Any, exc: Exception):
     return HTMLResponse(
         content="<h1>404 Not Found</h1>",
         status_code=404,
     )
-
-
-@app.get("/{catchall:path}")
-def serve_spa(catchall: str):
-    if catchall.startswith("api/"):
-        return JSONResponse({"detail": "Not Found"}, status_code=404)
-
-    # Check if the requested file exists natively in the frontend folder (e.g., favicon.ico)
-    file_path = os.path.join("data/frontend", catchall)
-    if os.path.exists(file_path) and os.path.isfile(file_path):
-        return FileResponse(file_path)
-
-    # Otherwise, return index.html so TanStack Router can handle the page route on the client side
-    return FileResponse("data/frontend/index.html")
 
 
 app.add_exception_handler(

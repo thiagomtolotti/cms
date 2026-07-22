@@ -1,4 +1,5 @@
 from typing import Annotated
+from uuid import uuid4
 
 import markdown
 from pathlib import Path
@@ -87,13 +88,16 @@ def create_post(
             content={"message": "A post with that slug already exists."},
         )
 
-    image_path = Path(image.filename)
-    markdown_path = Path(markdown.filename)
+    id = uuid4()
+
+    image_path = Path(str(id), image.filename)
+    markdown_path = Path(str(id), markdown.filename)
 
     file_repo.save(image_path, image.file.read())
     file_repo.save(markdown_path, markdown.file.read())
 
     post = Post(
+        id=id,
         author=dto.author,
         title=dto.title,
         slug=dto.slug,

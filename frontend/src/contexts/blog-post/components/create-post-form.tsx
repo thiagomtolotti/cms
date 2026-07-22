@@ -12,26 +12,7 @@ export default function CreatePostForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <input
-        type="text"
-        placeholder="Título do post"
-        className="p-4 w-full text-2xl"
-        name="title"
-        required
-      />
-
-      <div className="flex gap-6">
-        <input type="text" placeholder="slug" name="slug" required />
-        <input type="text" placeholder="Autor" name="author" required />
-        <input
-          type="date"
-          placeholder="Data de publicação"
-          name="date"
-          required
-        />
-      </div>
-
+    <form onSubmit={handleSubmit} className="flex flex-col gap-10">
       <label
         htmlFor="cover-image"
         className="cursor-pointer text-lg font-semibold"
@@ -46,6 +27,28 @@ export default function CreatePostForm() {
         accept="image/*"
         required
       />
+
+      <div className="flex flex-col gap-2">
+        <input
+          type="text"
+          placeholder="Título do post"
+          className="p-4 w-full text-3xl border-none outline-none"
+          name="title"
+          required
+        />
+
+        <div className="flex gap-6">
+          <input
+            type="date"
+            placeholder="Data de publicação"
+            name="date"
+            required
+          />
+          <input type="text" placeholder="Autor" name="author" required />
+
+          <input type="text" placeholder="slug" name="slug" required />
+        </div>
+      </div>
 
       <MarkdownEditor />
 

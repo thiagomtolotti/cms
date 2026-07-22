@@ -30,3 +30,10 @@ class InMemoryPostRepository(PostRepository):
 
     def create(self, post: Post) -> None:
         self.posts.append(post)
+
+    def exists(self, slug: str) -> bool:
+        for post in self.posts:
+            if post.slug == slug:
+                return True
+
+        return False

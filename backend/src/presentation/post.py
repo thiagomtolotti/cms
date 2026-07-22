@@ -81,6 +81,12 @@ def create_post(
             content={"message": "Invalid markdown format. Only .md files are allowed."},
         )
 
+    if repo.exists(dto.slug):
+        return JSONResponse(
+            status_code=400,
+            content={"message": "A post with that slug already exists."},
+        )
+
     image_path = Path(image.filename)
     markdown_path = Path(markdown.filename)
 

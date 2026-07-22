@@ -150,6 +150,15 @@ export interface components {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
         };
+        /** PostMetadataResponseDTO */
+        PostMetadataResponseDTO: {
+            /** Title */
+            title: string;
+            /** Author */
+            author: string;
+            /** Date */
+            date: string;
+        };
         /** ValidationError */
         ValidationError: {
             /** Location */
@@ -220,7 +229,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["PostMetadataResponseDTO"];
                 };
             };
             /** @description Validation Error */

@@ -1,12 +1,8 @@
-export interface PostMetadata {
-  title: string;
-  author: string;
-  date: string;
-}
+import type { components } from "../../../types/api";
 
 export default async function fetchMetadata(
   slug: string,
-): Promise<PostMetadata> {
+): Promise<components["schemas"]["PostMetadataResponseDTO"]> {
   const response = await fetch(`/api/posts/${slug}/metadata`);
 
   return await response.json();

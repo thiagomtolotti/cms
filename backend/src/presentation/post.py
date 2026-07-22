@@ -35,6 +35,7 @@ def get_post(post_slug: str):
 @post_router.get(
     "/{post_slug}/metadata",
     response_class=JSONResponse,
+    response_model=PostMetadataResponseDTO,
 )
 def get_post_metadata(post_slug: str):
     post = repo.get_from_slug(post_slug)

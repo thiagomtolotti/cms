@@ -64,7 +64,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/PostMetadataResponseDTO"
+                }
               }
             }
           },
@@ -303,6 +305,29 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "PostMetadataResponseDTO": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "author": {
+            "type": "string",
+            "title": "Author"
+          },
+          "date": {
+            "type": "string",
+            "title": "Date"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "author",
+          "date"
+        ],
+        "title": "PostMetadataResponseDTO"
       },
       "ValidationError": {
         "properties": {

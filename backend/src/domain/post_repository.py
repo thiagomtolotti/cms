@@ -9,3 +9,6 @@ class PostRepository(ABC):
 
     @abstractmethod
     def create(self, post: Post) -> None: ...
+
+    @abstractmethod
+    def exists(self, slug: str) -> bool: ...

@@ -62,3 +62,14 @@ class SQLitePostRepository(PostRepository):
                 ),
             )
             conn.commit()
+
+    def exists(self, slug: str) -> bool:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "SELECT 1 FROM posts WHERE slug = ? LIMIT 1",
+                (slug,),
+            )
+            row = cursor.fetchone()
+
+            return row is not None

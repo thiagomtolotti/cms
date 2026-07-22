@@ -34,11 +34,12 @@ const MarkdownEditor = forwardRef<MarkdownEditorHandle>((_, ref) => {
   }));
 
   return (
-    <div className="flex flex-col gap-4 border border-gray-300 min-h-100">
+    <div className="flex flex-col gap-4 border border-gray-300">
       <MDXEditor
         markdown={""}
         ref={editorRef}
         placeholder="Escreva seu post aqui..."
+        contentEditableClassName="min-h-100"
         plugins={[
           headingsPlugin(),
           linkDialogPlugin(),

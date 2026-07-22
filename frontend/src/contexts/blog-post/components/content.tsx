@@ -65,7 +65,12 @@ function BlogPostContent({ slug, content, metadata }: BlogPostContentProps) {
           />
         )}
 
-        {content && <div dangerouslySetInnerHTML={{ __html: content }} />}
+        {content && (
+          <div
+            className="flex flex-col gap-4"
+            dangerouslySetInnerHTML={{ __html: content }}
+          />
+        )}
       </div>
     </section>
   );

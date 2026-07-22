@@ -15,18 +15,18 @@ export default function BlogPostContainer({ slug }: BlogPostContainerProps) {
   const { data: metadata, isPending: isMetadataPending } =
     usePostMetadata(slug);
 
-  useEffect(() => {
-    const title = window.document.querySelector("title");
-    const originalTitle = title?.textContent || "Blog Post";
+  //   useEffect(() => {
+  //     const title = window.document.querySelector("title");
+  //     const originalTitle = title?.textContent || "Blog Post";
 
-    if (!title) return;
+  //     if (!title) return;
 
-    title.textContent = metadata?.title || "Blog Post";
+  //     title.textContent = metadata?.title || "Blog Post";
 
-    return () => {
-      title.textContent = originalTitle;
-    };
-  }, [metadata?.title]);
+  //     return () => {
+  //       title.textContent = originalTitle;
+  //     };
+  //   }, [metadata?.title]);
 
   return (
     <section className="flex flex-col w-full mx-auto mb-16">

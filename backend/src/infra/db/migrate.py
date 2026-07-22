@@ -8,6 +8,9 @@ def migrate_sqlite():
     if not DB_PATH.exists():
         import sqlite3
 
+        if not DATA_PATH.exists():
+            DATA_PATH.mkdir(parents=True)
+
         conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
 

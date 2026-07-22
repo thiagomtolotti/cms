@@ -2,6 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import CreatePostForm from "../../contexts/blog-post/components/create-post-form";
 
 export const Route = createFileRoute("/create/")({
+  head: () => ({
+    meta: [{ title: "Criar Post" }],
+  }),
   component: RouteComponent,
 });
 

@@ -18,6 +18,17 @@
         "cwd": "${workspaceFolder}/frontend"
       },
       "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "API Types",
+      "type": "shell",
+      "command": "make api-types",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "close": true
+      },
+      "problemMatcher": []
     }
   ]
 }

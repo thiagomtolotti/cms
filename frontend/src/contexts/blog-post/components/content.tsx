@@ -4,15 +4,16 @@ import useBlogPost from "../hooks/useBlogPost";
 import usePostMetadata from "../hooks/usePostMetadata";
 
 import getPostImage from "../lib/fetchPostImage";
-import type { PostMetadata } from "../lib/fetchMetadata";
+import type { components } from "../../../types/api";
 
 interface BlogPostContainerProps {
   slug: string;
 }
 
 export default function BlogPostContainer({ slug }: BlogPostContainerProps) {
-  const { content, isPending, error } = useBlogPost(slug);
-  const { metadata, isPending: isMetadataPending } = usePostMetadata(slug);
+  const { data: content, isPending, error } = useBlogPost(slug);
+  const { data: metadata, isPending: isMetadataPending } =
+    usePostMetadata(slug);
 
   useEffect(() => {
     const title = window.document.querySelector("title");
@@ -45,7 +46,7 @@ export default function BlogPostContainer({ slug }: BlogPostContainerProps) {
 interface BlogPostContentProps {
   slug: string;
   content: string;
-  metadata: PostMetadata;
+  metadata: components["schemas"]["PostMetadataResponseDTO"];
 }
 
 function BlogPostContent({ slug, content, metadata }: BlogPostContentProps) {

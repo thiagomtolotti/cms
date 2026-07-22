@@ -12,4 +12,12 @@
   button {
     @apply bg-blue-800 text-white px-4 py-2 rounded-md hover:bg-blue-900 transition-colors cursor-pointer;
   }
+
+  ol {
+    @apply list-decimal list-inside;
+  }
+
+  ul {
+    @apply list-disc list-inside;
+  }
 }

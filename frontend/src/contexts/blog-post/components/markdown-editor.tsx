@@ -13,6 +13,7 @@ import {
   headingsPlugin,
   imagePlugin,
   linkDialogPlugin,
+  listsPlugin,
   tablePlugin,
   toolbarPlugin,
   type MDXEditorMethods,
@@ -35,7 +36,7 @@ const MarkdownEditor = forwardRef<MarkdownEditorHandle>((_, ref) => {
 
   return (
     <div className="flex flex-col gap-4 border border-gray-300">
-      <MDXEditor
+      <MDXEditor // https://mdxeditor.dev/
         markdown={""}
         ref={editorRef}
         placeholder="Escreva seu post aqui..."
@@ -45,6 +46,7 @@ const MarkdownEditor = forwardRef<MarkdownEditorHandle>((_, ref) => {
           linkDialogPlugin(),
           tablePlugin(),
           imagePlugin(),
+          listsPlugin(),
           toolbarPlugin({
             toolbarContents: () => (
               <>

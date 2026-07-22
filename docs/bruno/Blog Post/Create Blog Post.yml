@@ -21,12 +21,12 @@ http:
       - name: image
         type: file
         value:
-          - /home/thiago/Documents/cms/backend/samples/image_sample.jpg
+          - ../../backend/samples/image_sample.jpg
         contentType: image/jpeg
       - name: markdown
         type: file
         value:
-          - /home/thiago/Documents/cms/backend/samples/sample.md
+          - ../../backend/samples/sample.md
         contentType: text/markdown; charset=utf-8
   auth: inherit
 

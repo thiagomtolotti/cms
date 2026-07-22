@@ -29,6 +29,12 @@
         "close": true
       },
       "problemMatcher": []
+    },
+    {
+      "label": "Dev - All",
+      "dependsOn": ["Backend - Dev", "Frontend - Dev"],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
     }
   ]
 }

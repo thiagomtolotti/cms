@@ -25,5 +25,8 @@ class DiskFileRepository(FileRepository):
     def save(self, path: Path, content: bytes) -> None:
         file_path = DATA_PATH / path
 
+        if not file_path.parent.exists():
+            file_path.parent.mkdir(parents=True, exist_ok=True)
+
         with open(file_path, "wb") as file:
             file.write(content)

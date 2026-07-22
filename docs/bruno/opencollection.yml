@@ -17,7 +17,7 @@ config:
 request:
   variables:
     - name: api_url
-      value: http://localhost:8000/api
+      value: http://localhost:8000/
 bundled: false
 extensions:
   bruno:

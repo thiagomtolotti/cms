@@ -7,6 +7,11 @@ import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 export const Route = createFileRoute("/$slug")({
   component: RouteComponent,
   loader: async ({ params }): Promise<Post> => fetchPost(params.slug),
+  head: ({ loaderData }) => {
+    return {
+      meta: [{ title: loaderData?.title }],
+    };
+  },
   pendingComponent: () => <p>Loading...</p>,
   errorComponent: () => <p>Houve um erro ao carregar o post</p>,
 });

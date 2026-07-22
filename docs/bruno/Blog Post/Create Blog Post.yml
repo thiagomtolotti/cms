@@ -1,0 +1,37 @@
+info:
+  name: Create Blog Post
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{api_url}}/posts"
+  body:
+    type: multipart-form
+    data:
+      - name: data
+        type: text
+        value: |-
+          {
+            "title": "Post de Teste",
+            "author": "Thiago Tolotti",
+            "date": "2026-07-22T02:57:37.180Z",
+            "slug": "test"
+          }
+      - name: image
+        type: file
+        value:
+          - /home/thiago/Documents/cms/backend/samples/image_sample.jpg
+        contentType: image/jpeg
+      - name: markdown
+        type: file
+        value:
+          - /home/thiago/Documents/cms/backend/samples/sample.md
+        contentType: text/markdown; charset=utf-8
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

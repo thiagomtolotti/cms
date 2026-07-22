@@ -1,16 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useCreateBlogPost from "../hooks/useCreateBlogPost";
 
-import MarkdownEditor from "./markdown-editor";
+import MarkdownEditor, { type MarkdownEditorHandle } from "./markdown-editor";
 
 export default function CreatePostForm() {
+  const editorRef = useRef<MarkdownEditorHandle>(null);
+
   const { create } = useCreateBlogPost();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
-    create(formData);
+    create(formData, editorRef.current?.getMarkdown() || "");
   }
 
   return (
@@ -39,7 +41,7 @@ export default function CreatePostForm() {
         </div>
       </div>
 
-      <MarkdownEditor />
+      <MarkdownEditor ref={editorRef} />
 
       <div className="mt-8 ml-auto">
         <button type="submit">Criar Post</button>

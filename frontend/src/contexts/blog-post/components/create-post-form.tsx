@@ -1,4 +1,5 @@
 import useCreateBlogPost from "../hooks/useCreateBlogPost";
+import MarkdownEditor from "./markdown-editor";
 
 export default function CreatePostForm() {
   const { create } = useCreateBlogPost();
@@ -46,20 +47,7 @@ export default function CreatePostForm() {
         required
       />
 
-      <label
-        htmlFor="markdown"
-        className="cursor-pointer text-lg font-semibold"
-      >
-        Markdown do post
-      </label>
-      <input
-        type="file"
-        placeholder="Markdown do post"
-        id="markdown"
-        name="markdown"
-        accept=".md"
-        required
-      />
+      <MarkdownEditor />
 
       <div className="mt-8 ml-auto">
         <button type="submit">Criar Post</button>

@@ -26,7 +26,7 @@ function RouteComponent() {
         src={post.imageUrl}
       />
 
-      <div className="w-full max-w-3xl mx-auto flex flex-col gap-4">
+      <div className="w-full max-w-3xl mx-auto flex flex-col gap-4 mb-16">
         <div className="flex flex-col gap-4 mb-4">
           <h1>{post.title}</h1>
           <span>

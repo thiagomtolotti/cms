@@ -9,5 +9,6 @@ export default function useValidateSlug(slug: string) {
       return response.ok;
     },
     enabled: slug.length > 0,
+    select: (isValid) => typeof isValid === "boolean" && isValid,
   });
 }

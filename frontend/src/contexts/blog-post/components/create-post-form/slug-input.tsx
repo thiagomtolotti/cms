@@ -25,7 +25,7 @@ export default function SlugInput() {
         className="[data-invalid]:text-gray-50!"
       />
 
-      {!isValidSlug && slug && (
+      {isValidSlug === false && slug && (
         <FieldDescription>Slug inválido ou já em uso</FieldDescription>
       )}
     </Field>

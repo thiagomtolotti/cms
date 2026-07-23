@@ -1,4 +1,7 @@
-.PHONY: dev build start
+.PHONY: dev build start setup
+
+setup:
+	uv sync
 
 dev:
 	uv run fastapi dev ./src/main.py --reload --port 8000

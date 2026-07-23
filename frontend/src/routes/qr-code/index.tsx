@@ -1,6 +1,9 @@
 import QRCode from "qrcode";
+
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
+
+import { Input } from "@/components/ui/input";
 
 export const Route = createFileRoute("/qr-code/")({
   component: RouteComponent,
@@ -13,18 +16,21 @@ function RouteComponent() {
   const containerRef = useRef<HTMLDivElement>(null);
   const generateQRCode = useGenerateQRCode(containerRef);
 
-  useEffect(() => {
-    generateQRCode("Hello, World!");
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!containerRef.current) return;
 
-    return () => {
-      if (!containerRef.current) return;
-
-      containerRef.current.innerHTML = "";
-    };
-  }, [generateQRCode]);
+    containerRef.current.innerHTML = "";
+    generateQRCode(e.target.value);
+  }
 
   return (
     <main className="mx-auto w-full max-w-sm flex flex-col items-center justify-center gap-4 p-4">
+      <Input
+        type="text"
+        placeholder="Enter text to generate QR code"
+        onChange={handleInputChange}
+      />
+
       <div ref={containerRef} />
     </main>
   );

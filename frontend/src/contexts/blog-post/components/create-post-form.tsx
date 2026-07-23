@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import useCreateBlogPost from "../hooks/useCreateBlogPost";
 
+import { Button } from "../../../components/ui/button";
+
 import MarkdownEditor, { type MarkdownEditorHandle } from "./markdown-editor";
 
 export default function CreatePostForm() {
   const editorRef = useRef<MarkdownEditorHandle>(null);
 
-  const { mutateAsync } = useCreateBlogPost();
+  const { mutateAsync, isPending } = useCreateBlogPost();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -56,7 +58,9 @@ export default function CreatePostForm() {
       <MarkdownEditor ref={editorRef} />
 
       <div className="mt-8 ml-auto">
-        <button type="submit">Criar Post</button>
+        <Button type="submit" isLoading={isPending}>
+          Criar Post
+        </Button>
       </div>
     </form>
   );

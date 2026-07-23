@@ -110,3 +110,14 @@ def create_post(
     repo.create(post)
 
     return {"message": "Post created successfully"}
+
+
+@post_router.get("/validate-slug/{slug}")
+def validate_slug(slug: str):
+    if repo.exists(slug):
+        return JSONResponse(
+            status_code=400,
+            content={"message": "A post with that slug already exists."},
+        )
+
+    return {"message": "Slug is available."}

@@ -187,6 +187,43 @@
         }
       }
     },
+    "/api/posts/validate-slug/{slug}": {
+      "get": {
+        "summary": "Validate Slug",
+        "operationId": "validate_slug_api_posts_validate_slug__slug__get",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Slug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/": {
       "get": {
         "summary": "Ping",

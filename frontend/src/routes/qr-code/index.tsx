@@ -29,8 +29,13 @@ function RouteComponent() {
 
   return (
     <main className="mx-auto w-full max-w-sm flex flex-col items-center justify-center gap-10 p-4 min-h-dvh">
-      <div className="w-full p-8 bg-black/80 rounded-xl">
-        <div ref={containerRef} className="w-full " />
+      <div className="w-full p-8 bg-muted rounded-xl">
+        <div
+          ref={containerRef}
+          className="w-full aspect-square flex items-center justify-center rounded-sm border empty:border-dashed empty:border-muted-foreground/30 bg-background/50 empty:p-6 text-center text-sm text-muted-foreground overflow-hidden"
+        >
+          <p>Seu QR Code aparecerá aqui</p>
+        </div>
       </div>
 
       <form

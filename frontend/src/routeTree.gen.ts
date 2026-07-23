@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SlugRouteImport } from './routes/$slug'
 import { Route as CreateIndexRouteImport } from './routes/create/index'
+import { Route as QrCodeIndexRouteImport } from './routes/qr-code/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,35 +29,44 @@ const CreateIndexRoute = CreateIndexRouteImport.update({
   path: '/create/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QrCodeIndexRoute = QrCodeIndexRouteImport.update({
+  id: '/qr-code/',
+  path: '/qr-code/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$slug': typeof SlugRoute
   '/create/': typeof CreateIndexRoute
+  '/qr-code/': typeof QrCodeIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$slug': typeof SlugRoute
   '/create': typeof CreateIndexRoute
+  '/qr-code': typeof QrCodeIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/$slug': typeof SlugRoute
   '/create/': typeof CreateIndexRoute
+  '/qr-code/': typeof QrCodeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/$slug' | '/create/'
+  fullPaths: '/' | '/$slug' | '/create/' | '/qr-code/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/$slug' | '/create'
-  id: '__root__' | '/' | '/$slug' | '/create/'
+  to: '/' | '/$slug' | '/create' | '/qr-code'
+  id: '__root__' | '/' | '/$slug' | '/create/' | '/qr-code/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SlugRoute: typeof SlugRoute
   CreateIndexRoute: typeof CreateIndexRoute
+  QrCodeIndexRoute: typeof QrCodeIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +92,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CreateIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/qr-code/': {
+      id: '/qr-code/'
+      path: '/qr-code'
+      fullPath: '/qr-code/'
+      preLoaderRoute: typeof QrCodeIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SlugRoute: SlugRoute,
   CreateIndexRoute: CreateIndexRoute,
+  QrCodeIndexRoute: QrCodeIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

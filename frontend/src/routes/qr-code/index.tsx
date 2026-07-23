@@ -4,6 +4,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useRef } from "react";
 
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/qr-code/")({
   component: RouteComponent,
@@ -16,37 +17,59 @@ function RouteComponent() {
   const containerRef = useRef<HTMLDivElement>(null);
   const generateQRCode = useGenerateQRCode(containerRef);
 
-  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleCreateQRCode(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const text = formData.get("text") as string;
+
     if (!containerRef.current) return;
 
-    containerRef.current.innerHTML = "";
-    generateQRCode(e.target.value);
+    generateQRCode(text);
   }
 
   return (
-    <main className="mx-auto w-full max-w-sm flex flex-col items-center justify-center gap-4 p-4">
-      <Input
-        type="text"
-        placeholder="Enter text to generate QR code"
-        onChange={handleInputChange}
-      />
+    <main className="mx-auto w-full max-w-sm flex flex-col items-center justify-center gap-10 p-4 min-h-dvh">
+      <div className="w-full p-8 bg-black/80 rounded-xl">
+        <div ref={containerRef} className="w-full " />
+      </div>
 
-      <div ref={containerRef} />
+      <form
+        onSubmit={handleCreateQRCode}
+        className="flex flex-col gap-8 w-full"
+      >
+        <Input
+          type="text"
+          name="text"
+          placeholder="Digite o texto que deseja gerar o QR Code"
+        />
+
+        <Button type="submit">Gerar QR Code</Button>
+      </form>
     </main>
   );
 }
 
 function useGenerateQRCode(container: React.RefObject<HTMLDivElement | null>) {
   return async function generateQRCode(text: string) {
-    QRCode.toCanvas(text, { errorCorrectionLevel: "H" }, (err, canvas) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
+    const width = container.current?.offsetWidth || undefined;
 
-      if (!container.current) return;
+    QRCode.toCanvas(
+      text,
+      {
+        errorCorrectionLevel: "H",
+        width,
+      },
+      (err, canvas) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
 
-      container.current.appendChild(canvas);
-    });
+        if (!container.current) return;
+
+        container.current.innerHTML = "";
+        container.current.appendChild(canvas);
+      },
+    );
   };
 }

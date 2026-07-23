@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import useCreateBlogPost from "../../hooks/useCreateBlogPost";
 
 import { Button } from "../../../../components/ui/button";
 
 import MarkdownEditor, { type MarkdownEditorHandle } from "../markdown-editor";
 import SlugInput from "./slug-input";
+import ImageInput from "./image-input";
 
 export default function CreatePostForm() {
   const editorRef = useRef<MarkdownEditorHandle>(null);
@@ -63,53 +64,5 @@ export default function CreatePostForm() {
         </Button>
       </div>
     </form>
-  );
-}
-
-function ImageInput() {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (previewUrl) URL.revokeObjectURL(previewUrl);
-    };
-  }, [previewUrl]);
-
-  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-
-    setPreviewUrl((current) => {
-      if (current) URL.revokeObjectURL(current);
-      return file ? URL.createObjectURL(file) : null;
-    });
-  }
-
-  return (
-    <>
-      <label
-        htmlFor="cover-image"
-        className="cursor-pointer text-lg font-semibold"
-      >
-        Imagem de capa
-      </label>
-
-      <input
-        type="file"
-        placeholder="Imagem de capa"
-        id="cover-image"
-        name="coverImage"
-        accept="image/*"
-        onChange={handleImageChange}
-        required
-      />
-
-      {previewUrl && (
-        <img
-          src={previewUrl}
-          alt="Pré-visualização da imagem de capa"
-          className="max-h-64 w-auto rounded-md object-cover"
-        />
-      )}
-    </>
   );
 }

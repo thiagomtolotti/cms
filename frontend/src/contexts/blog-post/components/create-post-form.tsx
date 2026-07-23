@@ -6,13 +6,25 @@ import MarkdownEditor, { type MarkdownEditorHandle } from "./markdown-editor";
 export default function CreatePostForm() {
   const editorRef = useRef<MarkdownEditorHandle>(null);
 
-  const { create } = useCreateBlogPost();
+  const { mutateAsync } = useCreateBlogPost();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
 
-    create(formData, editorRef.current?.getMarkdown() || "");
+    const markdown = editorRef.current?.getMarkdown() || "";
+    const formData = new FormData(e.currentTarget);
+    const markdownFile = new File([markdown], "post.md", {
+      type: "text/markdown",
+    });
+
+    await mutateAsync({
+      title: formData.get("title") as string,
+      slug: formData.get("slug") as string,
+      author: formData.get("author") as string,
+      date: formData.get("date") as string,
+      coverImage: formData.get("coverImage") as File,
+      markdown: markdownFile,
+    });
   }
 
   return (

@@ -35,6 +35,17 @@
       "dependsOn": ["Backend - Dev", "Frontend - Dev"],
       "dependsOrder": "parallel",
       "problemMatcher": []
+    },
+    {
+      "label": "Setup",
+      "type": "shell",
+      "command": "make setup",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "close": true
+      },
+      "problemMatcher": []
     }
   ]
 }

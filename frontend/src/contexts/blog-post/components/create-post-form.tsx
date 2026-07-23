@@ -1,9 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import useCreateBlogPost from "../hooks/useCreateBlogPost";
 
 import { Button } from "../../../components/ui/button";
 
 import MarkdownEditor, { type MarkdownEditorHandle } from "./markdown-editor";
+import useValidateSlug from "../hooks/useValidateSlug";
+import { Input } from "@/components/ui/input";
+import { Field, FieldLabel, FieldDescription } from "@/components/ui/field";
 
 export default function CreatePostForm() {
   const editorRef = useRef<MarkdownEditorHandle>(null);
@@ -50,8 +53,7 @@ export default function CreatePostForm() {
             required
           />
           <input type="text" placeholder="Autor" name="author" required />
-
-          <input type="text" placeholder="slug" name="slug" required />
+          <SlugInput />
         </div>
       </div>
 
@@ -92,6 +94,7 @@ function ImageInput() {
       >
         Imagem de capa
       </label>
+
       <input
         type="file"
         placeholder="Imagem de capa"
@@ -110,5 +113,34 @@ function ImageInput() {
         />
       )}
     </>
+  );
+}
+
+import { useDebounce } from "use-debounce";
+
+function SlugInput() {
+  const [slug, setSlug] = useState("");
+  const [debouncedSlug] = useDebounce(slug, 500);
+
+  const { data: isValidSlug } = useValidateSlug(debouncedSlug);
+
+  return (
+    <Field data-invalid={isValidSlug === false}>
+      <FieldLabel htmlFor="slug">Slug</FieldLabel>
+
+      <Input
+        type="text"
+        placeholder="slug"
+        name="slug"
+        value={slug}
+        onChange={(e) => setSlug(e.target.value)}
+        required
+        className="[data-invalid]:text-gray-50!"
+      />
+
+      {!isValidSlug && slug && (
+        <FieldDescription>Slug inválido ou já em uso</FieldDescription>
+      )}
+    </Field>
   );
 }

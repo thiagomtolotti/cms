@@ -1,10 +1,10 @@
-import type { Post } from "../contexts/blog-post/types/post";
+import type { Post } from "@/contexts/blog-post/types/post";
 
-import fetchPost from "../contexts/blog-post/lib/fetchPost";
+import fetchPost from "@/contexts/blog-post/lib/fetchPost";
 
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/$slug")({
+export const Route = createFileRoute("/$slug/")({
   component: RouteComponent,
   loader: async ({ params }): Promise<Post> => fetchPost(params.slug),
   head: ({ loaderData }) => {

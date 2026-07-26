@@ -10,7 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as SlugRouteImport } from './routes/$slug'
+import { Route as SlugIndexRouteImport } from './routes/$slug/index'
+import { Route as SlugEditarRouteImport } from './routes/$slug/editar'
 import { Route as CreateIndexRouteImport } from './routes/create/index'
 import { Route as QrCodeIndexRouteImport } from './routes/qr-code/index'
 
@@ -19,9 +20,14 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SlugRoute = SlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
+const SlugIndexRoute = SlugIndexRouteImport.update({
+  id: '/$slug/',
+  path: '/$slug/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SlugEditarRoute = SlugEditarRouteImport.update({
+  id: '/$slug/editar',
+  path: '/$slug/editar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CreateIndexRoute = CreateIndexRouteImport.update({
@@ -37,34 +43,38 @@ const QrCodeIndexRoute = QrCodeIndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/$slug': typeof SlugRoute
+  '/$slug/editar': typeof SlugEditarRoute
+  '/$slug/': typeof SlugIndexRoute
   '/create/': typeof CreateIndexRoute
   '/qr-code/': typeof QrCodeIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/$slug': typeof SlugRoute
+  '/$slug/editar': typeof SlugEditarRoute
+  '/$slug': typeof SlugIndexRoute
   '/create': typeof CreateIndexRoute
   '/qr-code': typeof QrCodeIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/$slug': typeof SlugRoute
+  '/$slug/editar': typeof SlugEditarRoute
+  '/$slug/': typeof SlugIndexRoute
   '/create/': typeof CreateIndexRoute
   '/qr-code/': typeof QrCodeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/$slug' | '/create/' | '/qr-code/'
+  fullPaths: '/' | '/$slug/editar' | '/$slug/' | '/create/' | '/qr-code/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/$slug' | '/create' | '/qr-code'
-  id: '__root__' | '/' | '/$slug' | '/create/' | '/qr-code/'
+  to: '/' | '/$slug/editar' | '/$slug' | '/create' | '/qr-code'
+  id: '__root__' | '/' | '/$slug/editar' | '/$slug/' | '/create/' | '/qr-code/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  SlugRoute: typeof SlugRoute
+  SlugEditarRoute: typeof SlugEditarRoute
+  SlugIndexRoute: typeof SlugIndexRoute
   CreateIndexRoute: typeof CreateIndexRoute
   QrCodeIndexRoute: typeof QrCodeIndexRoute
 }
@@ -78,11 +88,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/$slug': {
-      id: '/$slug'
+    '/$slug/': {
+      id: '/$slug/'
       path: '/$slug'
-      fullPath: '/$slug'
-      preLoaderRoute: typeof SlugRouteImport
+      fullPath: '/$slug/'
+      preLoaderRoute: typeof SlugIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$slug/editar': {
+      id: '/$slug/editar'
+      path: '/$slug/editar'
+      fullPath: '/$slug/editar'
+      preLoaderRoute: typeof SlugEditarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/create/': {
@@ -104,7 +121,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  SlugRoute: SlugRoute,
+  SlugEditarRoute: SlugEditarRoute,
+  SlugIndexRoute: SlugIndexRoute,
   CreateIndexRoute: CreateIndexRoute,
   QrCodeIndexRoute: QrCodeIndexRoute,
 }

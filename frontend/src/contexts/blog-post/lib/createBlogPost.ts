@@ -1,4 +1,4 @@
-export interface CreateBlogPostDTO {
+export interface MaintainBlogPostDTO {
   title: string;
   slug: string;
   author: string;
@@ -7,7 +7,7 @@ export interface CreateBlogPostDTO {
   markdown: File;
 }
 
-export default async function createBlogPost(data: CreateBlogPostDTO) {
+export default async function createBlogPost(data: MaintainBlogPostDTO) {
   const formData = new FormData();
 
   const dataWithoutFiles = {

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-export default function useValidateSlug(slug: string) {
+export default function useValidateSlug(slug: string, enabled: boolean = true) {
   return useQuery({
     queryKey: ["validate-slug", slug],
     queryFn: async () => {
@@ -8,7 +8,7 @@ export default function useValidateSlug(slug: string) {
 
       return response.ok;
     },
-    enabled: slug.length > 0,
+    enabled: slug.length > 0 && enabled,
     select: (isValid) => typeof isValid === "boolean" && isValid,
   });
 }

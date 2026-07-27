@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import useCreateBlogPost from "../../hooks/useCreateBlogPost";
+import useMaintainBlogPost from "../../hooks/useMaintainBlogPost";
 
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
@@ -11,10 +11,18 @@ import type { MarkdownEditorHandle } from "../markdown-editor";
 import SlugInput from "./slug-input";
 import ImageInput from "./image-input";
 
-export default function CreatePostForm() {
+import type { Post } from "../../types/post";
+
+interface MaintainPostFormProps {
+  post?: Post;
+}
+
+export default function MaintainPostForm({ post }: MaintainPostFormProps) {
   const editorRef = useRef<MarkdownEditorHandle>(null);
 
-  const { mutateAsync, isPending } = useCreateBlogPost();
+  const { mutateAsync, isPending } = useMaintainBlogPost(post?.slug);
+  const isEditing = !!post;
+  const buttonText = isEditing ? "Atualizar Post" : "Criar Post";
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -27,7 +35,7 @@ export default function CreatePostForm() {
 
     await mutateAsync({
       title: formData.get("title") as string,
-      slug: formData.get("slug") as string,
+      slug: (formData.get("slug") as string) ?? post?.slug,
       author: formData.get("author") as string,
       date: formData.get("date") as string,
       coverImage: formData.get("coverImage") as File,
@@ -37,7 +45,7 @@ export default function CreatePostForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-10">
-      <ImageInput />
+      <ImageInput defaultValue={post?.imageUrl} />
 
       <div className="flex flex-col gap-2">
         <Input
@@ -45,6 +53,7 @@ export default function CreatePostForm() {
           placeholder="Título do post"
           className="w-full text-3xl! border-none outline-none my-8"
           name="title"
+          defaultValue={post?.title}
           required
         />
 
@@ -53,6 +62,7 @@ export default function CreatePostForm() {
             type="date"
             name="date"
             placeholder="Data de publicação"
+            defaultValue={post?.date.toISOString().split("T")[0]}
             required
           />
           <FieldInput
@@ -60,18 +70,19 @@ export default function CreatePostForm() {
             name="author"
             placeholder="Autor"
             title="Autor"
+            defaultValue={post?.author}
             required
           />
 
-          <SlugInput />
+          <SlugInput defaultValue={post?.slug} />
         </div>
       </div>
 
-      <MarkdownEditor ref={editorRef} />
+      <MarkdownEditor ref={editorRef} defaultValue={post?.content} />
 
       <div className="mt-8 ml-auto">
         <Button type="submit" isLoading={isPending}>
-          Criar Post
+          {buttonText}
         </Button>
       </div>
     </form>

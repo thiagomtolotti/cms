@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 
-export default function ImageInput() {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+interface ImageInputProps {
+  defaultValue?: string;
+}
+
+export default function ImageInput({ defaultValue }: ImageInputProps) {
+  const [previewUrl, setPreviewUrl] = useState<string | null>(
+    defaultValue || null,
+  );
 
   useEffect(() => {
     return () => {
@@ -34,7 +40,7 @@ export default function ImageInput() {
         name="coverImage"
         accept="image/*"
         onChange={handleImageChange}
-        required
+        required={!defaultValue}
       />
 
       {previewUrl && (

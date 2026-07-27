@@ -13,7 +13,7 @@ export default function useMaintainBlogPost(slug?: string) {
 
   const create = useMutation({
     mutationFn: async (data: CreateBlogPostDTO) => {
-      createBlogPost(data);
+      await createBlogPost(data);
 
       return data.slug;
     },
@@ -28,7 +28,7 @@ export default function useMaintainBlogPost(slug?: string) {
 
   const update = useMutation({
     mutationFn: async (dto: UpdateBlogPostDTO) => {
-      updateBlogPost(dto);
+      await updateBlogPost(dto);
 
       return dto.slug;
     },

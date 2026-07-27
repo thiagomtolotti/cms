@@ -1,5 +1,9 @@
-export default async function fetchPostContent(slug: string) {
-  const response = await fetch(`/api/posts/${slug}`);
+import client from "@/types/client";
 
-  return response;
+export default async function fetchPostContent(slug: string) {
+  const res = await client.GET("/api/posts/{post_slug}", {
+    params: { path: { post_slug: slug } },
+  });
+
+  return res.data;
 }

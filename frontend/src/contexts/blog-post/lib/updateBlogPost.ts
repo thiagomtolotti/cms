@@ -1,3 +1,4 @@
+import client from "@/types/client";
 import type { CreateBlogPostDTO } from "./createBlogPost";
 
 export interface UpdateBlogPostDTO extends Omit<
@@ -7,25 +8,23 @@ export interface UpdateBlogPostDTO extends Omit<
   coverImage: File | null;
 }
 
-export default function updateBlogPost(data: UpdateBlogPostDTO) {
-  const formData = new FormData();
-
+export default async function updateBlogPost(data: UpdateBlogPostDTO) {
   const dataWithoutFiles = {
     title: data.title,
     slug: data.slug,
     author: data.author,
     date: data.date,
   };
-  formData.append("data", JSON.stringify(dataWithoutFiles));
 
-  if (data.coverImage) {
-    formData.append("image", data.coverImage);
-  }
+  console.log("Updating blog post with data:", dataWithoutFiles);
+  console.log("Cover image:", data.coverImage);
+  console.log("Markdown file:", data.markdown.text());
 
-  formData.append("markdown", data.markdown);
-
-  return fetch(`/api/posts`, {
-    method: "PUT",
-    body: formData,
+  return client.PUT("/api/posts", {
+    body: {
+      data: JSON.stringify(dataWithoutFiles),
+      image: data.coverImage as string | null,
+      markdown: data.markdown,
+    },
   });
 }

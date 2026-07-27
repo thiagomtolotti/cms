@@ -81,7 +81,8 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put?: never;
+        /** Update Post */
+        put: operations["update_post_api_posts_put"];
         /** Create Post */
         post: operations["create_post_api_posts_post"];
         delete?: never;
@@ -165,6 +166,15 @@ export interface components {
         };
         /** Body_update_post_api_posts__put */
         Body_update_post_api_posts__put: {
+            /** Data */
+            data: string;
+            /** Markdown */
+            markdown: string;
+            /** Image */
+            image?: string | null;
+        };
+        /** Body_update_post_api_posts_put */
+        Body_update_post_api_posts_put: {
             /** Data */
             data: string;
             /** Markdown */
@@ -342,6 +352,39 @@ export interface operations {
         requestBody: {
             content: {
                 "multipart/form-data": components["schemas"]["Body_create_post_api_posts__post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_post_api_posts_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_update_post_api_posts_put"];
             };
         };
         responses: {

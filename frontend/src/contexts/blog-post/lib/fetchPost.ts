@@ -11,7 +11,7 @@ export default async function fetchPost(slug: string): Promise<Post> {
 
   return {
     author: promises[0].author,
-    content: await promises[1].text(),
+    content: await promises[1],
     date: new Date(promises[0].date),
     imageUrl: getPostImage(slug),
     slug: slug,

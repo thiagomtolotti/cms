@@ -33,12 +33,15 @@ export default function MaintainPostForm({ post }: MaintainPostFormProps) {
       type: "text/markdown",
     });
 
+    let coverImage = formData.get("coverImage") as File | null;
+    coverImage = coverImage && coverImage.size > 0 ? coverImage : null;
+
     await mutateAsync({
       title: formData.get("title") as string,
       slug: (formData.get("slug") as string) ?? post?.slug,
       author: formData.get("author") as string,
       date: formData.get("date") as string,
-      coverImage: formData.get("coverImage") as File,
+      coverImage: coverImage as File,
       markdown: markdownFile,
     });
   }

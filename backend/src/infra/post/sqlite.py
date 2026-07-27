@@ -73,3 +73,26 @@ class SQLitePostRepository(PostRepository):
             row = cursor.fetchone()
 
             return row is not None
+
+    def update(self, post: Post) -> None:
+        if not self.exists(post.slug):
+            raise EntityNotFoundError("Post not found")
+        
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                UPDATE posts
+                SET title = ?, author = ?, date = ?, file_path = ?, image_path = ?
+                WHERE slug = ?
+                """,
+                (
+                    post.title,
+                    post.author,
+                    post.date.isoformat(),
+                    str(post.file),
+                    str(post.image),
+                    post.slug,
+                ),
+            )
+            conn.commit()

@@ -116,6 +116,40 @@
       }
     },
     "/api/posts/": {
+      "put": {
+        "summary": "Update Post",
+        "operationId": "update_post_api_posts__put",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_update_post_api_posts__put"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "summary": "Create Post",
         "operationId": "create_post_api_posts__post",
@@ -329,6 +363,37 @@
           "markdown"
         ],
         "title": "Body_create_post_api_posts_post"
+      },
+      "Body_update_post_api_posts__put": {
+        "properties": {
+          "data": {
+            "type": "string",
+            "title": "Data"
+          },
+          "markdown": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "Markdown"
+          },
+          "image": {
+            "anyOf": [
+              {
+                "type": "string",
+                "contentMediaType": "application/octet-stream"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image"
+          }
+        },
+        "type": "object",
+        "required": [
+          "data",
+          "markdown"
+        ],
+        "title": "Body_update_post_api_posts__put"
       },
       "HTTPValidationError": {
         "properties": {

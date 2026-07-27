@@ -30,6 +30,14 @@ class InMemoryPostRepository(PostRepository):
 
     def create(self, post: Post) -> None:
         self.posts.append(post)
+        
+    def update(self, post: Post) -> None:
+        for i, existing_post in enumerate(self.posts):
+            if existing_post.slug == post.slug:
+                self.posts[i] = post
+                return
+
+        raise EntityNotFoundError("Post not found")
 
     def exists(self, slug: str) -> bool:
         for post in self.posts:

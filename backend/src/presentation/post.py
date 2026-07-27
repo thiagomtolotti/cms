@@ -121,3 +121,47 @@ def validate_slug(slug: str):
         )
 
     return {"message": "Slug is available."}
+
+@post_router.put("/")
+@post_router.put("")
+def update_post(
+    data:Annotated[str, Form()],
+    markdown: UploadFile,
+    image: UploadFile | None = None,
+):
+    dto = CreatePostRequestDTO.model_validate_json(data)
+    
+    post = repo.get_from_slug(dto.slug)
+
+    if image:
+        if (
+            not image.filename
+            or image.filename.lower().endswith((".jpg", ".jpeg", ".png")) is False
+        ):
+            return JSONResponse(
+                status_code=400,
+                content={"message": "Invalid image format. Only JPG and PNG are allowed."},
+            )
+
+        image_path = Path(str(post.id), image.filename)
+        file_repo.save(image_path, image.file.read())
+        post.image = image_path
+
+    if not markdown.filename or not markdown.filename.lower().endswith(".md"):
+        return JSONResponse(
+            status_code=400,
+            content={"message": "Invalid markdown format. Only .md files are allowed."},
+        )
+
+    markdown_path = Path(str(post.id), markdown.filename)
+    file_repo.save(markdown_path, markdown.file.read())
+    post.file = markdown_path
+
+    post.author = dto.author
+    post.title = dto.title
+    post.slug = dto.slug
+    post.date = dto.date
+
+    repo.update(post)
+
+    return {"message": "Post updated successfully"}

@@ -3,14 +3,16 @@ import { useNavigate } from "@tanstack/react-router";
 
 import { toast } from "sonner";
 
-import type { MaintainBlogPostDTO } from "../lib/createBlogPost";
 import createBlogPost from "../lib/createBlogPost";
+import updateBlogPost from "../lib/updateBlogPost";
+import type { CreateBlogPostDTO } from "../lib/createBlogPost";
+import type { UpdateBlogPostDTO } from "../lib/updateBlogPost";
 
 export default function useMaintainBlogPost(slug?: string) {
   const navigate = useNavigate();
 
   const create = useMutation({
-    mutationFn: async (data: MaintainBlogPostDTO) => {
+    mutationFn: async (data: CreateBlogPostDTO) => {
       createBlogPost(data);
 
       return data.slug;
@@ -25,9 +27,10 @@ export default function useMaintainBlogPost(slug?: string) {
   });
 
   const update = useMutation({
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    mutationFn: async (_: MaintainBlogPostDTO) => {
-      throw new Error("Update functionality not implemented yet");
+    mutationFn: async (dto: UpdateBlogPostDTO) => {
+      updateBlogPost(dto);
+
+      return dto.slug;
     },
     onSuccess: (slug) => {
       toast.success("Post atualizado com sucesso!");

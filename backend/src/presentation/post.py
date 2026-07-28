@@ -4,7 +4,7 @@ from uuid import uuid4
 import markdown
 from pathlib import Path
 
-from fastapi import APIRouter, Form, UploadFile
+from fastapi import APIRouter, Form,File, UploadFile
 from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 
 from src.domain.post import Post
@@ -63,11 +63,11 @@ def get_post_image(post_slug: str):
 @post_router.post("/")
 def create_post(
     data: Annotated[str, Form()],
-    image: UploadFile,
-    markdown: UploadFile,
+    image:  Annotated[UploadFile, File()],
+    markdown:  Annotated[UploadFile, File()],
 ):
     dto = CreatePostRequestDTO.model_validate_json(data)
-
+    
     if (
         not image.filename
         or image.filename.lower().endswith((".jpg", ".jpeg", ".png")) is False
@@ -126,11 +126,10 @@ def validate_slug(slug: str):
 @post_router.put("")
 def update_post(
     data:Annotated[str, Form()],
-    markdown: UploadFile,
-    image: UploadFile | None = None,
-):
+    markdown: Annotated[UploadFile, File()],
+    image: Annotated[UploadFile | None, File()] = None,
+):    
     dto = CreatePostRequestDTO.model_validate_json(data)
-    
     post = repo.get_from_slug(dto.slug)
 
     if image:

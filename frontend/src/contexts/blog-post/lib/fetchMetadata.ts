@@ -8,5 +8,5 @@ export default async function fetchMetadata(
     params: { path: { post_slug: slug } },
   });
 
-  return res.data;
+  return res.data!;
 }

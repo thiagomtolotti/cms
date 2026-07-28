@@ -1,3 +1,4 @@
+import MultiPartFormDataSerializer from "@/lib/MultiPartFormDataSerializer";
 import client from "@/types/client";
 
 export interface CreateBlogPostDTO {
@@ -10,7 +11,7 @@ export interface CreateBlogPostDTO {
 }
 
 export default async function createBlogPost(data: CreateBlogPostDTO) {
-  const body = {
+  const bodyData = {
     title: data.title,
     slug: data.slug,
     author: data.author,
@@ -19,9 +20,10 @@ export default async function createBlogPost(data: CreateBlogPostDTO) {
 
   return await client.POST("/api/posts", {
     body: {
-      data: JSON.stringify(body),
-      image: data.coverImage,
-      markdown: data.markdown,
+      data: JSON.stringify(bodyData),
+      image: data.coverImage as any,
+      markdown: data.markdown as any,
     },
+    bodySerializer: MultiPartFormDataSerializer,
   });
 }

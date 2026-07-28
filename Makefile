@@ -9,8 +9,8 @@ api-types:
 	cd frontend && npm run api-types
 
 build:
-	cd frontend && npm run build
-	cd backend && make build
+	cd frontend && npm ci && npm run build
+	cd backend && uv sync && make build
 
 start:
 	cd backend && make start

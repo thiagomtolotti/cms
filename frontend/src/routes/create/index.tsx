@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import MaintainPostForm from "../../contexts/blog-post/components/maintain-post-form";
+import MaintainPostForm from "../../components/blog-post/components/maintain-post-form";
 
-import ProtectedRoute from "@/contexts/auth/components/protected-route";
+import ProtectedRoute from "@/components/auth/components/protected-route";
 
 export const Route = createFileRoute("/create/")({
   head: () => ({

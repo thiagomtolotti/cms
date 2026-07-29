@@ -1,10 +1,10 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 
-import fetchPost from "@/contexts/blog-post/lib/fetchPost";
-import type { Post } from "@/contexts/blog-post/types/post";
+import fetchPost from "@/components/blog-post/lib/fetchPost";
+import type { Post } from "@/components/blog-post/types/post";
 
-import MaintainPostForm from "@/contexts/blog-post/components/maintain-post-form";
-import ProtectedRoute from "@/contexts/auth/components/protected-route";
+import MaintainPostForm from "@/components/blog-post/components/maintain-post-form";
+import ProtectedRoute from "@/components/auth/components/protected-route";
 
 export const Route = createFileRoute("/$slug/editar")({
   component: RouteComponent,

@@ -20,7 +20,12 @@ export default function LoginButton() {
 
   const buttonProps: Record<AuthButtonVariants, Partial<ButtonProps>> = {
     login: LoginButton.Login({ onClick: () => keycloak?.login() }),
-    logout: LoginButton.Logout({ onClick: () => keycloak?.logout() }),
+    logout: LoginButton.Logout({
+      onClick: () =>
+        keycloak?.logout({
+          redirectUri: window.location.origin,
+        }),
+    }),
     loading: LoginButton.Loading({ disabled: true }),
   };
 

@@ -4,7 +4,7 @@ setup:
 	uv sync
 
 dev:
-	uv run fastapi dev ./src/main.py --reload --port 8000
+	uv run python -m fastapi dev ./src/main.py --reload --port 8000
 
 openapi:
 	uv run -m src.scripts.generate_openapi > openapi.json

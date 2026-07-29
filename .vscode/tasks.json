@@ -40,6 +40,9 @@
       "label": "Setup",
       "type": "shell",
       "command": "make setup",
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
       "presentation": {
         "reveal": "always",
         "panel": "shared",

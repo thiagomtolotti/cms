@@ -8,139 +8,197 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as SlugIndexRouteImport } from './routes/$slug/index'
-import { Route as SlugEditarRouteImport } from './routes/$slug/editar'
-import { Route as CreateIndexRouteImport } from './routes/create/index'
-import { Route as LogoutIndexRouteImport } from './routes/logout/index'
-import { Route as QrCodeIndexRouteImport } from './routes/qr-code/index'
+import { Route as rootRouteImport } from "./routes/__root";
+import { Route as IndexRouteImport } from "./routes/index";
+import { Route as SlugIndexRouteImport } from "./routes/$slug/index";
+import { Route as SlugEditarRouteImport } from "./routes/$slug/editar";
+import { Route as CreateIndexRouteImport } from "./routes/create/index";
+import { Route as AdminRouteImport } from "./routes/admin";
+import { Route as AdminIndexRouteImport } from "./routes/admin/index";
+import { Route as LogoutIndexRouteImport } from "./routes/logout/index";
+import { Route as QrCodeIndexRouteImport } from "./routes/qr-code/index";
 
 const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const SlugIndexRoute = SlugIndexRouteImport.update({
-  id: '/$slug/',
-  path: '/$slug/',
+  id: "/$slug/",
+  path: "/$slug/",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const SlugEditarRoute = SlugEditarRouteImport.update({
-  id: '/$slug/editar',
-  path: '/$slug/editar',
+  id: "/$slug/editar",
+  path: "/$slug/editar",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const CreateIndexRoute = CreateIndexRouteImport.update({
-  id: '/create/',
-  path: '/create/',
+  id: "/create/",
+  path: "/create/",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
+const AdminRoute = AdminRouteImport.update({
+  id: "/admin",
+  path: "/admin",
+  getParentRoute: () => rootRouteImport,
+} as any);
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: "/admin/",
+  path: "/",
+  getParentRoute: () => AdminRoute,
+} as any);
 const LogoutIndexRoute = LogoutIndexRouteImport.update({
-  id: '/logout/',
-  path: '/logout/',
+  id: "/logout/",
+  path: "/logout/",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const QrCodeIndexRoute = QrCodeIndexRouteImport.update({
-  id: '/qr-code/',
-  path: '/qr-code/',
+  id: "/qr-code/",
+  path: "/qr-code/",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/$slug/editar': typeof SlugEditarRoute
-  '/$slug/': typeof SlugIndexRoute
-  '/create/': typeof CreateIndexRoute
-  '/logout/': typeof LogoutIndexRoute
-  '/qr-code/': typeof QrCodeIndexRoute
+  "/": typeof IndexRoute;
+  "/$slug/editar": typeof SlugEditarRoute;
+  "/$slug/": typeof SlugIndexRoute;
+  "/create/": typeof CreateIndexRoute;
+  "/admin": typeof AdminRoute;
+  "/admin/": typeof AdminIndexRoute;
+  "/logout/": typeof LogoutIndexRoute;
+  "/qr-code/": typeof QrCodeIndexRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/$slug/editar': typeof SlugEditarRoute
-  '/$slug': typeof SlugIndexRoute
-  '/create': typeof CreateIndexRoute
-  '/logout': typeof LogoutIndexRoute
-  '/qr-code': typeof QrCodeIndexRoute
+  "/": typeof IndexRoute;
+  "/$slug/editar": typeof SlugEditarRoute;
+  "/$slug": typeof SlugIndexRoute;
+  "/create": typeof CreateIndexRoute;
+  "/admin": typeof AdminIndexRoute;
+  "/logout": typeof LogoutIndexRoute;
+  "/qr-code": typeof QrCodeIndexRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/$slug/editar': typeof SlugEditarRoute
-  '/$slug/': typeof SlugIndexRoute
-  '/create/': typeof CreateIndexRoute
-  '/logout/': typeof LogoutIndexRoute
-  '/qr-code/': typeof QrCodeIndexRoute
+  __root__: typeof rootRouteImport;
+  "/": typeof IndexRoute;
+  "/$slug/editar": typeof SlugEditarRoute;
+  "/$slug/": typeof SlugIndexRoute;
+  "/create/": typeof CreateIndexRoute;
+  "/admin": typeof AdminRoute;
+  "/admin/": typeof AdminIndexRoute;
+  "/logout/": typeof LogoutIndexRoute;
+  "/qr-code/": typeof QrCodeIndexRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
+  fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
-    '/' | '/$slug/editar' | '/$slug/' | '/create/' | '/logout/' | '/qr-code/'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/$slug/editar' | '/$slug' | '/create' | '/logout' | '/qr-code'
+    | "/"
+    | "/$slug/editar"
+    | "/$slug/"
+    | "/create/"
+    | "/admin"
+    | "/admin/"
+    | "/logout/"
+    | "/qr-code/";
+  fileRoutesByTo: FileRoutesByTo;
+  to:
+    | "/"
+    | "/$slug/editar"
+    | "/$slug"
+    | "/create"
+    | "/admin"
+    | "/admin"
+    | "/logout"
+    | "/qr-code";
   id:
-    | '__root__'
-    | '/'
-    | '/$slug/editar'
-    | '/$slug/'
-    | '/create/'
-    | '/logout/'
-    | '/qr-code/'
-  fileRoutesById: FileRoutesById
+    | "__root__"
+    | "/"
+    | "/$slug/editar"
+    | "/$slug/"
+    | "/create/"
+    | "/admin"
+    | "/admin/"
+    | "/logout/"
+    | "/qr-code/";
+  fileRoutesById: FileRoutesById;
 }
-export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  SlugEditarRoute: typeof SlugEditarRoute
-  SlugIndexRoute: typeof SlugIndexRoute
-  CreateIndexRoute: typeof CreateIndexRoute
-  LogoutIndexRoute: typeof LogoutIndexRoute
-  QrCodeIndexRoute: typeof QrCodeIndexRoute
+interface AdminRouteChildren {
+  AdminIndexRoute: typeof AdminIndexRoute;
 }
 
-declare module '@tanstack/react-router' {
+const adminRouteChildren: AdminRouteChildren = {
+  AdminIndexRoute: AdminIndexRoute,
+};
+const AdminRouteWithChildren = AdminRoute._addFileChildren(adminRouteChildren);
+
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute;
+  SlugEditarRoute: typeof SlugEditarRoute;
+  SlugIndexRoute: typeof SlugIndexRoute;
+  CreateIndexRoute: typeof CreateIndexRoute;
+  AdminRoute: typeof AdminRouteWithChildren;
+  LogoutIndexRoute: typeof LogoutIndexRoute;
+  QrCodeIndexRoute: typeof QrCodeIndexRoute;
+}
+
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/$slug/': {
-      id: '/$slug/'
-      path: '/$slug'
-      fullPath: '/$slug/'
-      preLoaderRoute: typeof SlugIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/$slug/editar': {
-      id: '/$slug/editar'
-      path: '/$slug/editar'
-      fullPath: '/$slug/editar'
-      preLoaderRoute: typeof SlugEditarRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/create/': {
-      id: '/create/'
-      path: '/create'
-      fullPath: '/create/'
-      preLoaderRoute: typeof CreateIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/logout/': {
-      id: '/logout/'
-      path: '/logout'
-      fullPath: '/logout/'
-      preLoaderRoute: typeof LogoutIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/qr-code/': {
-      id: '/qr-code/'
-      path: '/qr-code'
-      fullPath: '/qr-code/'
-      preLoaderRoute: typeof QrCodeIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+    "/": {
+      id: "/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof IndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/$slug/": {
+      id: "/$slug/";
+      path: "/$slug";
+      fullPath: "/$slug/";
+      preLoaderRoute: typeof SlugIndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/$slug/editar": {
+      id: "/$slug/editar";
+      path: "/$slug/editar";
+      fullPath: "/$slug/editar";
+      preLoaderRoute: typeof SlugEditarRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/create/": {
+      id: "/create/";
+      path: "/create";
+      fullPath: "/create/";
+      preLoaderRoute: typeof CreateIndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/admin": {
+      id: "/admin";
+      path: "/admin";
+      fullPath: "/admin";
+      preLoaderRoute: typeof AdminRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/admin/": {
+      id: "/admin/";
+      path: "/";
+      fullPath: "/admin/";
+      preLoaderRoute: typeof AdminIndexRouteImport;
+      parentRoute: typeof AdminRouteImport;
+    };
+    "/logout/": {
+      id: "/logout/";
+      path: "/logout";
+      fullPath: "/logout/";
+      preLoaderRoute: typeof LogoutIndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/qr-code/": {
+      id: "/qr-code/";
+      path: "/qr-code";
+      fullPath: "/qr-code/";
+      preLoaderRoute: typeof QrCodeIndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
   }
 }
 
@@ -149,9 +207,10 @@ const rootRouteChildren: RootRouteChildren = {
   SlugEditarRoute: SlugEditarRoute,
   SlugIndexRoute: SlugIndexRoute,
   CreateIndexRoute: CreateIndexRoute,
+  AdminRoute: AdminRouteWithChildren,
   LogoutIndexRoute: LogoutIndexRoute,
   QrCodeIndexRoute: QrCodeIndexRoute,
-}
+};
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();

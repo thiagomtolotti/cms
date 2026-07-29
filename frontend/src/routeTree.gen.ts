@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SlugIndexRouteImport } from './routes/$slug/index'
 import { Route as SlugEditarRouteImport } from './routes/$slug/editar'
 import { Route as CreateIndexRouteImport } from './routes/create/index'
+import { Route as LogoutIndexRouteImport } from './routes/logout/index'
 import { Route as QrCodeIndexRouteImport } from './routes/qr-code/index'
 
 const IndexRoute = IndexRouteImport.update({
@@ -35,6 +36,11 @@ const CreateIndexRoute = CreateIndexRouteImport.update({
   path: '/create/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LogoutIndexRoute = LogoutIndexRouteImport.update({
+  id: '/logout/',
+  path: '/logout/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const QrCodeIndexRoute = QrCodeIndexRouteImport.update({
   id: '/qr-code/',
   path: '/qr-code/',
@@ -46,6 +52,7 @@ export interface FileRoutesByFullPath {
   '/$slug/editar': typeof SlugEditarRoute
   '/$slug/': typeof SlugIndexRoute
   '/create/': typeof CreateIndexRoute
+  '/logout/': typeof LogoutIndexRoute
   '/qr-code/': typeof QrCodeIndexRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +60,7 @@ export interface FileRoutesByTo {
   '/$slug/editar': typeof SlugEditarRoute
   '/$slug': typeof SlugIndexRoute
   '/create': typeof CreateIndexRoute
+  '/logout': typeof LogoutIndexRoute
   '/qr-code': typeof QrCodeIndexRoute
 }
 export interface FileRoutesById {
@@ -61,14 +69,23 @@ export interface FileRoutesById {
   '/$slug/editar': typeof SlugEditarRoute
   '/$slug/': typeof SlugIndexRoute
   '/create/': typeof CreateIndexRoute
+  '/logout/': typeof LogoutIndexRoute
   '/qr-code/': typeof QrCodeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/$slug/editar' | '/$slug/' | '/create/' | '/qr-code/'
+  fullPaths:
+    '/' | '/$slug/editar' | '/$slug/' | '/create/' | '/logout/' | '/qr-code/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/$slug/editar' | '/$slug' | '/create' | '/qr-code'
-  id: '__root__' | '/' | '/$slug/editar' | '/$slug/' | '/create/' | '/qr-code/'
+  to: '/' | '/$slug/editar' | '/$slug' | '/create' | '/logout' | '/qr-code'
+  id:
+    | '__root__'
+    | '/'
+    | '/$slug/editar'
+    | '/$slug/'
+    | '/create/'
+    | '/logout/'
+    | '/qr-code/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -76,6 +93,7 @@ export interface RootRouteChildren {
   SlugEditarRoute: typeof SlugEditarRoute
   SlugIndexRoute: typeof SlugIndexRoute
   CreateIndexRoute: typeof CreateIndexRoute
+  LogoutIndexRoute: typeof LogoutIndexRoute
   QrCodeIndexRoute: typeof QrCodeIndexRoute
 }
 
@@ -109,6 +127,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CreateIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/logout/': {
+      id: '/logout/'
+      path: '/logout'
+      fullPath: '/logout/'
+      preLoaderRoute: typeof LogoutIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/qr-code/': {
       id: '/qr-code/'
       path: '/qr-code'
@@ -124,6 +149,7 @@ const rootRouteChildren: RootRouteChildren = {
   SlugEditarRoute: SlugEditarRoute,
   SlugIndexRoute: SlugIndexRoute,
   CreateIndexRoute: CreateIndexRoute,
+  LogoutIndexRoute: LogoutIndexRoute,
   QrCodeIndexRoute: QrCodeIndexRoute,
 }
 export const routeTree = rootRouteImport

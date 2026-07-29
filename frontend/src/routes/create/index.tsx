@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import MaintainPostForm from "../../contexts/blog-post/components/maintain-post-form";
 
+import useProtectedRoute from "@/contexts/auth/hooks/useProtectedRoute";
+
 export const Route = createFileRoute("/create/")({
   head: () => ({
     meta: [{ title: "Criar Post" }],
@@ -9,6 +11,12 @@ export const Route = createFileRoute("/create/")({
 });
 
 function RouteComponent() {
+  const { isPending } = useProtectedRoute();
+
+  if (isPending) {
+    return "Carregando...";
+  }
+
   return <CreatePostPage />;
 }
 

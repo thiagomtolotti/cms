@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useKeycloak } from "react-keycloak-easy";
+import { useKeycloak } from "@react-keycloak/web";
 
 export const Route = createFileRoute("/logout/")({
   component: RouteComponent,

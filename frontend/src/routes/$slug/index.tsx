@@ -1,6 +1,6 @@
-import type { Post } from "@/contexts/blog-post/types/post";
+import type { Post } from "@/components/blog-post/types/post";
 
-import fetchPost from "@/contexts/blog-post/lib/fetchPost";
+import fetchPost from "@/components/blog-post/lib/fetchPost";
 
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 

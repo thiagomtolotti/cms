@@ -1,9 +1,10 @@
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 
-import fetchPost from "@/contexts/blog-post/lib/fetchPost";
-import type { Post } from "@/contexts/blog-post/types/post";
+import fetchPost from "@/components/blog-post/lib/fetchPost";
+import type { Post } from "@/components/blog-post/types/post";
 
-import MaintainPostForm from "@/contexts/blog-post/components/maintain-post-form";
+import MaintainPostForm from "@/components/blog-post/components/maintain-post-form";
+import ProtectedRoute from "@/components/auth/components/protected-route";
 
 export const Route = createFileRoute("/$slug/editar")({
   component: RouteComponent,
@@ -14,10 +15,12 @@ function RouteComponent() {
   const post: Post = useLoaderData({ from: Route.id });
 
   return (
-    <section className="flex flex-col gap-8 max-w-4xl mx-auto my-16">
-      <h1 className="w-full mb-8">Editar post</h1>
+    <ProtectedRoute>
+      <section className="flex flex-col gap-8 max-w-4xl mx-auto my-16">
+        <h1 className="w-full mb-8">Editar post</h1>
 
-      <MaintainPostForm post={post} />
-    </section>
+        <MaintainPostForm post={post} />
+      </section>
+    </ProtectedRoute>
   );
 }

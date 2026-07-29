@@ -15,7 +15,12 @@ const router = createRouter({ routeTree });
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ReactKeycloakProvider authClient={keycloak}>
+    <ReactKeycloakProvider
+      authClient={keycloak}
+      initOptions={{
+        checkLoginIframe: false,
+      }}
+    >
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
       </QueryClientProvider>

@@ -1,7 +1,7 @@
 import Keycloak from "keycloak-js";
 
 const keycloak = new Keycloak({
-  clientId: "blog",
+  clientId: "frontend",
   realm: "blog",
   url: "https://auth.thiagotolotti.com",
 });

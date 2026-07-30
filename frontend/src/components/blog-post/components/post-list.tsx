@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import useListPosts from "../hooks/useListPosts";
 
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 
 import type { components } from "@/types/api";
 import humanReadableStatus from "@/types/humanReadableStatus";
@@ -44,12 +44,17 @@ interface PostListTableRowProps {
 }
 
 PostList.TableRow = ({ post }: PostListTableRowProps) => {
+  const navigate = useNavigate();
+
   return (
-    <TableRow>
+    <TableRow
+      className="cursor-pointer"
+      onClick={() => navigate({ to: `/${post.slug}` })}
+    >
       <TableCell>{post.title}</TableCell>
       <TableCell>{post.slug}</TableCell>
       <TableCell>{humanReadableStatus[post.status]}</TableCell>
-      <TableCell className="text-right">
+      <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
         <Link
           to={`/${post.slug}/editar`}
           className="text-blue-500 hover:underline"

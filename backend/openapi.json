@@ -298,6 +298,10 @@
         "properties": {
           "data": {
             "type": "string",
+            "contentMediaType": "application/json",
+            "contentSchema": {
+              "$ref": "#/components/schemas/CreatePostRequestDTO"
+            },
             "title": "Data"
           },
           "image": {
@@ -323,6 +327,10 @@
         "properties": {
           "data": {
             "type": "string",
+            "contentMediaType": "application/json",
+            "contentSchema": {
+              "$ref": "#/components/schemas/CreatePostRequestDTO"
+            },
             "title": "Data"
           },
           "markdown": {
@@ -349,6 +357,39 @@
           "markdown"
         ],
         "title": "Body_update_post_api_posts__put"
+      },
+      "CreatePostRequestDTO": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "author": {
+            "type": "string",
+            "title": "Author"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Date"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "status": {
+            "$ref": "#/components/schemas/PostStatus"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "author",
+          "date",
+          "slug",
+          "status"
+        ],
+        "title": "CreatePostRequestDTO"
       },
       "HTTPValidationError": {
         "properties": {
@@ -406,6 +447,15 @@
           "slug"
         ],
         "title": "PostMetadataResponseDTO"
+      },
+      "PostStatus": {
+        "type": "string",
+        "enum": [
+          "draft",
+          "published",
+          "deleted"
+        ],
+        "title": "PostStatus"
       },
       "ValidationError": {
         "properties": {

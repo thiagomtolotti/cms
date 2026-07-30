@@ -2,6 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, File, Form, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
+from pydantic import Json
 
 from src.application.post import PostService
 from src.presentation.types import (
@@ -90,14 +91,12 @@ class PostRouter(APIRouter):
 
     def create_post(
         self,
-        data: Annotated[str, Form()],
+        data: Annotated[Json[CreatePostRequestDTO], Form()],
         image: Annotated[UploadFile, File()],
         markdown: Annotated[UploadFile, File()],
     ):
-        dto = CreatePostRequestDTO.model_validate_json(data)
-
         self.service.create_post(
-            dto,
+            data,
             FileDTO.from_upload_file(
                 image,
                 required_mime_types=["image/"],
@@ -112,14 +111,13 @@ class PostRouter(APIRouter):
 
     def update_post(
         self,
-        data: Annotated[str, Form()],
+        data: Annotated[Json[CreatePostRequestDTO], Form()],
         markdown: Annotated[UploadFile, File()],
         image: Annotated[UploadFile | None, File()] = None,
     ):
-        dto = CreatePostRequestDTO.model_validate_json(data)
 
         self.service.update_post(
-            dto,
+            data,
             FileDTO.from_upload_file(
                 image,
                 required_mime_types=["image/"],

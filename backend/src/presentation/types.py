@@ -4,7 +4,7 @@ from typing import Self
 from fastapi import UploadFile
 from pydantic import BaseModel
 
-from src.domain.post import Post
+from src.domain.post import Post, PostStatus
 from src.exceptions import InvalidObjectError
 
 
@@ -29,6 +29,7 @@ class CreatePostRequestDTO(BaseModel):
     author: str
     date: datetime
     slug: str
+    status: PostStatus
 
 
 class FileDTO(BaseModel):

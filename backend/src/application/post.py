@@ -4,9 +4,9 @@ from uuid import uuid4
 import markdown
 
 from src.domain.file_repository import FileRepository
-from src.domain.post import Post
+from src.domain.post import Post, PostStatus
 from src.domain.post_repository import PostRepository
-from src.exceptions import EntityAlreadyExistsError
+from src.exceptions import EntityAlreadyExistsError, InvalidStatusError
 from src.presentation.types import CreatePostRequestDTO, FileDTO
 
 
@@ -54,6 +54,9 @@ class PostService:
         image: FileDTO,
         markdown: FileDTO,
     ) -> None:
+        if dto.status == PostStatus.DELETED:
+            raise InvalidStatusError("Cannot create a post with status 'deleted'.")
+
         if self.repo.exists(dto.slug):
             raise EntityAlreadyExistsError(
                 f"Post with slug '{dto.slug}' already exists."
@@ -75,6 +78,7 @@ class PostService:
             date=dto.date,
             image=image_path,
             file=markdown_path,
+            status=dto.status,
         )
 
         self.repo.create(post)
@@ -85,6 +89,9 @@ class PostService:
         image: FileDTO | None,
         markdown: FileDTO,
     ) -> None:
+        if dto.status == PostStatus.DELETED:
+            raise InvalidStatusError("Cannot create a post with status 'deleted'.")
+
         post = self.repo.get_from_slug(dto.slug)
 
         if image:

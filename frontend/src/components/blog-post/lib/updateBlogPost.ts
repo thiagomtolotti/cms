@@ -1,6 +1,7 @@
 import client from "@/types/client";
 import type { CreateBlogPostDTO } from "./createBlogPost";
 import MultiPartFormDataSerializer from "@/lib/MultiPartFormDataSerializer";
+import type { components } from "@/types/api";
 
 export interface UpdateBlogPostDTO extends Omit<
   CreateBlogPostDTO,
@@ -10,11 +11,12 @@ export interface UpdateBlogPostDTO extends Omit<
 }
 
 export default async function updateBlogPost(data: UpdateBlogPostDTO) {
-  const bodyData = {
+  const bodyData: components["schemas"]["CreatePostRequestDTO"] = {
     title: data.title,
     slug: data.slug,
     author: data.author,
     date: data.date,
+    status: "published",
   };
 
   return await client.PUT("/api/posts/", {

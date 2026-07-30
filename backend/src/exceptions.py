@@ -12,3 +12,7 @@ class InvalidObjectError(DomainError):
 
 class EntityAlreadyExistsError(DomainError):
     pass
+
+
+class InvalidStatusError(DomainError):
+    pass

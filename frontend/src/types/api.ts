@@ -147,6 +147,21 @@ export interface components {
             /** Image */
             image?: string | null;
         };
+        /** CreatePostRequestDTO */
+        CreatePostRequestDTO: {
+            /** Title */
+            title: string;
+            /** Author */
+            author: string;
+            /**
+             * Date
+             * Format: date-time
+             */
+            date: string;
+            /** Slug */
+            slug: string;
+            status: components["schemas"]["PostStatus"];
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -168,6 +183,11 @@ export interface components {
             /** Slug */
             slug: string;
         };
+        /**
+         * PostStatus
+         * @enum {string}
+         */
+        PostStatus: "draft" | "published" | "deleted";
         /** ValidationError */
         ValidationError: {
             /** Location */

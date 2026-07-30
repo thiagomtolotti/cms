@@ -49,6 +49,17 @@ const errorMiddleware: Middleware = {
   },
 };
 
+const authMiddleware: Middleware = {
+  async onRequest({ request }) {
+    const token = localStorage.getItem("kc_token");
+
+    if (token) {
+      request.headers.set("Authorization", `Bearer ${token}`);
+    }
+  },
+};
+
+client.use(authMiddleware);
 client.use(errorMiddleware);
 
 export default client;

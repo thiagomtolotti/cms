@@ -26,7 +26,7 @@ class PostMetadataResponseDTO(BaseModel):
         )
 
 
-class CreatePostRequestDTO(BaseModel):
+class MaintainPostRequestDTO(BaseModel):
     title: str
     author: str
     date: datetime

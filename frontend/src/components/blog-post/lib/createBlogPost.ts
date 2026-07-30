@@ -3,13 +3,13 @@ import type { components } from "@/types/api";
 import client from "@/types/client";
 
 export type CreateBlogPostDTO =
-  components["schemas"]["CreatePostRequestDTO"] & {
+  components["schemas"]["MaintainPostRequestDTO"] & {
     coverImage: File;
     markdown: File;
   };
 
 export default async function createBlogPost(data: CreateBlogPostDTO) {
-  const bodyData: components["schemas"]["CreatePostRequestDTO"] = {
+  const bodyData: components["schemas"]["MaintainPostRequestDTO"] = {
     title: data.title,
     slug: data.slug,
     author: data.author,

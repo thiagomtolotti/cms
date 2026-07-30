@@ -12,6 +12,14 @@ import SlugInput from "./slug-input";
 import ImageInput from "./image-input";
 
 import type { Post } from "../../types/post";
+import { ButtonGroup } from "@/components/ui/button-group";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ChevronDownIcon } from "lucide-react";
 
 interface MaintainPostFormProps {
   post?: Post;
@@ -22,16 +30,19 @@ export default function MaintainPostForm({ post }: MaintainPostFormProps) {
 
   const { mutateAsync, isPending } = useMaintainBlogPost(post?.slug);
   const isEditing = !!post;
-  const buttonText = isEditing ? "Atualizar Post" : "Criar Post";
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
+    const submitter = (e.nativeEvent as SubmitEvent).submitter;
+    const formData = new FormData(e.currentTarget, submitter);
+
     const markdown = editorRef.current?.getMarkdown() || "";
-    const formData = new FormData(e.currentTarget);
     const markdownFile = new File([markdown], "post.md", {
       type: "text/markdown",
     });
+
+    const actionStatus = formData.get("actionStatus") as "draft" | "published";
 
     let coverImage = formData.get("coverImage") as File | null;
     coverImage = coverImage && coverImage.size > 0 ? coverImage : null;
@@ -43,7 +54,7 @@ export default function MaintainPostForm({ post }: MaintainPostFormProps) {
       date: formData.get("date") as string,
       coverImage: coverImage as File,
       markdown: markdownFile,
-      status: "published",
+      status: actionStatus,
     });
   }
 
@@ -85,13 +96,65 @@ export default function MaintainPostForm({ post }: MaintainPostFormProps) {
       <MarkdownEditor ref={editorRef} defaultValue={post?.content} />
 
       <div className="mt-8 ml-auto">
-        <Button type="submit" isLoading={isPending}>
-          {buttonText}
-        </Button>
+        <MaintainPostForm.SubmitButton
+          isPending={isPending}
+          isEditing={isEditing}
+        />
       </div>
     </form>
   );
 }
+
+interface SubmitButtonProps {
+  isPending: boolean;
+  isEditing: boolean;
+}
+
+MaintainPostForm.SubmitButton = ({
+  isPending,
+  isEditing,
+}: SubmitButtonProps) => {
+  const buttonText = isEditing ? "Atualizar e publicar" : "Criar e publicar";
+
+  return (
+    <ButtonGroup>
+      <Button
+        type="submit"
+        name="actionStatus"
+        value="draft"
+        isLoading={isPending}
+      >
+        Salvar rascunho
+      </Button>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          render={
+            <Button className="px-4!">
+              <ChevronDownIcon />
+            </Button>
+          }
+        />
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem
+            className="cursor-pointer"
+            render={
+              <Button
+                variant="ghost"
+                type="submit"
+                name="actionStatus"
+                value="published"
+                isLoading={isPending}
+              >
+                {buttonText}
+              </Button>
+            }
+          />
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </ButtonGroup>
+  );
+};
 
 interface FieldInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id?: string;

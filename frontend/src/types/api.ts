@@ -147,8 +147,18 @@ export interface components {
             /** Image */
             image?: string | null;
         };
-        /** CreatePostRequestDTO */
-        CreatePostRequestDTO: {
+        /** HTTPValidationError */
+        HTTPValidationError: {
+            /** Detail */
+            detail?: components["schemas"]["ValidationError"][];
+        };
+        /** ListPostsResponseDTO */
+        ListPostsResponseDTO: {
+            /** Posts */
+            posts: components["schemas"]["PostMetadataResponseDTO"][];
+        };
+        /** MaintainPostRequestDTO */
+        MaintainPostRequestDTO: {
             /** Title */
             title: string;
             /** Author */
@@ -161,16 +171,6 @@ export interface components {
             /** Slug */
             slug: string;
             status: components["schemas"]["PostStatus"];
-        };
-        /** HTTPValidationError */
-        HTTPValidationError: {
-            /** Detail */
-            detail?: components["schemas"]["ValidationError"][];
-        };
-        /** ListPostsResponseDTO */
-        ListPostsResponseDTO: {
-            /** Posts */
-            posts: components["schemas"]["PostMetadataResponseDTO"][];
         };
         /** PostMetadataResponseDTO */
         PostMetadataResponseDTO: {

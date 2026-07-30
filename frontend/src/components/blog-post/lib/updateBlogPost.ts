@@ -11,7 +11,7 @@ export interface UpdateBlogPostDTO extends Omit<
 }
 
 export default async function updateBlogPost(data: UpdateBlogPostDTO) {
-  const bodyData: components["schemas"]["CreatePostRequestDTO"] = {
+  const bodyData: components["schemas"]["MaintainPostRequestDTO"] = {
     title: data.title,
     slug: data.slug,
     author: data.author,

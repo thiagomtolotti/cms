@@ -49,8 +49,8 @@ class SQLitePostRepository(PostRepository):
             cursor = conn.cursor()
             cursor.execute(
                 """
-                INSERT INTO posts (id, title, slug, author, date, file_path, image_path)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO posts (id, title, slug, author, date, file_path, image_path, status)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     str(post.id),
@@ -60,6 +60,7 @@ class SQLitePostRepository(PostRepository):
                     post.date.isoformat(),
                     str(post.file),
                     str(post.image),
+                    post.status.value,
                 ),
             )
             conn.commit()
@@ -84,7 +85,7 @@ class SQLitePostRepository(PostRepository):
             cursor.execute(
                 """
                 UPDATE posts
-                SET title = ?, author = ?, date = ?, file_path = ?, image_path = ?
+                SET title = ?, author = ?, date = ?, file_path = ?, image_path = ?, status = ?
                 WHERE slug = ?
                 """,
                 (
@@ -93,6 +94,7 @@ class SQLitePostRepository(PostRepository):
                     post.date.isoformat(),
                     str(post.file),
                     str(post.image),
+                    post.status.value,
                     post.slug,
                 ),
             )

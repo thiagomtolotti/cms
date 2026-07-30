@@ -7,7 +7,7 @@ from src.domain.file_repository import FileRepository
 from src.domain.post import Post, PostStatus
 from src.domain.post_repository import PostRepository
 from src.exceptions import EntityAlreadyExistsError, InvalidStatusError
-from src.presentation.types import CreatePostRequestDTO, FileDTO
+from src.presentation.types import FileDTO, MaintainPostRequestDTO
 
 
 class PostService:
@@ -50,7 +50,7 @@ class PostService:
 
     def create_post(
         self,
-        dto: CreatePostRequestDTO,
+        dto: MaintainPostRequestDTO,
         image: FileDTO,
         markdown: FileDTO,
     ) -> None:
@@ -85,7 +85,7 @@ class PostService:
 
     def update_post(
         self,
-        dto: CreatePostRequestDTO,
+        dto: MaintainPostRequestDTO,
         image: FileDTO | None,
         markdown: FileDTO,
     ) -> None:
@@ -94,21 +94,28 @@ class PostService:
 
         post = self.repo.get_from_slug(dto.slug)
 
+        image_path = post.image
+
         if image:
             image_path = Path(str(post.id), image.filename)
             self.file_repo.save(image_path, image.content)
-            post.image = image_path
 
         markdown_path = Path(str(post.id), markdown.filename)
 
         self.file_repo.save(markdown_path, markdown.content)
-        post.file = markdown_path
 
-        post.author = dto.author
-        post.title = dto.title
-        post.slug = dto.slug
-        post.date = dto.date
+        post = Post(
+            id=post.id,
+            author=dto.author,
+            title=dto.title,
+            slug=dto.slug,
+            date=dto.date,
+            status=dto.status,
+            image=image_path,
+            file=markdown_path,
+        )
 
+        print("updating post with data:", post.status)
         self.repo.update(post)
 
     def list_posts(self) -> list[Post]:

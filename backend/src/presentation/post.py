@@ -6,9 +6,9 @@ from pydantic import Json
 
 from src.application.post import PostService
 from src.presentation.types import (
-    CreatePostRequestDTO,
     FileDTO,
     ListPostsResponseDTO,
+    MaintainPostRequestDTO,
     PostMetadataResponseDTO,
 )
 
@@ -91,7 +91,7 @@ class PostRouter(APIRouter):
 
     def create_post(
         self,
-        data: Annotated[Json[CreatePostRequestDTO], Form()],
+        data: Annotated[Json[MaintainPostRequestDTO], Form()],
         image: Annotated[UploadFile, File()],
         markdown: Annotated[UploadFile, File()],
     ):
@@ -111,7 +111,7 @@ class PostRouter(APIRouter):
 
     def update_post(
         self,
-        data: Annotated[Json[CreatePostRequestDTO], Form()],
+        data: Annotated[Json[MaintainPostRequestDTO], Form()],
         markdown: Annotated[UploadFile, File()],
         image: Annotated[UploadFile | None, File()] = None,
     ):

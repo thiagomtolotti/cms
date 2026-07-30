@@ -45,7 +45,7 @@ PostList.TableRow = ({ post }: PostListTableRowProps) => {
     <TableRow>
       <TableCell>{post.title}</TableCell>
       <TableCell>{post.slug}</TableCell>
-      <TableCell>Publicado</TableCell>
+      <TableCell>{post.status}</TableCell>
       <TableCell className="text-right">
         <Link
           to={`/${post.slug}/editar`}

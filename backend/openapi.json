@@ -437,6 +437,9 @@
           "slug": {
             "type": "string",
             "title": "Slug"
+          },
+          "status": {
+            "$ref": "#/components/schemas/PostStatus"
           }
         },
         "type": "object",
@@ -444,7 +447,8 @@
           "title",
           "author",
           "date",
-          "slug"
+          "slug",
+          "status"
         ],
         "title": "PostMetadataResponseDTO"
       },

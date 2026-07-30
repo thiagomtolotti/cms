@@ -182,6 +182,7 @@ export interface components {
             date: string;
             /** Slug */
             slug: string;
+            status: components["schemas"]["PostStatus"];
         };
         /**
          * PostStatus

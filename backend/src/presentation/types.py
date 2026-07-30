@@ -13,6 +13,7 @@ class PostMetadataResponseDTO(BaseModel):
     author: str
     date: str
     slug: str
+    status: PostStatus
 
     @classmethod
     def from_domain(cls, post: Post) -> Self:
@@ -21,6 +22,7 @@ class PostMetadataResponseDTO(BaseModel):
             author=post.author,
             slug=post.slug,
             date=post.date.isoformat(),
+            status=post.status,
         )
 
 

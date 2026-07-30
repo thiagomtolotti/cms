@@ -8,8 +8,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import useListPosts from "../hooks/useListPosts";
-import type { components } from "@/types/api";
+
 import { Link } from "@tanstack/react-router";
+
+import type { components } from "@/types/api";
+import humanReadableStatus from "@/types/humanReadableStatus";
 
 export default function PostList() {
   const { data } = useListPosts();
@@ -19,8 +22,8 @@ export default function PostList() {
       <TableCaption>Lista de Posts.</TableCaption>
       <TableHeader>
         <TableRow className="[&>th]:font-bold">
-          <TableHead className="w-full">Título</TableHead>
           <TableHead>Título</TableHead>
+          <TableHead>Slug</TableHead>
           <TableHead>Status</TableHead>
           <TableHead className="text-right">Ações</TableHead>
         </TableRow>
@@ -45,7 +48,7 @@ PostList.TableRow = ({ post }: PostListTableRowProps) => {
     <TableRow>
       <TableCell>{post.title}</TableCell>
       <TableCell>{post.slug}</TableCell>
-      <TableCell>{post.status}</TableCell>
+      <TableCell>{humanReadableStatus[post.status]}</TableCell>
       <TableCell className="text-right">
         <Link
           to={`/${post.slug}/editar`}

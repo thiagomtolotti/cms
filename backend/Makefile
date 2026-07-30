@@ -1,4 +1,4 @@
-.PHONY: dev build start setup
+.PHONY: dev build start setup typecheck
 
 setup:
 	uv sync
@@ -15,3 +15,6 @@ build:
 
 start:
 	.venv/bin/start
+
+typecheck:
+	uv run mypy ./src 

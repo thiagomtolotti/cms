@@ -17,11 +17,11 @@ export default async function updateBlogPost(data: UpdateBlogPostDTO) {
     date: data.date,
   };
 
-  return await client.PUT("/api/posts", {
+  return await client.PUT("/api/posts/", {
     body: {
       data: JSON.stringify(bodyData),
-      image: data.coverImage as any,
-      markdown: data.markdown as any,
+      image: data.coverImage as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+      markdown: data.markdown as any, // eslint-disable-line @typescript-eslint/no-explicit-any
     },
     bodySerializer: MultiPartFormDataSerializer,
   });

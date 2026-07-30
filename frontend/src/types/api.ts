@@ -55,42 +55,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/posts/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        /** Update Post */
-        put: operations["update_post_api_posts__put"];
-        /** Create Post */
-        post: operations["create_post_api_posts__post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/posts": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        /** Update Post */
-        put: operations["update_post_api_posts_put"];
-        /** Create Post */
-        post: operations["create_post_api_posts_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/posts/validate-slug/{slug}": {
         parameters: {
             query?: never;
@@ -102,6 +66,25 @@ export interface paths {
         get: operations["validate_slug_api_posts_validate_slug__slug__get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/posts/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List */
+        get: operations["_list_api_posts__get"];
+        /** Update Post */
+        put: operations["update_post_api_posts__put"];
+        /** Create Post */
+        post: operations["create_post_api_posts__post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -155,26 +138,8 @@ export interface components {
             /** Markdown */
             markdown: string;
         };
-        /** Body_create_post_api_posts_post */
-        Body_create_post_api_posts_post: {
-            /** Data */
-            data: string;
-            /** Image */
-            image: string;
-            /** Markdown */
-            markdown: string;
-        };
         /** Body_update_post_api_posts__put */
         Body_update_post_api_posts__put: {
-            /** Data */
-            data: string;
-            /** Markdown */
-            markdown: string;
-            /** Image */
-            image?: string | null;
-        };
-        /** Body_update_post_api_posts_put */
-        Body_update_post_api_posts_put: {
             /** Data */
             data: string;
             /** Markdown */
@@ -187,6 +152,11 @@ export interface components {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
         };
+        /** ListPostsResponseDTO */
+        ListPostsResponseDTO: {
+            /** Posts */
+            posts: components["schemas"]["PostMetadataResponseDTO"][];
+        };
         /** PostMetadataResponseDTO */
         PostMetadataResponseDTO: {
             /** Title */
@@ -195,6 +165,8 @@ export interface components {
             author: string;
             /** Date */
             date: string;
+            /** Slug */
+            slug: string;
         };
         /** ValidationError */
         ValidationError: {
@@ -309,6 +281,57 @@ export interface operations {
             };
         };
     };
+    validate_slug_api_posts_validate_slug__slug__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    _list_api_posts__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListPostsResponseDTO"];
+                };
+            };
+        };
+    };
     update_post_api_posts__put: {
         parameters: {
             query?: never;
@@ -354,103 +377,6 @@ export interface operations {
                 "multipart/form-data": components["schemas"]["Body_create_post_api_posts__post"];
             };
         };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    update_post_api_posts_put: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "multipart/form-data": components["schemas"]["Body_update_post_api_posts_put"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    create_post_api_posts_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "multipart/form-data": components["schemas"]["Body_create_post_api_posts_post"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    validate_slug_api_posts_validate_slug__slug__get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                slug: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
         responses: {
             /** @description Successful Response */
             200: {

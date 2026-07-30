@@ -19,3 +19,8 @@ include = ["src*"]
 
 [tool.uv]
 package = true
+
+[dependency-groups]
+dev = [
+    "mypy>=2.3.0",
+]

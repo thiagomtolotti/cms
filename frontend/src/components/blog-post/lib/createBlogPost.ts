@@ -18,11 +18,11 @@ export default async function createBlogPost(data: CreateBlogPostDTO) {
     date: data.date,
   };
 
-  return await client.POST("/api/posts", {
+  return await client.POST("/api/posts/", {
     body: {
       data: JSON.stringify(bodyData),
-      image: data.coverImage as any,
-      markdown: data.markdown as any,
+      image: data.coverImage as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+      markdown: data.markdown as any, // eslint-disable-line @typescript-eslint/no-explicit-any
     },
     bodySerializer: MultiPartFormDataSerializer,
   });

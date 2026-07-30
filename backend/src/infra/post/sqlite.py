@@ -2,8 +2,8 @@ from datetime import datetime
 from pathlib import Path
 
 from src.domain.post import Post
-from src.exceptions import EntityNotFoundError
 from src.domain.post_repository import PostRepository
+from src.exceptions import EntityNotFoundError
 
 
 def get_connection():
@@ -77,7 +77,7 @@ class SQLitePostRepository(PostRepository):
     def update(self, post: Post) -> None:
         if not self.exists(post.slug):
             raise EntityNotFoundError("Post not found")
-        
+
         with get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
@@ -96,3 +96,26 @@ class SQLitePostRepository(PostRepository):
                 ),
             )
             conn.commit()
+
+    def list_(self) -> list[Post]:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "SELECT id, title, slug, author, date, file_path, image_path FROM posts"
+            )
+            rows = cursor.fetchall()
+
+            posts = [
+                Post(
+                    id=row[0],
+                    title=row[1],
+                    slug=row[2],
+                    author=row[3],
+                    date=datetime.fromisoformat(row[4]),
+                    file=Path(row[5]),
+                    image=Path(row[6]),
+                )
+                for row in rows
+            ]
+
+            return posts

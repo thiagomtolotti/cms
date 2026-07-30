@@ -115,7 +115,60 @@
         }
       }
     },
+    "/api/posts/validate-slug/{slug}": {
+      "get": {
+        "summary": "Validate Slug",
+        "operationId": "validate_slug_api_posts_validate_slug__slug__get",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Slug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/posts/": {
+      "get": {
+        "summary": " List",
+        "operationId": "_list_api_posts__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListPostsResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
       "put": {
         "summary": "Update Post",
         "operationId": "update_post_api_posts__put",
@@ -163,113 +216,6 @@
           },
           "required": true
         },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/posts": {
-      "put": {
-        "summary": "Update Post",
-        "operationId": "update_post_api_posts_put",
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_update_post_api_posts_put"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Create Post",
-        "operationId": "create_post_api_posts_post",
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_create_post_api_posts_post"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/posts/validate-slug/{slug}": {
-      "get": {
-        "summary": "Validate Slug",
-        "operationId": "validate_slug_api_posts_validate_slug__slug__get",
-        "parameters": [
-          {
-            "name": "slug",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Slug"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -373,31 +319,6 @@
         ],
         "title": "Body_create_post_api_posts__post"
       },
-      "Body_create_post_api_posts_post": {
-        "properties": {
-          "data": {
-            "type": "string",
-            "title": "Data"
-          },
-          "image": {
-            "type": "string",
-            "contentMediaType": "application/octet-stream",
-            "title": "Image"
-          },
-          "markdown": {
-            "type": "string",
-            "contentMediaType": "application/octet-stream",
-            "title": "Markdown"
-          }
-        },
-        "type": "object",
-        "required": [
-          "data",
-          "image",
-          "markdown"
-        ],
-        "title": "Body_create_post_api_posts_post"
-      },
       "Body_update_post_api_posts__put": {
         "properties": {
           "data": {
@@ -429,37 +350,6 @@
         ],
         "title": "Body_update_post_api_posts__put"
       },
-      "Body_update_post_api_posts_put": {
-        "properties": {
-          "data": {
-            "type": "string",
-            "title": "Data"
-          },
-          "markdown": {
-            "type": "string",
-            "contentMediaType": "application/octet-stream",
-            "title": "Markdown"
-          },
-          "image": {
-            "anyOf": [
-              {
-                "type": "string",
-                "contentMediaType": "application/octet-stream"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Image"
-          }
-        },
-        "type": "object",
-        "required": [
-          "data",
-          "markdown"
-        ],
-        "title": "Body_update_post_api_posts_put"
-      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -472,6 +362,22 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "ListPostsResponseDTO": {
+        "properties": {
+          "posts": {
+            "items": {
+              "$ref": "#/components/schemas/PostMetadataResponseDTO"
+            },
+            "type": "array",
+            "title": "Posts"
+          }
+        },
+        "type": "object",
+        "required": [
+          "posts"
+        ],
+        "title": "ListPostsResponseDTO"
       },
       "PostMetadataResponseDTO": {
         "properties": {
@@ -486,13 +392,18 @@
           "date": {
             "type": "string",
             "title": "Date"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
           }
         },
         "type": "object",
         "required": [
           "title",
           "author",
-          "date"
+          "date",
+          "slug"
         ],
         "title": "PostMetadataResponseDTO"
       },

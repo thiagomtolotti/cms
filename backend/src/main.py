@@ -1,17 +1,13 @@
 import os
 from typing import Any
 
-
-from fastapi import FastAPI, APIRouter
-from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
-
-
-from .infra.db.migrate import migrate_sqlite
-
-from .presentation.post import post_router
+from fastapi import APIRouter, FastAPI
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 
 from .constants import DATA_PATH
+from .dependencies import post_router
 from .exceptions import EntityNotFoundError
+from .infra.db.migrate import migrate_sqlite
 
 migrate_sqlite()
 
@@ -57,6 +53,13 @@ def not_found_error_handler(_: Any, exc: Exception):
     )
 
 
+def domain_error_handler(_: Any, exc: Exception):
+    return JSONResponse(
+        status_code=400,
+        content={"message": str(exc)},
+    )
+
+
 app.add_exception_handler(
     EntityNotFoundError,
     not_found_error_handler,
@@ -64,6 +67,10 @@ app.add_exception_handler(
 app.add_exception_handler(
     FileNotFoundError,
     not_found_error_handler,
+)
+app.add_exception_handler(
+    Exception,
+    domain_error_handler,
 )
 
 

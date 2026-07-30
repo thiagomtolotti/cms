@@ -1,166 +1,145 @@
 from typing import Annotated
-from uuid import uuid4
 
-import markdown
-from pathlib import Path
+from fastapi import APIRouter, File, Form, UploadFile
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 
-from fastapi import APIRouter, Form,File, UploadFile
-from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
-
-from src.domain.post import Post
+from src.application.post import PostService
 from src.presentation.types import (
     CreatePostRequestDTO,
+    FileDTO,
+    ListPostsResponseDTO,
     PostMetadataResponseDTO,
 )
-from src.dependencies import repo, file_repo
-
-post_router = APIRouter(prefix="/posts")
 
 
-@post_router.get(
-    "/{post_slug}",
-    response_class=HTMLResponse,
-)
-def get_post(post_slug: str):
-    post = repo.get_from_slug(post_slug)
+class PostRouter(APIRouter):
+    def __init__(self, service: PostService):
+        self.service = service
 
-    content = file_repo.get_from_path(Path(post.file))
-    content = content.decode("utf-8")
+        super().__init__(prefix="/posts")
 
-    html = markdown.markdown(content)
+        self.add_api_route(
+            "/{post_slug}",
+            self.get_post,
+            response_class=HTMLResponse,
+            methods=["GET"],
+        )
 
-    return html
+        self.add_api_route(
+            "/{post_slug}/metadata",
+            self.get_post_metadata,
+            response_class=JSONResponse,
+            response_model=PostMetadataResponseDTO,
+            methods=["GET"],
+        )
 
+        self.add_api_route(
+            "/{post_slug}/image",
+            self.get_post_image,
+            response_class=FileResponse,
+            methods=["GET"],
+        )
 
-@post_router.get(
-    "/{post_slug}/metadata",
-    response_class=JSONResponse,
-    response_model=PostMetadataResponseDTO,
-)
-def get_post_metadata(post_slug: str):
-    post = repo.get_from_slug(post_slug)
+        self.add_api_route(
+            "/validate-slug/{slug}",
+            self.validate_slug,
+            response_class=JSONResponse,
+            methods=["GET"],
+        )
 
-    return PostMetadataResponseDTO.from_domain(post)
+        self.add_api_route(
+            "/",
+            self.create_post,
+            response_class=JSONResponse,
+            methods=["POST"],
+        )
 
+        self.add_api_route(
+            "/",
+            self.update_post,
+            response_class=JSONResponse,
+            methods=["PUT"],
+        )
 
-@post_router.get(
-    "/{post_slug}/image",
-    response_class=FileResponse,
-)
-def get_post_image(post_slug: str):
-    post = repo.get_from_slug(post_slug)
+        self.add_api_route(
+            "/",
+            self._list,
+            response_class=JSONResponse,
+            response_model=ListPostsResponseDTO,
+            methods=["GET"],
+        )
 
-    path = file_repo.get_complete_path(post.image)
+    def get_post(self, post_slug: str):
+        html = self.service.get_post_content(post_slug)
 
-    return FileResponse(
-        path=path,
-        media_type="image/jpeg",
-        filename=path.name,
-    )
+        return html
 
+    def get_post_metadata(self, post_slug: str):
+        post = self.service.get_post(post_slug)
 
-@post_router.post("")
-@post_router.post("/")
-def create_post(
-    data: Annotated[str, Form()],
-    image:  Annotated[UploadFile, File()],
-    markdown:  Annotated[UploadFile, File()],
-):
-    dto = CreatePostRequestDTO.model_validate_json(data)
-    
-    if (
-        not image.filename
-        or image.filename.lower().endswith((".jpg", ".jpeg", ".png")) is False
+        return PostMetadataResponseDTO.from_domain(post)
+
+    def get_post_image(self, post_slug: str):
+        path = self.service.get_post_image_path(post_slug)
+
+        return FileResponse(
+            path=path,
+            media_type="image/jpeg",
+            filename=path.name,
+        )
+
+    def create_post(
+        self,
+        data: Annotated[str, Form()],
+        image: Annotated[UploadFile, File()],
+        markdown: Annotated[UploadFile, File()],
     ):
-        return JSONResponse(
-            status_code=400,
-            content={"message": "Invalid image format. Only JPG and PNG are allowed."},
+        dto = CreatePostRequestDTO.model_validate_json(data)
+
+        self.service.create_post(
+            dto,
+            FileDTO.from_upload_file(
+                image,
+                required_mime_types=["image/"],
+            ),
+            FileDTO.from_upload_file(
+                markdown,
+                required_mime_types=["text/markdown"],
+            ),
         )
 
-    if not markdown.filename or not markdown.filename.lower().endswith(".md"):
-        return JSONResponse(
-            status_code=400,
-            content={"message": "Invalid markdown format. Only .md files are allowed."},
-        )
+        return {"message": "Post created successfully"}
 
-    if repo.exists(dto.slug):
-        return JSONResponse(
-            status_code=400,
-            content={"message": "A post with that slug already exists."},
-        )
+    def update_post(
+        self,
+        data: Annotated[str, Form()],
+        markdown: Annotated[UploadFile, File()],
+        image: Annotated[UploadFile | None, File()] = None,
+    ):
+        dto = CreatePostRequestDTO.model_validate_json(data)
 
-    id = uuid4()
-
-    image_path = Path(str(id), image.filename)
-    markdown_path = Path(str(id), markdown.filename)
-
-    file_repo.save(image_path, image.file.read())
-    file_repo.save(markdown_path, markdown.file.read())
-
-    post = Post(
-        id=id,
-        author=dto.author,
-        title=dto.title,
-        slug=dto.slug,
-        date=dto.date,
-        image=image_path,
-        file=markdown_path,
-    )
-
-    repo.create(post)
-
-    return {"message": "Post created successfully"}
-
-
-@post_router.get("/validate-slug/{slug}")
-def validate_slug(slug: str):
-    if repo.exists(slug):
-        return JSONResponse(
-            status_code=400,
-            content={"message": "A post with that slug already exists."},
-        )
-
-    return {"message": "Slug is available."}
-
-@post_router.put("/")
-@post_router.put("")
-def update_post(
-    data:Annotated[str, Form()],
-    markdown: Annotated[UploadFile, File()],
-    image: Annotated[UploadFile | None, File()] = None,
-):    
-    dto = CreatePostRequestDTO.model_validate_json(data)
-    post = repo.get_from_slug(dto.slug)
-
-    if image:
-        if (
-            not image.filename
-            or image.filename.lower().endswith((".jpg", ".jpeg", ".png")) is False
-        ):
-            return JSONResponse(
-                status_code=400,
-                content={"message": "Invalid image format. Only JPG and PNG are allowed."},
+        self.service.update_post(
+            dto,
+            FileDTO.from_upload_file(
+                image,
+                required_mime_types=["image/"],
             )
-
-        image_path = Path(str(post.id), image.filename)
-        file_repo.save(image_path, image.file.read())
-        post.image = image_path
-
-    if not markdown.filename or not markdown.filename.lower().endswith(".md"):
-        return JSONResponse(
-            status_code=400,
-            content={"message": "Invalid markdown format. Only .md files are allowed."},
+            if image
+            else None,
+            FileDTO.from_upload_file(
+                markdown,
+                required_mime_types=["text/markdown"],
+            ),
         )
 
-    markdown_path = Path(str(post.id), markdown.filename)
-    file_repo.save(markdown_path, markdown.file.read())
-    post.file = markdown_path
+        return {"message": "Post updated successfully"}
 
-    post.author = dto.author
-    post.title = dto.title
-    post.slug = dto.slug
-    post.date = dto.date
+    def validate_slug(self, slug: str):
+        self.service.validate_slug(slug)
 
-    repo.update(post)
+        return {"message": "Slug is available."}
 
-    return {"message": "Post updated successfully"}
+    def _list(self):
+        posts = self.service.list_posts()
+
+        return ListPostsResponseDTO.from_domain(posts)

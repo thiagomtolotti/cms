@@ -10,8 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as SlugIndexRouteImport } from './routes/$slug/index'
 import { Route as SlugEditarRouteImport } from './routes/$slug/editar'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as CreateIndexRouteImport } from './routes/create/index'
 import { Route as LogoutIndexRouteImport } from './routes/logout/index'
 import { Route as QrCodeIndexRouteImport } from './routes/qr-code/index'
@@ -19,6 +21,11 @@ import { Route as QrCodeIndexRouteImport } from './routes/qr-code/index'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SlugIndexRoute = SlugIndexRouteImport.update({
@@ -30,6 +37,11 @@ const SlugEditarRoute = SlugEditarRouteImport.update({
   id: '/$slug/editar',
   path: '/$slug/editar',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
 } as any)
 const CreateIndexRoute = CreateIndexRouteImport.update({
   id: '/create/',
@@ -49,8 +61,10 @@ const QrCodeIndexRoute = QrCodeIndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/$slug/editar': typeof SlugEditarRoute
   '/$slug/': typeof SlugIndexRoute
+  '/admin/': typeof AdminIndexRoute
   '/create/': typeof CreateIndexRoute
   '/logout/': typeof LogoutIndexRoute
   '/qr-code/': typeof QrCodeIndexRoute
@@ -59,6 +73,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$slug/editar': typeof SlugEditarRoute
   '/$slug': typeof SlugIndexRoute
+  '/admin': typeof AdminIndexRoute
   '/create': typeof CreateIndexRoute
   '/logout': typeof LogoutIndexRoute
   '/qr-code': typeof QrCodeIndexRoute
@@ -66,8 +81,10 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/$slug/editar': typeof SlugEditarRoute
   '/$slug/': typeof SlugIndexRoute
+  '/admin/': typeof AdminIndexRoute
   '/create/': typeof CreateIndexRoute
   '/logout/': typeof LogoutIndexRoute
   '/qr-code/': typeof QrCodeIndexRoute
@@ -75,14 +92,30 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/$slug/editar' | '/$slug/' | '/create/' | '/logout/' | '/qr-code/'
+    | '/'
+    | '/admin'
+    | '/$slug/editar'
+    | '/$slug/'
+    | '/admin/'
+    | '/create/'
+    | '/logout/'
+    | '/qr-code/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/$slug/editar' | '/$slug' | '/create' | '/logout' | '/qr-code'
+  to:
+    | '/'
+    | '/$slug/editar'
+    | '/$slug'
+    | '/admin'
+    | '/create'
+    | '/logout'
+    | '/qr-code'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/$slug/editar'
     | '/$slug/'
+    | '/admin/'
     | '/create/'
     | '/logout/'
     | '/qr-code/'
@@ -90,6 +123,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
   SlugEditarRoute: typeof SlugEditarRoute
   SlugIndexRoute: typeof SlugIndexRoute
   CreateIndexRoute: typeof CreateIndexRoute
@@ -106,6 +140,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/$slug/': {
       id: '/$slug/'
       path: '/$slug'
@@ -119,6 +160,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/$slug/editar'
       preLoaderRoute: typeof SlugEditarRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/create/': {
       id: '/create/'
@@ -144,8 +192,19 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
   SlugEditarRoute: SlugEditarRoute,
   SlugIndexRoute: SlugIndexRoute,
   CreateIndexRoute: CreateIndexRoute,

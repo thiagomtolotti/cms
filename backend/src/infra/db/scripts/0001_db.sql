@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS posts (
+	id TEXT PRIMARY KEY,
+	title TEXT NOT NULL,
+	slug TEXT NOT NULL UNIQUE,
+	author TEXT NOT NULL,
+	date TEXT NOT NULL,
+	file_path TEXT NOT NULL,
+	image_path TEXT NOT NULL
+);

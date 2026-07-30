@@ -2,6 +2,7 @@
 
 setup:
 	uv sync
+	uv run pre-commit install
 
 dev:
 	uv run python -m fastapi dev ./src/main.py --reload --port 8000
@@ -17,4 +18,4 @@ start:
 	.venv/bin/start
 
 typecheck:
-	uv run mypy ./src 
+	uv run pyright 

@@ -1,4 +1,4 @@
-.PHONY: build start api-types
+.PHONY: build start api-types typecheck setup
 
 setup:
 	$(MAKE) -C backend setup
@@ -15,3 +15,6 @@ build:
 start:
 	cd backend && make start
 	
+typecheck:
+	cd backend && make typecheck
+	cd frontend && npm run typecheck

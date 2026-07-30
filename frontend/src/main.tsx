@@ -20,6 +20,14 @@ createRoot(document.getElementById("root")!).render(
       initOptions={{
         checkLoginIframe: false,
       }}
+      onTokens={(tokens) => keycloak.saveTokens(tokens)}
+      onEvent={(e, err) => {
+        console.log("onEvent", e, err);
+
+        if (e === "onAuthLogout" || e === "onAuthRefreshError") {
+          keycloak.logout();
+        }
+      }}
     >
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />

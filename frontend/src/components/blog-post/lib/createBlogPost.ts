@@ -2,14 +2,11 @@ import MultiPartFormDataSerializer from "@/lib/MultiPartFormDataSerializer";
 import type { components } from "@/types/api";
 import client from "@/types/client";
 
-export interface CreateBlogPostDTO {
-  title: string;
-  slug: string;
-  author: string;
-  date: string;
-  coverImage: File;
-  markdown: File;
-}
+export type CreateBlogPostDTO =
+  components["schemas"]["CreatePostRequestDTO"] & {
+    coverImage: File;
+    markdown: File;
+  };
 
 export default async function createBlogPost(data: CreateBlogPostDTO) {
   const bodyData: components["schemas"]["CreatePostRequestDTO"] = {
@@ -17,7 +14,7 @@ export default async function createBlogPost(data: CreateBlogPostDTO) {
     slug: data.slug,
     author: data.author,
     date: data.date,
-    status: "published",
+    status: data.status,
   };
 
   return await client.POST("/api/posts/", {

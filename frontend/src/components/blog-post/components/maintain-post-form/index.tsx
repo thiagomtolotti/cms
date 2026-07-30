@@ -43,6 +43,7 @@ export default function MaintainPostForm({ post }: MaintainPostFormProps) {
       date: formData.get("date") as string,
       coverImage: coverImage as File,
       markdown: markdownFile,
+      status: "published",
     });
   }
 

@@ -16,7 +16,7 @@ export default async function updateBlogPost(data: UpdateBlogPostDTO) {
     slug: data.slug,
     author: data.author,
     date: data.date,
-    status: "published",
+    status: data.status,
   };
 
   return await client.PUT("/api/posts/", {

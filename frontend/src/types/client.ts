@@ -1,5 +1,6 @@
 import createClient, { type Middleware } from "openapi-fetch";
 import type { paths } from "./api";
+import keycloak from "@/lib/keycloak";
 
 type ApiError = {
   detail?: {
@@ -51,7 +52,7 @@ const errorMiddleware: Middleware = {
 
 const authMiddleware: Middleware = {
   async onRequest({ request }) {
-    const token = localStorage.getItem("kc_token");
+    const token = keycloak.token;
 
     if (token) {
       request.headers.set("Authorization", `Bearer ${token}`);

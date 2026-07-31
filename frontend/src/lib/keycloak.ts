@@ -47,9 +47,9 @@ class KeycloakService extends Keycloak {
 }
 
 const keycloak = new KeycloakService({
-  clientId: "frontend",
-  realm: "blog",
-  url: "https://auth.thiagotolotti.com",
+  clientId: import.meta.env.VITE_KEYCLOAK_CLIENT_ID,
+  realm: import.meta.env.VITE_KEYCLOAK_REALM,
+  url: import.meta.env.VITE_KEYCLOAK_BASE_URL,
 });
 
 // @ts-ignore

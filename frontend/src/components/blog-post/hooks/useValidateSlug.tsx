@@ -1,14 +1,20 @@
+import client from "@/types/client";
 import { useQuery } from "@tanstack/react-query";
 
 export default function useValidateSlug(slug: string, enabled: boolean = true) {
   return useQuery({
     queryKey: ["validate-slug", slug],
     queryFn: async () => {
-      const response = await fetch(`/api/posts/validate-slug/${slug}`);
+      try {
+        await client.GET("/api/posts/validate-slug/{slug}", {
+          params: { path: { slug } },
+        });
 
-      return response.ok;
+        return true;
+      } catch (error) {
+        return false;
+      }
     },
     enabled: slug.length > 0 && enabled,
-    select: (isValid) => typeof isValid === "boolean" && isValid,
   });
 }

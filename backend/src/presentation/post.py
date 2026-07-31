@@ -1,10 +1,11 @@
 from typing import Annotated
 
-from fastapi import APIRouter, File, Form, UploadFile
+from fastapi import APIRouter, Depends, File, Form, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from pydantic import Json
 
 from src.application.post import PostService
+from src.domain.auth_repository import AuthRepository
 from src.presentation.types import (
     FileDTO,
     ListPostsResponseDTO,
@@ -12,9 +13,15 @@ from src.presentation.types import (
     PostMetadataResponseDTO,
 )
 
+from .logged_middleware import logged_middleware
+
 
 class PostRouter(APIRouter):
-    def __init__(self, service: PostService):
+    def __init__(
+        self,
+        service: PostService,
+        auth_repo: AuthRepository,
+    ):
         self.service = service
 
         super().__init__(prefix="/posts")
@@ -42,10 +49,20 @@ class PostRouter(APIRouter):
         )
 
         self.add_api_route(
+            "/",
+            self._list,
+            response_class=JSONResponse,
+            response_model=ListPostsResponseDTO,
+            methods=["GET"],
+            dependencies=[Depends(logged_middleware(auth_repo))],
+        )
+
+        self.add_api_route(
             "/validate-slug/{slug}",
             self.validate_slug,
             response_class=JSONResponse,
             methods=["GET"],
+            dependencies=[Depends(logged_middleware(auth_repo))],
         )
 
         self.add_api_route(
@@ -53,6 +70,7 @@ class PostRouter(APIRouter):
             self.create_post,
             response_class=JSONResponse,
             methods=["POST"],
+            dependencies=[Depends(logged_middleware(auth_repo))],
         )
 
         self.add_api_route(
@@ -60,14 +78,7 @@ class PostRouter(APIRouter):
             self.update_post,
             response_class=JSONResponse,
             methods=["PUT"],
-        )
-
-        self.add_api_route(
-            "/",
-            self._list,
-            response_class=JSONResponse,
-            response_model=ListPostsResponseDTO,
-            methods=["GET"],
+            dependencies=[Depends(logged_middleware(auth_repo))],
         )
 
     def get_post(self, post_slug: str):

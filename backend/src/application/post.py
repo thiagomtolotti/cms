@@ -19,8 +19,8 @@ class PostService:
         self.repo = repo
         self.file_repo = file_repo
 
-    def get_post_content(self, post_slug: str) -> str:
-        post = self.repo.get_from_slug(post_slug)
+    def get_post_content(self, post_slug: str, published_only: bool = True) -> str:
+        post = self.repo.get_from_slug(post_slug, published_only)
 
         content = self.file_repo.get_from_path(Path(post.file))
         content_str = content.decode("utf-8")
@@ -29,8 +29,8 @@ class PostService:
 
         return html
 
-    def get_post(self, post_slug: str) -> Post:
-        post = self.repo.get_from_slug(post_slug)
+    def get_post(self, post_slug: str, published_only: bool = True) -> Post:
+        post = self.repo.get_from_slug(post_slug, published_only)
 
         return post
 

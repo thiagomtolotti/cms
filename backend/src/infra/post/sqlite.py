@@ -19,13 +19,18 @@ def get_connection():
 
 
 class SQLitePostRepository(PostRepository):
-    def get_from_slug(self, slug: str) -> Post:
+    def get_from_slug(self, slug: str, published_only: bool = True) -> Post:
+        query = """
+            SELECT id, title, slug, author, date, file_path, image_path, status
+            FROM posts
+            WHERE slug = :slug
+            AND (:published_only = 0 OR status = 'published')
+            LIMIT 1
+        """
+        
         with get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute(
-                "SELECT * FROM posts WHERE slug = ? LIMIT 1",
-                (slug,),
-            )
+            cursor.execute(query, {"slug": slug, "published_only": published_only})
             row = cursor.fetchone()
 
             if row is None:

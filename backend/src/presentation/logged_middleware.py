@@ -7,20 +7,28 @@ from src.domain.token import Token
 
 
 def logged_middleware(
-    auth_repo: AuthRepository,
-) -> Callable[[Request], Awaitable[Token]]:
-    async def _logged_middleware(request: Request):
-        token = request.headers.get("Authorization")
+    auth_repo: AuthRepository, should_fail: bool = True
+) -> Callable[[Request], Awaitable[bool]]:
+    async def _middleware(request: Request):
+        try:
+            token = request.headers.get("Authorization")
 
-        if not token:
-            raise HTTPException(status_code=401, detail="Missing authorization token")
+            if not token:
+                raise ValueError("Authorization token is missing")
+            elif should_fail:
+                return False
 
-        token_obj = Token.from_string(token)
-        valid = await auth_repo.is_valid_token(token_obj)
+            token_obj = Token.from_string(token)
+            valid = await auth_repo.is_valid_token(token_obj)
 
-        if not valid:
-            raise HTTPException(status_code=401, detail="Invalid authorization token")
+            if not valid:
+                raise ValueError("Invalid token")
 
-        return token_obj
+            return bool(token_obj)
+        except Exception as e:
+            if should_fail:
+                raise HTTPException(status_code=401, detail=str(e))
 
-    return _logged_middleware
+            return False
+
+    return _middleware

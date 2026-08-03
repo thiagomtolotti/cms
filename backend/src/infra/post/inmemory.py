@@ -22,9 +22,11 @@ class InMemoryPostRepository(PostRepository):
             )
         ]
 
-    def get_from_slug(self, slug: str) -> Post:
+    def get_from_slug(self, slug: str, published_only: bool = True) -> Post:
         for post in self.posts:
             if post.slug == slug:
+                if published_only and post.status != PostStatus.PUBLISHED:
+                    raise EntityNotFoundError("Post not found")
                 return post
 
         raise EntityNotFoundError("Post not found")

@@ -23,7 +23,7 @@ export default async function fetchPost(slug: string): Promise<Post> {
     author: promises[0].author,
     content: promises[1]!,
     date: new Date(promises[0].date),
-    imageUrl: URL.createObjectURL(promises[2]!),
+    imageUrl: promises[2]!,
     slug: slug,
     title: promises[0].title,
   };

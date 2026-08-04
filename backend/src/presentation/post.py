@@ -106,10 +106,8 @@ class PostRouter(APIRouter):
 
         return PostMetadataResponseDTO.from_domain(post)
 
-    async def get_post_image(self, post_slug: str, request: Request):
-        is_logged = await self._check_logged(request)
-
-        path = self.service.get_post_image_path(post_slug, published_only=not is_logged)
+    async def get_post_image(self, post_slug: str):
+        path = self.service.get_post_image_path(post_slug, published_only=False)
 
         return FileResponse(
             path=path,
@@ -143,7 +141,6 @@ class PostRouter(APIRouter):
         markdown: Annotated[UploadFile, File()],
         image: Annotated[UploadFile | None, File()] = None,
     ):
-
         self.service.update_post(
             data,
             FileDTO.from_upload_file(

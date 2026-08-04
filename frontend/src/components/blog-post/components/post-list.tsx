@@ -30,7 +30,7 @@ export default function PostList() {
       </TableHeader>
       <TableBody>
         {data?.posts.map((post) => (
-          <PostList.TableRow key={post.title} post={post} />
+          <PostList.TableRow key={post.slug} post={post} />
         ))}
 
         <TableRow></TableRow>

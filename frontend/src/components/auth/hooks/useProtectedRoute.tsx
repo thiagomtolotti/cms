@@ -13,11 +13,6 @@ export default function useProtectedRoute() {
     }
   }, [keycloak, initialized]);
 
-  useEffect(() => {
-    console.log("usePrivateRoute - keycloak:", keycloak.authenticated);
-    console.log("usePrivateRoute - initialized:", initialized);
-  }, [keycloak, initialized]);
-
   return {
     isPending: !initialized || (initialized && !keycloak.authenticated),
   };

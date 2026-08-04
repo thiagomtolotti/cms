@@ -4,14 +4,9 @@ class KeycloakService extends Keycloak {
   constructor(config: Keycloak.KeycloakConfig) {
     super(config);
 
-    if (this.authenticated) {
-      this.token = sessionStorage.getItem("kc_token") ?? undefined;
-      this.refreshToken =
-        sessionStorage.getItem("kc_refreshToken") ?? undefined;
-      this.idToken = sessionStorage.getItem("kc_idToken") ?? undefined;
-    } else {
-      this.clearToken();
-    }
+    this.token = sessionStorage.getItem("kc_token") ?? undefined;
+    this.refreshToken = sessionStorage.getItem("kc_refreshToken") ?? undefined;
+    this.idToken = sessionStorage.getItem("kc_idToken") ?? undefined;
   }
 
   public async login(options?: Keycloak.KeycloakLoginOptions) {

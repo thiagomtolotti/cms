@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import useMaintainBlogPost from "../../hooks/useMaintainBlogPost";
 
 import { Button } from "@/components/ui/button";
@@ -31,14 +31,8 @@ export default function MaintainPostForm({ post }: MaintainPostFormProps) {
   const { mutateAsync, isPending } = useMaintainBlogPost(post?.slug);
   const isEditing = !!post;
 
-  const [actionStatus, setActionStatus] = useState<"draft" | "published">(
-    "draft",
-  );
-
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
-    console.log("submit");
 
     const submitter = (e.nativeEvent as SubmitEvent).submitter;
     const formData = new FormData(e.currentTarget, submitter);
@@ -47,6 +41,7 @@ export default function MaintainPostForm({ post }: MaintainPostFormProps) {
     const markdownFile = new File([markdown], "post.md", {
       type: "text/markdown",
     });
+    const actionStatus = formData.get("actionStatus") as "draft" | "published";
 
     let coverImage = formData.get("coverImage") as File | null;
     coverImage = coverImage && coverImage.size > 0 ? coverImage : null;
@@ -107,7 +102,6 @@ export default function MaintainPostForm({ post }: MaintainPostFormProps) {
         <MaintainPostForm.SubmitButton
           isPending={isPending}
           isEditing={isEditing}
-          onSelectedStatus={setActionStatus}
         />
       </div>
     </form>
@@ -117,13 +111,11 @@ export default function MaintainPostForm({ post }: MaintainPostFormProps) {
 interface SubmitButtonProps {
   isPending: boolean;
   isEditing: boolean;
-  onSelectedStatus: React.Dispatch<React.SetStateAction<"draft" | "published">>;
 }
 
 MaintainPostForm.SubmitButton = ({
   isPending,
   isEditing,
-  onSelectedStatus,
 }: SubmitButtonProps) => {
   const buttonText = isEditing ? "Atualizar e publicar" : "Criar e publicar";
 
@@ -134,7 +126,6 @@ MaintainPostForm.SubmitButton = ({
         name="actionStatus"
         value="draft"
         isLoading={isPending}
-        onClick={() => onSelectedStatus("draft")}
       >
         Salvar rascunho
       </Button>

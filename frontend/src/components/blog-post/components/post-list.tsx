@@ -14,6 +14,19 @@ import {
 } from "@/components/ui/table";
 
 import PostStatusBadge from "./post-status-badge";
+import { Button } from "@/components/ui/button";
+import { Edit, Trash } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function PostList() {
   const { data } = useListPosts();
@@ -26,7 +39,7 @@ export default function PostList() {
           <TableHead>Título</TableHead>
           <TableHead>Slug</TableHead>
           <TableHead>Status</TableHead>
-          <TableHead className="text-right">Ações</TableHead>
+          <TableHead className="text-right w-min!">Ações</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -58,13 +71,67 @@ PostList.TableRow = ({ post }: PostListTableRowProps) => {
         <PostStatusBadge status={post.status} />
       </TableCell>
       <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
-        <Link
-          to={`/${post.slug}/editar`}
-          className="text-blue-500 hover:underline"
-        >
-          Editar
-        </Link>
+        <div className="flex gap-2 ml-auto! w-min">
+          <EditPostAction slug={post.slug} />
+          <DeletePostAction slug={post.slug} />
+        </div>
       </TableCell>
     </TableRow>
   );
 };
+
+interface EditPostActionProps {
+  slug: string;
+}
+
+function EditPostAction({ slug }: EditPostActionProps) {
+  return (
+    <Link to={`/${slug}/editar`}>
+      <Button size="icon" variant="ghost">
+        <Edit />
+      </Button>
+    </Link>
+  );
+}
+
+interface DeletePostActionProps {
+  slug: string;
+}
+
+function DeletePostAction({ slug }: DeletePostActionProps) {
+  const handleDelete = async () => {
+    console.log("Item deleted!");
+  };
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger>
+        <Button
+          size="icon"
+          variant="ghost"
+          onClick={() => console.log(`Delete post with slug: ${slug}`)}
+        >
+          <Trash />
+        </Button>
+      </AlertDialogTrigger>
+
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Excluir Post</AlertDialogTitle>
+
+          <AlertDialogDescription>
+            Você tem certeza que deseja excluir este post? Esta ação não pode
+            ser desfeita.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+          <AlertDialogAction variant="destructive" onClick={handleDelete}>
+            Excluir
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}

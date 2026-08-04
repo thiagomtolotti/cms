@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
+import { useCanGoBack, useNavigate, useRouter } from "@tanstack/react-router";
 
 import { toast } from "sonner";
 
@@ -9,7 +9,9 @@ import type { CreateBlogPostDTO } from "../lib/createBlogPost";
 import type { UpdateBlogPostDTO } from "../lib/updateBlogPost";
 
 export default function useMaintainBlogPost(slug?: string) {
+  const router = useRouter();
   const navigate = useNavigate();
+  const canGoBack = useCanGoBack();
 
   const create = useMutation({
     mutationFn: async (data: CreateBlogPostDTO) => {
@@ -34,6 +36,12 @@ export default function useMaintainBlogPost(slug?: string) {
     },
     onSuccess: (slug) => {
       toast.success("Post atualizado com sucesso!");
+
+      if (canGoBack) {
+        router.history.back();
+        return;
+      }
+
       navigate({ to: `/${slug}` });
     },
     onError: (error) => {

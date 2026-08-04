@@ -138,6 +138,7 @@ MaintainPostForm.SubmitButton = ({
         <DropdownMenuContent align="end">
           <DropdownMenuItem
             className="cursor-pointer"
+            nativeButton
             render={
               <Button
                 variant="ghost"

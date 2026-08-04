@@ -26,5 +26,6 @@ export default async function fetchPost(slug: string): Promise<Post> {
     imageUrl: promises[2]!,
     slug: slug,
     title: promises[0].title,
+    status: promises[0].status,
   };
 }

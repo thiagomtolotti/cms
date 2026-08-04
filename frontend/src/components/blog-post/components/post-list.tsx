@@ -1,3 +1,8 @@
+import type { components } from "@/types/api";
+
+import useListPosts from "../hooks/useListPosts";
+import { Link, useNavigate } from "@tanstack/react-router";
+
 import {
   Table,
   TableBody,
@@ -7,14 +12,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import useListPosts from "../hooks/useListPosts";
 
-import { Link, useNavigate } from "@tanstack/react-router";
-
-import type { components } from "@/types/api";
-import humanReadableStatus from "@/types/humanReadableStatus";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
+import PostStatusBadge from "./post-status-badge";
 
 export default function PostList() {
   const { data } = useListPosts();
@@ -69,24 +68,3 @@ PostList.TableRow = ({ post }: PostListTableRowProps) => {
     </TableRow>
   );
 };
-
-interface PostStatusBadgeProps {
-  status: components["schemas"]["PostStatus"];
-}
-
-function PostStatusBadge({ status }: PostStatusBadgeProps) {
-  const props: Record<
-    components["schemas"]["PostStatus"],
-    React.HTMLProps<unknown>["className"]
-  > = {
-    draft: "bg-yellow-100 text-yellow-700 border-yellow-300",
-    published: "bg-green-100 text-green-800 border-green-300",
-    deleted: "bg-red-100 text-red-800 border-red-300",
-  };
-
-  return (
-    <Badge className={cn(props[status], "border border-solid")}>
-      {humanReadableStatus[status]}
-    </Badge>
-  );
-}

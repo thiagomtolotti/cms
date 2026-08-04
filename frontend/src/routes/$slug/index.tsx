@@ -3,6 +3,8 @@ import type { Post } from "@/components/blog-post/types/post";
 import fetchPost from "@/components/blog-post/lib/fetchPost";
 
 import { createFileRoute, useLoaderData } from "@tanstack/react-router";
+import { useKeycloak } from "@react-keycloak/web";
+import PostStatusBadge from "@/components/blog-post/components/post-status-badge";
 
 export const Route = createFileRoute("/$slug/")({
   component: RouteComponent,
@@ -17,6 +19,7 @@ export const Route = createFileRoute("/$slug/")({
 });
 
 function RouteComponent() {
+  const { keycloak } = useKeycloak();
   const post: Post = useLoaderData({ from: Route.id });
 
   return (
@@ -29,8 +32,10 @@ function RouteComponent() {
       <div className="w-full max-w-3xl mx-auto flex flex-col gap-4 mb-16">
         <div className="flex flex-col gap-4 mb-4">
           <h1>{post.title}</h1>
-          <span>
+
+          <span className="flex items-center gap-4">
             {post.date.toLocaleDateString("pt-BR")} - {post.author}
+            {keycloak.authenticated && <PostStatusBadge status={post.status} />}
           </span>
         </div>
 

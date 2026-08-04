@@ -92,7 +92,7 @@ class PostService:
         if dto.status == PostStatus.DELETED:
             raise InvalidStatusError("Cannot create a post with status 'deleted'.")
 
-        post = self.repo.get_from_slug(dto.slug)
+        post = self.repo.get_from_slug(dto.slug, published_only=False)
 
         image_path = post.image
 

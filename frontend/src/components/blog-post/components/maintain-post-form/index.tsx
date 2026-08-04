@@ -59,7 +59,11 @@ export default function MaintainPostForm({ post }: MaintainPostFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-10">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-10"
+      id="maintain-post-form"
+    >
       <ImageInput defaultValue={post?.imageUrl} />
 
       <div className="flex flex-col gap-2">
@@ -145,6 +149,7 @@ MaintainPostForm.SubmitButton = ({
                 type="submit"
                 name="actionStatus"
                 value="published"
+                form="maintain-post-form"
                 isLoading={isPending}
               >
                 {buttonText}

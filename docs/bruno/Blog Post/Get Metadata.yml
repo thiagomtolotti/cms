@@ -8,7 +8,7 @@ http:
   url: "{{api_url}}/posts/:slug/metadata"
   params:
     - name: slug
-      value: test
+      value: teste2
       type: path
   auth: inherit
 

@@ -1,0 +1,12 @@
+name: Dev
+variables:
+  - name: auth_url
+    value: https://auth.thiagotolotti.com
+  - name: client_id
+    value: frontend
+  - secret: true
+    name: username
+  - secret: true
+    name: password
+  - name: realm
+    value: blog

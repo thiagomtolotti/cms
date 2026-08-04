@@ -1,0 +1,40 @@
+info:
+  name: Login
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{auth_url}}/realms/{{realm}}/protocol/openid-connect/token"
+  headers:
+    - name: Content-Type
+      value: application/x-www-form-urlencoded
+  body:
+    type: form-urlencoded
+    data:
+      - name: grant_type
+        value: password
+      - name: client_id
+        value: "{{client_id}}"
+      - name: username
+        value: "{{username}}"
+      - name: password
+        value: "{{password}}"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const token = bru.getEnvVar("access_token");
+
+        if (res.status === 200) {
+          bru.setEnvVar("access_token", res.body.access_token);
+          bru.setEnvVar("refresh_token", res.body.refresh_token);
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

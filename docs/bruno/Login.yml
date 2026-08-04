@@ -29,7 +29,8 @@ runtime:
         const token = bru.getEnvVar("access_token");
 
         if (res.status === 200) {
-            bru.setEnvVar("access_token", res.body.access_token);
+          bru.setEnvVar("access_token", res.body.access_token);
+          bru.setEnvVar("refresh_token", res.body.refresh_token);
         }
 
 settings:

@@ -1,0 +1,33 @@
+info:
+  name: Logout
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{auth_url}}/realms/{{realm}}/protocol/openid-connect/logout"
+  body:
+    type: form-urlencoded
+    data:
+      - name: client_id
+        value: "{{client_id}}"
+      - name: refresh_token
+        value: "{{refresh_token}}"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.status === 200 || res.status === 204) {
+          bru.setEnvVar("access_token", "");
+          bru.setEnvVar("refresh_token", "");
+          
+          console.log("Logged out successfully and cleared local tokens!");
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

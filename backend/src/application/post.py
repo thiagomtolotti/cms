@@ -34,8 +34,8 @@ class PostService:
 
         return post
 
-    def get_post_image_path(self, post_slug: str) -> Path:
-        post = self.get_post(post_slug)
+    def get_post_image_path(self, post_slug: str, published_only: bool = True) -> Path:
+        post = self.get_post(post_slug, published_only)
         path = self.file_repo.get_complete_path(post.image)
 
         return path

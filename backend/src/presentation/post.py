@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, File, Form, UploadFile, Request
+from fastapi import APIRouter, Depends, File, Form, Request, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from pydantic import Json
 
@@ -84,31 +84,32 @@ class PostRouter(APIRouter):
 
     async def _check_logged(self, request: Request) -> bool:
         middleware_fn = logged_middleware(self.auth_repo, should_fail=False)
-        
+
         return await middleware_fn(request)
-    
-    async def get_post(
-        self,
-        post_slug: str,
-        request: Request
-    ):
+
+    async def get_post(self, post_slug: str, request: Request):
         is_logged = await self._check_logged(request)
 
-        html = self.service.get_post_content(
-            post_slug, published_only=not is_logged
-        )
-        
+        html = self.service.get_post_content(post_slug, published_only=not is_logged)
+
         return html
 
-    async def get_post_metadata(self, post_slug: str, request: Request) -> PostMetadataResponseDTO:
+    async def get_post_metadata(
+        self, post_slug: str, request: Request
+    ) -> PostMetadataResponseDTO:
         is_logged = await self._check_logged(request)
-        
-        post = self.service.get_post(post_slug, published_only=not is_logged,)
+
+        post = self.service.get_post(
+            post_slug,
+            published_only=not is_logged,
+        )
 
         return PostMetadataResponseDTO.from_domain(post)
 
-    def get_post_image(self, post_slug: str):
-        path = self.service.get_post_image_path(post_slug)
+    async def get_post_image(self, post_slug: str, request: Request):
+        is_logged = await self._check_logged(request)
+
+        path = self.service.get_post_image_path(post_slug, published_only=not is_logged)
 
         return FileResponse(
             path=path,

@@ -122,3 +122,6 @@ class PostService:
         posts = self.repo.list_()
 
         return posts
+
+    def delete_post(self, post_slug: str) -> None:
+        self.repo.delete(post_slug)

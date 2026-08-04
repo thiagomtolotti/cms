@@ -115,7 +115,6 @@ class PostService:
             file=markdown_path,
         )
 
-        print("updating post with data:", post.status)
         self.repo.update(post)
 
     def list_posts(self) -> list[Post]:

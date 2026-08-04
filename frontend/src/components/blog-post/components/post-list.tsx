@@ -27,6 +27,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import useDeletePost from "../hooks/useDeletePost";
+import { useState } from "react";
 
 export default function PostList() {
   const { data } = useListPosts();
@@ -99,12 +101,16 @@ interface DeletePostActionProps {
 }
 
 function DeletePostAction({ slug }: DeletePostActionProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const { mutateAsync } = useDeletePost(slug);
+
   const handleDelete = async () => {
-    console.log("Item deleted!");
+    await mutateAsync();
+    setIsOpen(false);
   };
 
   return (
-    <AlertDialog>
+    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger>
         <Button
           size="icon"

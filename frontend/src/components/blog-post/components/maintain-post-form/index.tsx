@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import useMaintainBlogPost from "../../hooks/useMaintainBlogPost";
 
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,14 @@ import SlugInput from "./slug-input";
 import ImageInput from "./image-input";
 
 import type { Post } from "../../types/post";
+import { ButtonGroup } from "@/components/ui/button-group";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ChevronDownIcon } from "lucide-react";
 
 interface MaintainPostFormProps {
   post?: Post;
@@ -22,13 +30,20 @@ export default function MaintainPostForm({ post }: MaintainPostFormProps) {
 
   const { mutateAsync, isPending } = useMaintainBlogPost(post?.slug);
   const isEditing = !!post;
-  const buttonText = isEditing ? "Atualizar Post" : "Criar Post";
+
+  const [actionStatus, setActionStatus] = useState<"draft" | "published">(
+    "draft",
+  );
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
+    console.log("submit");
+
+    const submitter = (e.nativeEvent as SubmitEvent).submitter;
+    const formData = new FormData(e.currentTarget, submitter);
+
     const markdown = editorRef.current?.getMarkdown() || "";
-    const formData = new FormData(e.currentTarget);
     const markdownFile = new File([markdown], "post.md", {
       type: "text/markdown",
     });
@@ -43,11 +58,16 @@ export default function MaintainPostForm({ post }: MaintainPostFormProps) {
       date: formData.get("date") as string,
       coverImage: coverImage as File,
       markdown: markdownFile,
+      status: actionStatus,
     });
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-10">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-10"
+      id="maintain-post-form"
+    >
       <ImageInput defaultValue={post?.imageUrl} />
 
       <div className="flex flex-col gap-2">
@@ -84,13 +104,71 @@ export default function MaintainPostForm({ post }: MaintainPostFormProps) {
       <MarkdownEditor ref={editorRef} defaultValue={post?.content} />
 
       <div className="mt-8 ml-auto">
-        <Button type="submit" isLoading={isPending}>
-          {buttonText}
-        </Button>
+        <MaintainPostForm.SubmitButton
+          isPending={isPending}
+          isEditing={isEditing}
+          onSelectedStatus={setActionStatus}
+        />
       </div>
     </form>
   );
 }
+
+interface SubmitButtonProps {
+  isPending: boolean;
+  isEditing: boolean;
+  onSelectedStatus: React.Dispatch<React.SetStateAction<"draft" | "published">>;
+}
+
+MaintainPostForm.SubmitButton = ({
+  isPending,
+  isEditing,
+  onSelectedStatus,
+}: SubmitButtonProps) => {
+  const buttonText = isEditing ? "Atualizar e publicar" : "Criar e publicar";
+
+  return (
+    <ButtonGroup>
+      <Button
+        type="submit"
+        name="actionStatus"
+        value="draft"
+        isLoading={isPending}
+        onClick={() => onSelectedStatus("draft")}
+      >
+        Salvar rascunho
+      </Button>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          render={
+            <Button className="px-4!">
+              <ChevronDownIcon />
+            </Button>
+          }
+        />
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem
+            className="cursor-pointer"
+            nativeButton
+            render={
+              <Button
+                variant="ghost"
+                type="submit"
+                name="actionStatus"
+                value="published"
+                form="maintain-post-form"
+                isLoading={isPending}
+              >
+                {buttonText}
+              </Button>
+            }
+          />
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </ButtonGroup>
+  );
+};
 
 interface FieldInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id?: string;

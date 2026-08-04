@@ -4,7 +4,7 @@ from typing import Self
 from fastapi import UploadFile
 from pydantic import BaseModel
 
-from src.domain.post import Post
+from src.domain.post import Post, PostStatus
 from src.exceptions import InvalidObjectError
 
 
@@ -13,6 +13,7 @@ class PostMetadataResponseDTO(BaseModel):
     author: str
     date: str
     slug: str
+    status: PostStatus
 
     @classmethod
     def from_domain(cls, post: Post) -> Self:
@@ -21,14 +22,16 @@ class PostMetadataResponseDTO(BaseModel):
             author=post.author,
             slug=post.slug,
             date=post.date.isoformat(),
+            status=post.status,
         )
 
 
-class CreatePostRequestDTO(BaseModel):
+class MaintainPostRequestDTO(BaseModel):
     title: str
     author: str
     date: datetime
     slug: str
+    status: PostStatus
 
 
 class FileDTO(BaseModel):

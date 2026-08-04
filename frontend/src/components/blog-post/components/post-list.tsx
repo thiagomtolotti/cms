@@ -1,3 +1,8 @@
+import type { components } from "@/types/api";
+
+import useListPosts from "../hooks/useListPosts";
+import { Link, useNavigate } from "@tanstack/react-router";
+
 import {
   Table,
   TableBody,
@@ -7,9 +12,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import useListPosts from "../hooks/useListPosts";
-import type { components } from "@/types/api";
-import { Link } from "@tanstack/react-router";
+
+import PostStatusBadge from "./post-status-badge";
 
 export default function PostList() {
   const { data } = useListPosts();
@@ -19,15 +23,15 @@ export default function PostList() {
       <TableCaption>Lista de Posts.</TableCaption>
       <TableHeader>
         <TableRow className="[&>th]:font-bold">
-          <TableHead className="w-full">Título</TableHead>
           <TableHead>Título</TableHead>
+          <TableHead>Slug</TableHead>
           <TableHead>Status</TableHead>
           <TableHead className="text-right">Ações</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {data?.posts.map((post) => (
-          <PostList.TableRow key={post.title} post={post} />
+          <PostList.TableRow key={post.slug} post={post} />
         ))}
 
         <TableRow></TableRow>
@@ -41,12 +45,19 @@ interface PostListTableRowProps {
 }
 
 PostList.TableRow = ({ post }: PostListTableRowProps) => {
+  const navigate = useNavigate();
+
   return (
-    <TableRow>
+    <TableRow
+      className="cursor-pointer"
+      onClick={() => navigate({ to: `/${post.slug}` })}
+    >
       <TableCell>{post.title}</TableCell>
       <TableCell>{post.slug}</TableCell>
-      <TableCell>Publicado</TableCell>
-      <TableCell className="text-right">
+      <TableCell>
+        <PostStatusBadge status={post.status} />
+      </TableCell>
+      <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
         <Link
           to={`/${post.slug}/editar`}
           className="text-blue-500 hover:underline"

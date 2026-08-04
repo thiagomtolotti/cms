@@ -1,3 +1,5 @@
+import type { components } from "@/types/api";
+
 export interface Post {
   title: string;
   date: Date;
@@ -5,4 +7,5 @@ export interface Post {
   imageUrl: string;
   content: string;
   slug: string;
+  status: components["schemas"]["PostStatus"];
 }

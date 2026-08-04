@@ -1,14 +1,15 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, File, Form, UploadFile
+from fastapi import APIRouter, Depends, File, Form, Request, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
+from pydantic import Json
 
 from src.application.post import PostService
 from src.domain.auth_repository import AuthRepository
 from src.presentation.types import (
-    CreatePostRequestDTO,
     FileDTO,
     ListPostsResponseDTO,
+    MaintainPostRequestDTO,
     PostMetadataResponseDTO,
 )
 
@@ -22,6 +23,7 @@ class PostRouter(APIRouter):
         auth_repo: AuthRepository,
     ):
         self.service = service
+        self.auth_repo = auth_repo
 
         super().__init__(prefix="/posts")
 
@@ -80,18 +82,32 @@ class PostRouter(APIRouter):
             dependencies=[Depends(logged_middleware(auth_repo))],
         )
 
-    def get_post(self, post_slug: str):
-        html = self.service.get_post_content(post_slug)
+    async def _check_logged(self, request: Request) -> bool:
+        middleware_fn = logged_middleware(self.auth_repo, should_fail=False)
+
+        return await middleware_fn(request)
+
+    async def get_post(self, post_slug: str, request: Request):
+        is_logged = await self._check_logged(request)
+
+        html = self.service.get_post_content(post_slug, published_only=not is_logged)
 
         return html
 
-    def get_post_metadata(self, post_slug: str):
-        post = self.service.get_post(post_slug)
+    async def get_post_metadata(
+        self, post_slug: str, request: Request
+    ) -> PostMetadataResponseDTO:
+        is_logged = await self._check_logged(request)
+
+        post = self.service.get_post(
+            post_slug,
+            published_only=not is_logged,
+        )
 
         return PostMetadataResponseDTO.from_domain(post)
 
-    def get_post_image(self, post_slug: str):
-        path = self.service.get_post_image_path(post_slug)
+    async def get_post_image(self, post_slug: str):
+        path = self.service.get_post_image_path(post_slug, published_only=False)
 
         return FileResponse(
             path=path,
@@ -101,14 +117,12 @@ class PostRouter(APIRouter):
 
     def create_post(
         self,
-        data: Annotated[str, Form()],
+        data: Annotated[Json[MaintainPostRequestDTO], Form()],
         image: Annotated[UploadFile, File()],
         markdown: Annotated[UploadFile, File()],
     ):
-        dto = CreatePostRequestDTO.model_validate_json(data)
-
         self.service.create_post(
-            dto,
+            data,
             FileDTO.from_upload_file(
                 image,
                 required_mime_types=["image/"],
@@ -123,14 +137,12 @@ class PostRouter(APIRouter):
 
     def update_post(
         self,
-        data: Annotated[str, Form()],
+        data: Annotated[Json[MaintainPostRequestDTO], Form()],
         markdown: Annotated[UploadFile, File()],
         image: Annotated[UploadFile | None, File()] = None,
     ):
-        dto = CreatePostRequestDTO.model_validate_json(data)
-
         self.service.update_post(
-            dto,
+            data,
             FileDTO.from_upload_file(
                 image,
                 required_mime_types=["image/"],

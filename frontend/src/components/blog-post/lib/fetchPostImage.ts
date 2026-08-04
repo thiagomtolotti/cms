@@ -1,3 +1,3 @@
-export default function getPostImage(slug: string) {
+export default async function getPostImage(slug: string) {
   return `/api/posts/${slug}/image`;
 }

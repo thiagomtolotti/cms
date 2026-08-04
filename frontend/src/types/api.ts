@@ -157,6 +157,21 @@ export interface components {
             /** Posts */
             posts: components["schemas"]["PostMetadataResponseDTO"][];
         };
+        /** MaintainPostRequestDTO */
+        MaintainPostRequestDTO: {
+            /** Title */
+            title: string;
+            /** Author */
+            author: string;
+            /**
+             * Date
+             * Format: date-time
+             */
+            date: string;
+            /** Slug */
+            slug: string;
+            status: components["schemas"]["PostStatus"];
+        };
         /** PostMetadataResponseDTO */
         PostMetadataResponseDTO: {
             /** Title */
@@ -167,7 +182,13 @@ export interface components {
             date: string;
             /** Slug */
             slug: string;
+            status: components["schemas"]["PostStatus"];
         };
+        /**
+         * PostStatus
+         * @enum {string}
+         */
+        PostStatus: "draft" | "published" | "deleted";
         /** ValidationError */
         ValidationError: {
             /** Location */

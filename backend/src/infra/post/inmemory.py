@@ -2,9 +2,9 @@ from datetime import datetime
 from pathlib import Path
 from uuid import uuid4
 
-from src.exceptions import EntityNotFoundError
-from src.domain.post import Post
+from src.domain.post import Post, PostStatus
 from src.domain.post_repository import PostRepository
+from src.exceptions import EntityNotFoundError
 
 
 class InMemoryPostRepository(PostRepository):
@@ -18,19 +18,22 @@ class InMemoryPostRepository(PostRepository):
                 file=Path("test.md"),
                 image=Path("image.jpg"),
                 slug="test",
+                status=PostStatus.PUBLISHED,
             )
         ]
 
-    def get_from_slug(self, slug: str) -> Post:
+    def get_from_slug(self, slug: str, published_only: bool = True) -> Post:
         for post in self.posts:
             if post.slug == slug:
+                if published_only and post.status != PostStatus.PUBLISHED:
+                    raise EntityNotFoundError("Post not found")
                 return post
 
         raise EntityNotFoundError("Post not found")
 
     def create(self, post: Post) -> None:
         self.posts.append(post)
-        
+
     def update(self, post: Post) -> None:
         for i, existing_post in enumerate(self.posts):
             if existing_post.slug == post.slug:

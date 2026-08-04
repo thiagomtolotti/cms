@@ -298,6 +298,10 @@
         "properties": {
           "data": {
             "type": "string",
+            "contentMediaType": "application/json",
+            "contentSchema": {
+              "$ref": "#/components/schemas/MaintainPostRequestDTO"
+            },
             "title": "Data"
           },
           "image": {
@@ -323,6 +327,10 @@
         "properties": {
           "data": {
             "type": "string",
+            "contentMediaType": "application/json",
+            "contentSchema": {
+              "$ref": "#/components/schemas/MaintainPostRequestDTO"
+            },
             "title": "Data"
           },
           "markdown": {
@@ -379,6 +387,39 @@
         ],
         "title": "ListPostsResponseDTO"
       },
+      "MaintainPostRequestDTO": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "author": {
+            "type": "string",
+            "title": "Author"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Date"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "status": {
+            "$ref": "#/components/schemas/PostStatus"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "author",
+          "date",
+          "slug",
+          "status"
+        ],
+        "title": "MaintainPostRequestDTO"
+      },
       "PostMetadataResponseDTO": {
         "properties": {
           "title": {
@@ -396,6 +437,9 @@
           "slug": {
             "type": "string",
             "title": "Slug"
+          },
+          "status": {
+            "$ref": "#/components/schemas/PostStatus"
           }
         },
         "type": "object",
@@ -403,9 +447,19 @@
           "title",
           "author",
           "date",
-          "slug"
+          "slug",
+          "status"
         ],
         "title": "PostMetadataResponseDTO"
+      },
+      "PostStatus": {
+        "type": "string",
+        "enum": [
+          "draft",
+          "published",
+          "deleted"
+        ],
+        "title": "PostStatus"
       },
       "ValidationError": {
         "properties": {

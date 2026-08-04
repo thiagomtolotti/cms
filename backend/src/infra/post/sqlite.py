@@ -1,7 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 
-from src.domain.post import Post
+from src.domain.post import Post, PostStatus
 from src.domain.post_repository import PostRepository
 from src.exceptions import EntityNotFoundError
 
@@ -19,13 +19,18 @@ def get_connection():
 
 
 class SQLitePostRepository(PostRepository):
-    def get_from_slug(self, slug: str) -> Post:
+    def get_from_slug(self, slug: str, published_only: bool = True) -> Post:
+        query = """
+            SELECT id, title, slug, author, date, file_path, image_path, status
+            FROM posts
+            WHERE slug = :slug
+            AND (:published_only = 0 OR status = 'published')
+            LIMIT 1
+        """
+        
         with get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute(
-                "SELECT * FROM posts WHERE slug = ? LIMIT 1",
-                (slug,),
-            )
+            cursor.execute(query, {"slug": slug, "published_only": published_only})
             row = cursor.fetchone()
 
             if row is None:
@@ -39,6 +44,7 @@ class SQLitePostRepository(PostRepository):
                 date=datetime.fromisoformat(row[4]),
                 file=Path(row[5]),
                 image=Path(row[6]),
+                status=PostStatus(row[7]),
             )
 
             return post
@@ -48,8 +54,8 @@ class SQLitePostRepository(PostRepository):
             cursor = conn.cursor()
             cursor.execute(
                 """
-                INSERT INTO posts (id, title, slug, author, date, file_path, image_path)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO posts (id, title, slug, author, date, file_path, image_path, status)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     str(post.id),
@@ -59,6 +65,7 @@ class SQLitePostRepository(PostRepository):
                     post.date.isoformat(),
                     str(post.file),
                     str(post.image),
+                    post.status.value,
                 ),
             )
             conn.commit()
@@ -83,7 +90,7 @@ class SQLitePostRepository(PostRepository):
             cursor.execute(
                 """
                 UPDATE posts
-                SET title = ?, author = ?, date = ?, file_path = ?, image_path = ?
+                SET title = ?, author = ?, date = ?, file_path = ?, image_path = ?, status = ?
                 WHERE slug = ?
                 """,
                 (
@@ -92,6 +99,7 @@ class SQLitePostRepository(PostRepository):
                     post.date.isoformat(),
                     str(post.file),
                     str(post.image),
+                    post.status.value,
                     post.slug,
                 ),
             )
@@ -100,9 +108,7 @@ class SQLitePostRepository(PostRepository):
     def list_(self) -> list[Post]:
         with get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute(
-                "SELECT id, title, slug, author, date, file_path, image_path FROM posts"
-            )
+            cursor.execute("SELECT * FROM posts")
             rows = cursor.fetchall()
 
             posts = [
@@ -114,6 +120,7 @@ class SQLitePostRepository(PostRepository):
                     date=datetime.fromisoformat(row[4]),
                     file=Path(row[5]),
                     image=Path(row[6]),
+                    status=PostStatus(row[7]),
                 )
                 for row in rows
             ]

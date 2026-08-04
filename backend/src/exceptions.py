@@ -20,6 +20,11 @@ class EntityAlreadyExistsError(DomainError):
         super().__init__(message, status_code=409)
 
 
+class InvalidStatusError(DomainError):
+    def __init__(self, message: str = "Entity already exists"):
+        super().__init__(message, status_code=409)
+
+
 class InvalidTokenError(DomainError):
     def __init__(self, message: str = "Invalid token"):
         super().__init__(message, status_code=401)

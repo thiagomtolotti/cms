@@ -4,10 +4,10 @@ from uuid import uuid4
 import markdown
 
 from src.domain.file_repository import FileRepository
-from src.domain.post import Post
+from src.domain.post import Post, PostStatus
 from src.domain.post_repository import PostRepository
-from src.exceptions import EntityAlreadyExistsError
-from src.presentation.types import CreatePostRequestDTO, FileDTO
+from src.exceptions import EntityAlreadyExistsError, InvalidStatusError
+from src.presentation.types import FileDTO, MaintainPostRequestDTO
 
 
 class PostService:
@@ -19,8 +19,8 @@ class PostService:
         self.repo = repo
         self.file_repo = file_repo
 
-    def get_post_content(self, post_slug: str) -> str:
-        post = self.repo.get_from_slug(post_slug)
+    def get_post_content(self, post_slug: str, published_only: bool = True) -> str:
+        post = self.repo.get_from_slug(post_slug, published_only)
 
         content = self.file_repo.get_from_path(Path(post.file))
         content_str = content.decode("utf-8")
@@ -29,13 +29,13 @@ class PostService:
 
         return html
 
-    def get_post(self, post_slug: str) -> Post:
-        post = self.repo.get_from_slug(post_slug)
+    def get_post(self, post_slug: str, published_only: bool = True) -> Post:
+        post = self.repo.get_from_slug(post_slug, published_only)
 
         return post
 
-    def get_post_image_path(self, post_slug: str) -> Path:
-        post = self.get_post(post_slug)
+    def get_post_image_path(self, post_slug: str, published_only: bool = True) -> Path:
+        post = self.get_post(post_slug, published_only)
         path = self.file_repo.get_complete_path(post.image)
 
         return path
@@ -50,10 +50,13 @@ class PostService:
 
     def create_post(
         self,
-        dto: CreatePostRequestDTO,
+        dto: MaintainPostRequestDTO,
         image: FileDTO,
         markdown: FileDTO,
     ) -> None:
+        if dto.status == PostStatus.DELETED:
+            raise InvalidStatusError("Cannot create a post with status 'deleted'.")
+
         if self.repo.exists(dto.slug):
             raise EntityAlreadyExistsError(
                 f"Post with slug '{dto.slug}' already exists."
@@ -75,33 +78,44 @@ class PostService:
             date=dto.date,
             image=image_path,
             file=markdown_path,
+            status=dto.status,
         )
 
         self.repo.create(post)
 
     def update_post(
         self,
-        dto: CreatePostRequestDTO,
+        dto: MaintainPostRequestDTO,
         image: FileDTO | None,
         markdown: FileDTO,
     ) -> None:
-        post = self.repo.get_from_slug(dto.slug)
+        if dto.status == PostStatus.DELETED:
+            raise InvalidStatusError("Cannot create a post with status 'deleted'.")
+
+        post = self.repo.get_from_slug(dto.slug, published_only=False)
+
+        image_path = post.image
 
         if image:
             image_path = Path(str(post.id), image.filename)
             self.file_repo.save(image_path, image.content)
-            post.image = image_path
 
         markdown_path = Path(str(post.id), markdown.filename)
 
         self.file_repo.save(markdown_path, markdown.content)
-        post.file = markdown_path
 
-        post.author = dto.author
-        post.title = dto.title
-        post.slug = dto.slug
-        post.date = dto.date
+        post = Post(
+            id=post.id,
+            author=dto.author,
+            title=dto.title,
+            slug=dto.slug,
+            date=dto.date,
+            status=dto.status,
+            image=image_path,
+            file=markdown_path,
+        )
 
+        print("updating post with data:", post.status)
         self.repo.update(post)
 
     def list_posts(self) -> list[Post]:

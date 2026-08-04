@@ -8,18 +8,24 @@ export default async function fetchPost(slug: string): Promise<Post> {
   const promises = await Promise.all([
     fetchMetadata(slug),
     fetchPostContent(slug),
+    getPostImage(slug),
   ]);
 
-  if (!promises[0] || !promises[1]) {
-    throw new Error("Failed to fetch post data.");
-  }
+  promises.forEach((promise) => {
+    if (promise instanceof Error) {
+      throw new Error(
+        `Error fetching post data for slug "${slug}": ${promise.message}`,
+      );
+    }
+  });
 
   return {
     author: promises[0].author,
-    content: promises[1],
+    content: promises[1]!,
     date: new Date(promises[0].date),
-    imageUrl: getPostImage(slug),
+    imageUrl: promises[2]!,
     slug: slug,
     title: promises[0].title,
+    status: promises[0].status,
   };
 }

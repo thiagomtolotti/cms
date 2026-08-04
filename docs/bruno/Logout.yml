@@ -20,8 +20,8 @@ runtime:
     - type: after-response
       code: |-
         if (res.status === 200 || res.status === 204) {
-          bru.setEnvVar("access_token", "");
-          bru.setEnvVar("refresh_token", "");
+          bru.deleteEnvVar("access_token");
+          bru.deleteEnvVar("refresh_token");
           
           console.log("Logged out successfully and cleared local tokens!");
         }

@@ -1,7 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
-import deletePost from "../lib/deletePost";
+
 import { toast } from "sonner";
-import { queryClient } from "@/main";
+
+import deletePost from "../lib/deletePost";
+import queryClient from "@/lib/queryClient";
 
 export default function useDeletePost(slug: string) {
   return useMutation({

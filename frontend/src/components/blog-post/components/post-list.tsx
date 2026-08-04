@@ -41,7 +41,7 @@ export default function PostList() {
           <TableHead>Título</TableHead>
           <TableHead>Slug</TableHead>
           <TableHead>Status</TableHead>
-          <TableHead className="text-right w-min!">Ações</TableHead>
+          <TableHead className="text-right w-0!">Ações</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -74,8 +74,8 @@ PostList.TableRow = ({ post }: PostListTableRowProps) => {
       </TableCell>
       <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
         <div className="flex gap-2 ml-auto! w-min">
-          <EditPostAction slug={post.slug} />
-          <DeletePostAction slug={post.slug} />
+          {post.status !== "deleted" && <EditPostAction slug={post.slug} />}
+          {post.status !== "deleted" && <DeletePostAction slug={post.slug} />}
         </div>
       </TableCell>
     </TableRow>

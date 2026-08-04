@@ -15,8 +15,6 @@ def logged_middleware(
 
             if not token:
                 raise ValueError("Authorization token is missing")
-            elif should_fail:
-                return False
 
             token_obj = Token.from_string(token)
             valid = await auth_repo.is_valid_token(token_obj)

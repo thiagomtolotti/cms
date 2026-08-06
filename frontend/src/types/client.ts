@@ -1,5 +1,7 @@
-import createClient, { type Middleware } from "openapi-fetch";
+import { notFound } from "@tanstack/react-router";
 import type { paths } from "./api";
+
+import createClient, { type Middleware } from "openapi-fetch";
 import keycloak from "@/lib/keycloak";
 
 type ApiError = {
@@ -43,6 +45,10 @@ const client = createClient<paths>();
 const errorMiddleware: Middleware = {
   async onResponse({ response }) {
     if (!response.ok) {
+      if (response.status === 404) {
+        throw notFound();
+      }
+
       throw await getApiError(response);
     }
 

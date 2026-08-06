@@ -21,7 +21,7 @@ import {
   type MDXEditorMethods,
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
-import { forwardRef, useImperativeHandle, useRef } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 
 export interface MarkdownEditorHandle {
   getMarkdown: () => string;
@@ -40,6 +40,10 @@ const MarkdownEditor = forwardRef<MarkdownEditorHandle, MarkdownEditorProps>(
         return editorRef.current?.getMarkdown() || "";
       },
     }));
+
+    useEffect(() => {
+      editorRef.current?.setMarkdown(defaultValue || "");
+    }, [defaultValue]);
 
     return (
       <div className="flex flex-col gap-4 border border-gray-300">

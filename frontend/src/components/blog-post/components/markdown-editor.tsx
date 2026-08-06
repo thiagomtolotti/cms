@@ -3,6 +3,7 @@ import {
   BoldItalicUnderlineToggles,
   CodeToggle,
   CreateLink,
+  DiffSourceToggleWrapper,
   InsertCodeBlock,
   InsertImage,
   InsertTable,
@@ -10,6 +11,7 @@ import {
   MDXEditor,
   Separator,
   UndoRedo,
+  diffSourcePlugin,
   headingsPlugin,
   imagePlugin,
   linkDialogPlugin,
@@ -47,6 +49,7 @@ const MarkdownEditor = forwardRef<MarkdownEditorHandle, MarkdownEditorProps>(
           placeholder="Escreva seu post aqui..."
           contentEditableClassName="min-h-100"
           plugins={[
+            diffSourcePlugin(),
             headingsPlugin(),
             linkDialogPlugin(),
             tablePlugin(),
@@ -54,7 +57,7 @@ const MarkdownEditor = forwardRef<MarkdownEditorHandle, MarkdownEditorProps>(
             listsPlugin(),
             toolbarPlugin({
               toolbarContents: () => (
-                <>
+                <DiffSourceToggleWrapper>
                   <UndoRedo />
                   <Separator />
                   <BoldItalicUnderlineToggles />
@@ -67,7 +70,7 @@ const MarkdownEditor = forwardRef<MarkdownEditorHandle, MarkdownEditorProps>(
                   <InsertTable />
                   <InsertImage />
                   <InsertCodeBlock />
-                </>
+                </DiffSourceToggleWrapper>
               ),
             }),
           ]}

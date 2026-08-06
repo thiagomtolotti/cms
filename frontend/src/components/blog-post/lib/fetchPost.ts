@@ -14,13 +14,13 @@ export default async function fetchPost(
     getPostImage(slug),
   ]);
 
-  promises.forEach((promise) => {
-    if (promise instanceof Error) {
-      throw new Error(
-        `Error fetching post data for slug "${slug}": ${promise.message}`,
-      );
-    }
-  });
+  //   promises.forEach((promise) => {
+  //     if (promise instanceof Error) {
+  //       throw new Error(
+  //         `Error fetching post data for slug "${slug}": ${promise.message}`,
+  //       );
+  //     }
+  //   });
 
   return {
     author: promises[0].author,

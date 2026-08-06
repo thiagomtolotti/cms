@@ -15,7 +15,8 @@ export interface paths {
         get: operations["get_post_api_posts__post_slug__get"];
         put?: never;
         post?: never;
-        delete?: never;
+        /** Delete */
+        delete: operations["_delete_api_posts__post_slug__delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -188,7 +189,7 @@ export interface components {
          * PostStatus
          * @enum {string}
          */
-        PostStatus: "draft" | "published" | "deleted";
+        PostStatus: "draft" | "published";
         /** ValidationError */
         ValidationError: {
             /** Location */
@@ -229,6 +230,37 @@ export interface operations {
                 };
                 content: {
                     "text/html": string;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    _delete_api_posts__post_slug__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                post_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
             /** @description Validation Error */

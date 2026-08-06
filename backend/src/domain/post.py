@@ -9,7 +9,6 @@ from pydantic import BaseModel, Field
 class PostStatus(Enum):
     DRAFT = "draft"
     PUBLISHED = "published"
-    DELETED = "deleted"
 
 
 class Post(BaseModel):

@@ -42,6 +42,41 @@
             }
           }
         }
+      },
+      "delete": {
+        "summary": " Delete",
+        "operationId": "_delete_api_posts__post_slug__delete",
+        "parameters": [
+          {
+            "name": "post_slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Post Slug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/posts/{post_slug}/metadata": {
@@ -456,8 +491,7 @@
         "type": "string",
         "enum": [
           "draft",
-          "published",
-          "deleted"
+          "published"
         ],
         "title": "PostStatus"
       },

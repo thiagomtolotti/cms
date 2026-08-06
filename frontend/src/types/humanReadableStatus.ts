@@ -6,7 +6,6 @@ const humanReadableStatus: Record<
 > = {
   draft: "Rascunho",
   published: "Publicado",
-  deleted: "Excluído",
 };
 
 export default humanReadableStatus;

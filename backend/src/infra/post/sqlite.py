@@ -27,7 +27,7 @@ class SQLitePostRepository(PostRepository):
             AND (:published_only = 0 OR status = 'published')
             LIMIT 1
         """
-        
+
         with get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(query, {"slug": slug, "published_only": published_only})
@@ -126,3 +126,15 @@ class SQLitePostRepository(PostRepository):
             ]
 
             return posts
+
+    def delete(self, slug: str) -> None:
+        if not self.exists(slug):
+            raise EntityNotFoundError("Post not found")
+
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "DELETE FROM posts WHERE slug = ?",
+                (slug,),
+            )
+            conn.commit()

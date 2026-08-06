@@ -18,3 +18,6 @@ class PostRepository(ABC):
 
     @abstractmethod
     def list_(self) -> list[Post]: ...
+
+    @abstractmethod
+    def delete(self, slug: str) -> None: ...

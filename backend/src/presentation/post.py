@@ -82,6 +82,14 @@ class PostRouter(APIRouter):
             dependencies=[Depends(logged_middleware(auth_repo))],
         )
 
+        self.add_api_route(
+            "/{post_slug}",
+            self._delete,
+            response_class=JSONResponse,
+            methods=["DELETE"],
+            dependencies=[Depends(logged_middleware(auth_repo))],
+        )
+
     async def _check_logged(self, request: Request) -> bool:
         middleware_fn = logged_middleware(self.auth_repo, should_fail=False)
 
@@ -166,3 +174,8 @@ class PostRouter(APIRouter):
         posts = self.service.list_posts()
 
         return ListPostsResponseDTO.from_domain(posts)
+
+    def _delete(self, post_slug: str):
+        self.service.delete_post(post_slug)
+
+        return {"message": "Post deleted successfully"}

@@ -1,0 +1,19 @@
+info:
+  name: Delete Post
+  type: http
+  seq: 6
+
+http:
+  method: DELETE
+  url: "{{api_url}}/posts/:post_slug"
+  params:
+    - name: post_slug
+      value: test
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

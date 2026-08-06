@@ -17,7 +17,7 @@ function RouteComponent() {
 
   return (
     <ProtectedRoute>
-      <section className="flex flex-col gap-8 max-w-4xl mx-auto my-16">
+      <section className="flex flex-col gap-8 max-w-4xl mx-auto my-16 max-lg:px-8">
         <h1 className="w-full mb-8">Editar post</h1>
 
         <MaintainPostForm post={post} />

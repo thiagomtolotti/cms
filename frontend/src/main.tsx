@@ -10,8 +10,12 @@ import { ReactKeycloakProvider } from "@react-keycloak/web";
 
 import keycloak from "./lib/keycloak";
 import queryClient from "./lib/queryClient";
+import NotFoundPage from "./components/pages/not_found";
 
-const router = createRouter({ routeTree });
+const router = createRouter({
+  routeTree,
+  defaultNotFoundComponent: NotFoundPage,
+});
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

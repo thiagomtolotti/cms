@@ -35,6 +35,13 @@ class PostRouter(APIRouter):
         )
 
         self.add_api_route(
+            "/{post_slug}/markdown",
+            self.get_post_markdown,
+            response_class=FileResponse,
+            methods=["GET"],
+        )
+
+        self.add_api_route(
             "/{post_slug}/metadata",
             self.get_post_metadata,
             response_class=JSONResponse,
@@ -98,9 +105,26 @@ class PostRouter(APIRouter):
     async def get_post(self, post_slug: str, request: Request):
         is_logged = await self._check_logged(request)
 
-        html = self.service.get_post_content(post_slug, published_only=not is_logged)
+        html = self.service.get_post_content(
+            post_slug,
+            published_only=not is_logged,
+        )
 
         return html
+
+    async def get_post_markdown(self, post_slug: str, request: Request):
+        is_logged = await self._check_logged(request)
+
+        markdown = self.service.get_post_markdown_path(
+            post_slug,
+            published_only=not is_logged,
+        )
+
+        return FileResponse(
+            path=markdown,
+            media_type="text/markdown",
+            filename=f"{post_slug}.md",
+        )
 
     async def get_post_metadata(
         self, post_slug: str, request: Request

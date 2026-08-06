@@ -79,6 +79,38 @@
         }
       }
     },
+    "/api/posts/{post_slug}/markdown": {
+      "get": {
+        "summary": "Get Post Markdown",
+        "operationId": "get_post_markdown_api_posts__post_slug__markdown_get",
+        "parameters": [
+          {
+            "name": "post_slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Post Slug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/posts/{post_slug}/metadata": {
       "get": {
         "summary": "Get Post Metadata",

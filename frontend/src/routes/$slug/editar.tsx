@@ -8,7 +8,8 @@ import ProtectedRoute from "@/components/auth/components/protected-route";
 
 export const Route = createFileRoute("/$slug/editar")({
   component: RouteComponent,
-  loader: async ({ params }): Promise<Post> => fetchPost(params.slug),
+  loader: async ({ params }): Promise<Post> =>
+    fetchPost(params.slug, { markdown: true }),
 });
 
 function RouteComponent() {

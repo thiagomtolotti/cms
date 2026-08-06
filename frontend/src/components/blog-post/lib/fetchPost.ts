@@ -4,10 +4,13 @@ import fetchMetadata from "./fetchMetadata";
 import fetchPostContent from "./fetchPostContent";
 import getPostImage from "./fetchPostImage";
 
-export default async function fetchPost(slug: string): Promise<Post> {
+export default async function fetchPost(
+  slug: string,
+  config?: { markdown?: boolean },
+): Promise<Post> {
   const promises = await Promise.all([
     fetchMetadata(slug),
-    fetchPostContent(slug),
+    fetchPostContent(slug, config),
     getPostImage(slug),
   ]);
 

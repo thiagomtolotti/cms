@@ -1,7 +1,7 @@
 from pathlib import Path
 from uuid import uuid4
 
-import markdown
+import markdown as md
 
 from src.domain.file_repository import FileRepository
 from src.domain.post import Post
@@ -19,15 +19,23 @@ class PostService:
         self.repo = repo
         self.file_repo = file_repo
 
-    def get_post_content(self, post_slug: str, published_only: bool = True) -> str:
+    def get_post_content(self, post_slug: str, *, published_only: bool = True) -> str:
         post = self.repo.get_from_slug(post_slug, published_only)
 
         content = self.file_repo.get_from_path(Path(post.file))
         content_str = content.decode("utf-8")
 
-        html = markdown.markdown(content_str)
+        res = md.markdown(content_str)
 
-        return html
+        return res
+
+    def get_post_markdown_path(
+        self, post_slug: str, published_only: bool = True
+    ) -> Path:
+        post = self.repo.get_from_slug(post_slug, published_only)
+        path = self.file_repo.get_complete_path(post.file)
+
+        return path
 
     def get_post(self, post_slug: str, published_only: bool = True) -> Post:
         post = self.repo.get_from_slug(post_slug, published_only)

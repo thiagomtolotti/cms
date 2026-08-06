@@ -1,14 +1,14 @@
 info:
-  name: Get Metadata
+  name: Get Content Markdown
   type: http
-  seq: 3
+  seq: 2
 
 http:
   method: GET
-  url: "{{api_url}}/posts/:slug/metadata"
+  url: "{{api_url}}/posts/:slug/markdown"
   params:
     - name: slug
-      value: teste2
+      value: teste
       type: path
   auth: inherit
 

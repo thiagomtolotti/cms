@@ -44,7 +44,7 @@ function TitleArea({ post }: TitleAreaProps) {
     <div className="flex flex-col gap-4 mb-4">
       <h1>{post.title}</h1>
 
-      <span className="flex items-center gap-4">
+      <span className="flex items-center gap-x-4 gap-y-2 flex-wrap">
         {post.date.toLocaleDateString("pt-BR")} - {post.author}
         {keycloak.authenticated && <PostStatusBadge status={post.status} />}
       </span>

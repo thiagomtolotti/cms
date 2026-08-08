@@ -25,7 +25,7 @@ function RouteComponent() {
   return (
     <section className="flex flex-col gap-4">
       <img
-        className="max-h-70 object-cover object-center mb-8"
+        className="max-h-100 object-cover object-center mb-8 max-w-3xl w-full mx-auto rounded-2xl shadow-md "
         src={post.imageUrl}
       />
 

@@ -23,7 +23,7 @@ function RouteComponent() {
   const post: Post = useLoaderData({ from: Route.id });
 
   return (
-    <section className="flex flex-col gap-4 w-full max-w-3xl mb-16 px-8 mx-auto">
+    <section className="flex flex-col gap-4 w-full max-w-3xl mb-16 px-6 mx-auto">
       <ImageArea imageUrl={post.imageUrl} />
 
       <TitleArea post={post} />

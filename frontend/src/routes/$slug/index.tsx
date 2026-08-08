@@ -20,34 +20,61 @@ export const Route = createFileRoute("/$slug/")({
 });
 
 function RouteComponent() {
-  const { keycloak } = useKeycloak();
   const post: Post = useLoaderData({ from: Route.id });
 
   return (
-    <section className="flex flex-col gap-4 w-full max-w-3xl mb-16 max-lg:px-8 mx-auto">
-      <div
-        className={cn(
-          "mb-8 max-h-100 max-lg:max-h-[40dvw] max-w-3xl w-full mx-auto",
-          "rounded-2xl overflow-hidden shadow-md max-lg:rounded-lg",
-          "flex items-center justify-center",
-        )}
-      >
-        <img className="object-cover object-center" src={post.imageUrl} />
-      </div>
+    <section className="flex flex-col gap-4 w-full max-w-3xl mb-16 px-8 mx-auto">
+      <ImageArea imageUrl={post.imageUrl} />
 
-      <div className="flex flex-col gap-4 mb-4">
-        <h1>{post.title}</h1>
+      <TitleArea post={post} />
 
-        <span className="flex items-center gap-4">
-          {post.date.toLocaleDateString("pt-BR")} - {post.author}
-          {keycloak.authenticated && <PostStatusBadge status={post.status} />}
-        </span>
-      </div>
-
-      <div
-        className="flex flex-col gap-4"
-        dangerouslySetInnerHTML={{ __html: post.content }}
-      />
+      <ContentArea content={post.content} />
     </section>
+  );
+}
+
+interface TitleAreaProps {
+  post: Post;
+}
+
+function TitleArea({ post }: TitleAreaProps) {
+  const { keycloak } = useKeycloak();
+
+  return (
+    <div className="flex flex-col gap-4 mb-4">
+      <h1>{post.title}</h1>
+
+      <span className="flex items-center gap-4">
+        {post.date.toLocaleDateString("pt-BR")} - {post.author}
+        {keycloak.authenticated && <PostStatusBadge status={post.status} />}
+      </span>
+    </div>
+  );
+}
+
+interface ImageAreaProps {
+  imageUrl: string;
+}
+
+function ImageArea({ imageUrl }: ImageAreaProps) {
+  return (
+    <div
+      className={cn(
+        "mb-8 max-h-[50dvh] max-w-3xl w-full mx-auto",
+        "rounded-2xl overflow-hidden shadow-md max-lg:rounded-lg",
+        "flex items-center justify-center",
+      )}
+    >
+      <img className="object-cover object-center" src={imageUrl} />
+    </div>
+  );
+}
+
+function ContentArea({ content }: { content: string }) {
+  return (
+    <div
+      className="flex flex-col gap-4"
+      dangerouslySetInnerHTML={{ __html: content }}
+    />
   );
 }

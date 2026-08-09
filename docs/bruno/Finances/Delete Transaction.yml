@@ -8,7 +8,7 @@ http:
   url: "{{api_url}}/finance/:id"
   params:
     - name: id
-      value: ""
+      value: "1234"
       type: path
   auth: inherit
 

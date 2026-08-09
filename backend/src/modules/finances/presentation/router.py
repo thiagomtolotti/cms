@@ -41,14 +41,14 @@ class FinancesRouter(APIRouter):
 
         self.add_api_route(
             "/{transaction_id}",
-            lambda: {"message": "Update transaction"},
+            self._update_transaction,
             response_class=JSONResponse,
             methods=["PUT"],
         )
 
         self.add_api_route(
             "/{transaction_id}",
-            lambda: {"message": "Delete transaction"},
+            self._delete_transaction,
             response_class=JSONResponse,
             methods=["DELETE"],
         )
@@ -60,3 +60,15 @@ class FinancesRouter(APIRouter):
         print(request)
 
         return {"message": "New transaction created"}
+
+    def _update_transaction(
+        self, transaction_id: str, request: MaintainTransactionRequestDTO
+    ):
+        print(transaction_id, request)
+
+        return {"message": f"Transaction {transaction_id} updated"}
+
+    def _delete_transaction(self, transaction_id: str):
+        print(transaction_id)
+
+        return {"message": f"Transaction {transaction_id} deleted"}

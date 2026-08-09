@@ -422,14 +422,45 @@
         "tags": [
           "Transactions"
         ],
-        "summary": "<Lambda>",
-        "operationId": "_lambda__api_finance__transaction_id__put",
+        "summary": " Update Transaction",
+        "operationId": "_update_transaction_api_finance__transaction_id__put",
+        "parameters": [
+          {
+            "name": "transaction_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Transaction Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaintainTransactionRequestDTO"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -439,14 +470,35 @@
         "tags": [
           "Transactions"
         ],
-        "summary": "<Lambda>",
-        "operationId": "_lambda__api_finance__transaction_id__delete",
+        "summary": " Delete Transaction",
+        "operationId": "_delete_transaction_api_finance__transaction_id__delete",
+        "parameters": [
+          {
+            "name": "transaction_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Transaction Id"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -653,6 +705,7 @@
           },
           "date": {
             "type": "string",
+            "format": "date-time",
             "title": "Date"
           },
           "type": {

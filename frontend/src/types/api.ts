@@ -153,11 +153,11 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        /** <Lambda> */
-        put: operations["_lambda__api_finance__transaction_id__put"];
+        /** Update Transaction */
+        put: operations["_update_transaction_api_finance__transaction_id__put"];
         post?: never;
-        /** <Lambda> */
-        delete: operations["_lambda__api_finance__transaction_id__delete"];
+        /** Delete Transaction */
+        delete: operations["_delete_transaction_api_finance__transaction_id__delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -250,7 +250,10 @@ export interface components {
             description: string;
             /** Amount */
             amount: number;
-            /** Date */
+            /**
+             * Date
+             * Format: date-time
+             */
             date: string;
             type: components["schemas"]["TransactionType"];
         };
@@ -672,11 +675,48 @@ export interface operations {
             };
         };
     };
-    _lambda__api_finance__transaction_id__put: {
+    _update_transaction_api_finance__transaction_id__put: {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                transaction_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MaintainTransactionRequestDTO"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    _delete_transaction_api_finance__transaction_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                transaction_id: string;
+            };
             cookie?: never;
         };
         requestBody?: never;
@@ -690,24 +730,13 @@ export interface operations {
                     "application/json": unknown;
                 };
             };
-        };
-    };
-    _lambda__api_finance__transaction_id__delete: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
+            /** @description Validation Error */
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

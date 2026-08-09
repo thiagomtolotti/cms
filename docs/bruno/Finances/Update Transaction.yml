@@ -8,8 +8,17 @@ http:
   url: "{{api_url}}/finance/:id"
   params:
     - name: id
-      value: ""
+      value: "1234"
       type: path
+  body:
+    type: json
+    data: |-
+      {
+        "description": "",
+        "amount": 4200,
+        "date": "2026-08-09T00:00:00.000Z",
+        "type": "income"
+      }
   auth: inherit
 
 settings:

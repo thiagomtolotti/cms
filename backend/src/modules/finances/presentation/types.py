@@ -1,3 +1,4 @@
+from datetime import datetime
 from enum import Enum
 
 from pydantic import BaseModel
@@ -11,5 +12,5 @@ class TransactionType(Enum):
 class MaintainTransactionRequestDTO(BaseModel):
     description: str
     amount: int
-    date: str
+    date: datetime
     type: TransactionType

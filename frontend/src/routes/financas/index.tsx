@@ -56,6 +56,20 @@ function AddTransaction() {
 function MaintainTransactionForm() {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const description = formData.get("description") as string;
+    const amount = parseFloat(formData.get("amount") as string);
+    const date = formData.get("date") as string;
+    const transactionType = formData.get("transactionType") as
+      "income" | "expense";
+
+    console.log({
+      description,
+      amount,
+      date,
+      transactionType,
+    });
   }
 
   return (
@@ -64,9 +78,10 @@ function MaintainTransactionForm() {
         name="description"
         placeholder="Descrição"
         className="col-span-2"
+        required
       />
-      <Input name="amount" placeholder="Valor" />
-      <Input name="date" type="date" placeholder="Data" />
+      <Input name="amount" placeholder="Valor" required />
+      <Input name="date" type="date" placeholder="Data" required />
       <TransactionTypeSelect />
 
       <div className="col-span-2 ml-auto mt-4">
@@ -82,6 +97,7 @@ function TransactionTypeSelect() {
       className="flex gap-8 col-start-2"
       defaultValue="income"
       name="transactionType"
+      required
     >
       <div className="flex items-center gap-2">
         <RadioGroupItem value="income" id="income" />

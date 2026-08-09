@@ -1,11 +1,17 @@
+from uuid import UUID
+
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
+
+from src.modules.finances.application.transaction_service import TransactionService
 
 from .types import MaintainTransactionRequestDTO
 
 
 class FinancesRouter(APIRouter):
-    def __init__(self):
+    def __init__(self, service: TransactionService):
+        self.service = service
+
         super().__init__(
             prefix="/finance",
             tags=["Transactions"],
@@ -57,18 +63,21 @@ class FinancesRouter(APIRouter):
         return {"message": "List of transactions"}
 
     def _create_transaction(self, request: MaintainTransactionRequestDTO):
-        print(request)
+        self.service.create_transaction(request.to_domain(request))
 
         return {"message": "New transaction created"}
 
     def _update_transaction(
-        self, transaction_id: str, request: MaintainTransactionRequestDTO
+        self, transaction_id: UUID, request: MaintainTransactionRequestDTO
     ):
-        print(transaction_id, request)
+        self.service.update_transaction(
+            transaction_id,
+            request.to_domain(request),
+        )
 
         return {"message": f"Transaction {transaction_id} updated"}
 
-    def _delete_transaction(self, transaction_id: str):
-        print(transaction_id)
+    def _delete_transaction(self, transaction_id: UUID):
+        self.service.delete_transaction(transaction_id)
 
         return {"message": f"Transaction {transaction_id} deleted"}

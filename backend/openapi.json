@@ -431,6 +431,7 @@
             "required": true,
             "schema": {
               "type": "string",
+              "format": "uuid",
               "title": "Transaction Id"
             }
           }
@@ -479,6 +480,7 @@
             "required": true,
             "schema": {
               "type": "string",
+              "format": "uuid",
               "title": "Transaction Id"
             }
           }

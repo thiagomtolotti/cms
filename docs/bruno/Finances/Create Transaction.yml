@@ -6,6 +6,15 @@ info:
 http:
   method: POST
   url: "{{api_url}}/finance"
+  body:
+    type: json
+    data: |-
+      {
+        "description": "",
+        "amount": 4200,
+        "date": "asda",
+        "type": "income"
+      }
   auth: inherit
 
 settings:

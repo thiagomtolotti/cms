@@ -310,27 +310,8 @@
         "tags": [
           "Transactions"
         ],
-        "summary": "<Lambda>",
-        "operationId": "_lambda__api_finance_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/finance/": {
-      "get": {
-        "tags": [
-          "Transactions"
-        ],
-        "summary": "<Lambda>",
-        "operationId": "_lambda__api_finance__get",
+        "summary": " List Transactions",
+        "operationId": "_list_transactions_api_finance_get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -346,14 +327,90 @@
         "tags": [
           "Transactions"
         ],
-        "summary": "<Lambda>",
-        "operationId": "_lambda__api_finance__post",
+        "summary": " Create Transaction",
+        "operationId": "_create_transaction_api_finance_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaintainTransactionRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/finance/": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": " List Transactions",
+        "operationId": "_list_transactions_api_finance__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": " Create Transaction",
+        "operationId": "_create_transaction_api_finance__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaintainTransactionRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -584,6 +641,33 @@
         ],
         "title": "MaintainPostRequestDTO"
       },
+      "MaintainTransactionRequestDTO": {
+        "properties": {
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "amount": {
+            "type": "integer",
+            "title": "Amount"
+          },
+          "date": {
+            "type": "string",
+            "title": "Date"
+          },
+          "type": {
+            "$ref": "#/components/schemas/TransactionType"
+          }
+        },
+        "type": "object",
+        "required": [
+          "description",
+          "amount",
+          "date",
+          "type"
+        ],
+        "title": "MaintainTransactionRequestDTO"
+      },
       "PostMetadataResponseDTO": {
         "properties": {
           "title": {
@@ -623,6 +707,14 @@
           "published"
         ],
         "title": "PostStatus"
+      },
+      "TransactionType": {
+        "type": "string",
+        "enum": [
+          "income",
+          "expense"
+        ],
+        "title": "TransactionType"
       },
       "ValidationError": {
         "properties": {

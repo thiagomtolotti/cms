@@ -116,10 +116,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** <Lambda> */
-        get: operations["_lambda__api_finance_get"];
+        /** List Transactions */
+        get: operations["_list_transactions_api_finance_get"];
         put?: never;
-        post?: never;
+        /** Create Transaction */
+        post: operations["_create_transaction_api_finance_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -133,11 +134,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** <Lambda> */
-        get: operations["_lambda__api_finance__get"];
+        /** List Transactions */
+        get: operations["_list_transactions_api_finance__get"];
         put?: never;
-        /** <Lambda> */
-        post: operations["_lambda__api_finance__post"];
+        /** Create Transaction */
+        post: operations["_create_transaction_api_finance__post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -243,6 +244,16 @@ export interface components {
             slug: string;
             status: components["schemas"]["PostStatus"];
         };
+        /** MaintainTransactionRequestDTO */
+        MaintainTransactionRequestDTO: {
+            /** Description */
+            description: string;
+            /** Amount */
+            amount: number;
+            /** Date */
+            date: string;
+            type: components["schemas"]["TransactionType"];
+        };
         /** PostMetadataResponseDTO */
         PostMetadataResponseDTO: {
             /** Title */
@@ -260,6 +271,11 @@ export interface components {
          * @enum {string}
          */
         PostStatus: "draft" | "published";
+        /**
+         * TransactionType
+         * @enum {string}
+         */
+        TransactionType: "income" | "expense";
         /** ValidationError */
         ValidationError: {
             /** Location */
@@ -550,7 +566,7 @@ export interface operations {
             };
         };
     };
-    _lambda__api_finance_get: {
+    _list_transactions_api_finance_get: {
         parameters: {
             query?: never;
             header?: never;
@@ -570,7 +586,40 @@ export interface operations {
             };
         };
     };
-    _lambda__api_finance__get: {
+    _create_transaction_api_finance_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MaintainTransactionRequestDTO"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    _list_transactions_api_finance__get: {
         parameters: {
             query?: never;
             header?: never;
@@ -590,14 +639,18 @@ export interface operations {
             };
         };
     };
-    _lambda__api_finance__post: {
+    _create_transaction_api_finance__post: {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MaintainTransactionRequestDTO"];
+            };
+        };
         responses: {
             /** @description Successful Response */
             200: {
@@ -606,6 +659,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

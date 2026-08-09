@@ -5,7 +5,11 @@ info:
 
 http:
   method: PUT
-  url: "{{api_url}}/transaction:id"
+  url: "{{api_url}}/finance/:id"
+  params:
+    - name: id
+      value: ""
+      type: path
   auth: inherit
 
 settings:

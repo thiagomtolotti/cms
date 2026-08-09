@@ -1,0 +1,22 @@
+from src.core.auth.auth_repository import AuthRepository
+from src.core.file.file_repository import FileRepository
+from src.core.settings import settings
+from src.modules.blog.application.post_service import PostService
+from src.modules.blog.domain.post_repository import PostRepository
+from src.modules.blog.infra.post_repository_impl import SQLitePostRepository
+from src.modules.blog.presentation.router import PostRouter
+
+from .auth.keycloak import KeycloakAuthRepository
+from .file.disk import DiskFileRepository
+
+auth_repo: AuthRepository = KeycloakAuthRepository(
+    base_url=settings.keycloak_base_url,
+    client_id=settings.keycloak_client_id,
+    realm_name=settings.keycloak_realm,
+)
+
+repo: PostRepository = SQLitePostRepository()
+file_repo: FileRepository = DiskFileRepository()
+
+post_service = PostService(repo, file_repo)
+post_router = PostRouter(post_service, auth_repo)

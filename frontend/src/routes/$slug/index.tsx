@@ -1,11 +1,13 @@
-import type { Post } from "@/components/blog-post/types/post";
+import { useKeycloak } from "@react-keycloak/web";
 
 import fetchPost from "@/components/blog-post/lib/fetchPost";
 
-import { createFileRoute, useLoaderData } from "@tanstack/react-router";
-import { useKeycloak } from "@react-keycloak/web";
-import PostStatusBadge from "@/components/blog-post/components/post-status-badge";
+import type { Post } from "@/components/blog-post/types/post";
+
 import { cn } from "@/lib/utils";
+
+import { createFileRoute, useLoaderData } from "@tanstack/react-router";
+import PostStatusBadge from "@/components/blog-post/components/post-status-badge";
 
 export const Route = createFileRoute("/$slug/")({
   component: RouteComponent,
@@ -42,7 +44,7 @@ function TitleArea({ post }: TitleAreaProps) {
 
   return (
     <div className="flex flex-col gap-4 mb-4">
-      <h1>{post.title}</h1>
+      <h1 className="text-4xl font-semibold">{post.title}</h1>
 
       <span className="flex items-center gap-x-4 gap-y-2 flex-wrap">
         {post.date.toLocaleDateString("pt-BR")} - {post.author}
@@ -53,19 +55,21 @@ function TitleArea({ post }: TitleAreaProps) {
 }
 
 interface ImageAreaProps {
-  imageUrl: string;
+  imageUrl: string | null;
 }
 
 function ImageArea({ imageUrl }: ImageAreaProps) {
+  if (!imageUrl) return null;
+
   return (
     <div
       className={cn(
-        "mb-8 max-h-[50dvh] max-w-3xl w-full mx-auto",
-        "rounded-2xl overflow-hidden shadow-md max-lg:rounded-lg",
+        "mb-8 aspect-video max-w-3xl w-full mx-auto",
+        "overflow-hidden shadow-md rounded-lg lg:rounded-xl",
         "flex items-center justify-center",
       )}
     >
-      <img className="object-cover object-center" src={imageUrl} />
+      <img className="w-full h-full object-cover" src={imageUrl} />
     </div>
   );
 }

@@ -42,8 +42,14 @@ class PostService:
 
         return post
 
-    def get_post_image_path(self, post_slug: str, published_only: bool = True) -> Path:
+    def get_post_image_path(
+        self, post_slug: str, published_only: bool = True
+    ) -> Path | None:
         post = self.get_post(post_slug, published_only)
+
+        if not post.image:
+            return None
+
         path = self.file_repo.get_complete_path(post.image)
 
         return path
@@ -59,7 +65,8 @@ class PostService:
     def create_post(
         self,
         dto: MaintainPostRequestDTO,
-        image: FileDTO,
+        *,
+        image: FileDTO | None = None,
         markdown: FileDTO,
     ) -> None:
         if self.repo.exists(dto.slug):
@@ -69,10 +76,12 @@ class PostService:
 
         id = uuid4()
 
-        image_path = Path(str(id), image.filename)
-        markdown_path = Path(str(id), markdown.filename)
+        image_path = None
+        if image:
+            image_path = Path(str(id), image.filename)
+            self.file_repo.save(image_path, image.content)
 
-        self.file_repo.save(image_path, image.content)
+        markdown_path = Path(str(id), markdown.filename)
         self.file_repo.save(markdown_path, markdown.content)
 
         post = Post(
@@ -96,14 +105,12 @@ class PostService:
     ) -> None:
         post = self.repo.get_from_slug(dto.slug, published_only=False)
 
-        image_path = post.image
-
+        image_path = None
         if image:
             image_path = Path(str(post.id), image.filename)
             self.file_repo.save(image_path, image.content)
 
         markdown_path = Path(str(post.id), markdown.filename)
-
         self.file_repo.save(markdown_path, markdown.content)
 
         post = Post(

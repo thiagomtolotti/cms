@@ -151,10 +151,10 @@ export interface components {
         Body_create_post_api_posts__post: {
             /** Data */
             data: string;
-            /** Image */
-            image: string;
             /** Markdown */
             markdown: string;
+            /** Image */
+            image?: string | null;
         };
         /** Body_update_post_api_posts__put */
         Body_update_post_api_posts__put: {

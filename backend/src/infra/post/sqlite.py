@@ -43,7 +43,7 @@ class SQLitePostRepository(PostRepository):
                 author=row[3],
                 date=datetime.fromisoformat(row[4]),
                 file=Path(row[5]),
-                image=Path(row[6]),
+                image=Path(row[6]) if row[6] else None,
                 status=PostStatus(row[7]),
             )
 
@@ -64,7 +64,7 @@ class SQLitePostRepository(PostRepository):
                     post.author,
                     post.date.isoformat(),
                     str(post.file),
-                    str(post.image),
+                    str(post.image) if post.image else None,
                     post.status.value,
                 ),
             )
@@ -98,7 +98,7 @@ class SQLitePostRepository(PostRepository):
                     post.author,
                     post.date.isoformat(),
                     str(post.file),
-                    str(post.image),
+                    str(post.image) if post.image else None,
                     post.status.value,
                     post.slug,
                 ),
@@ -119,7 +119,7 @@ class SQLitePostRepository(PostRepository):
                     author=row[3],
                     date=datetime.fromisoformat(row[4]),
                     file=Path(row[5]),
-                    image=Path(row[6]),
+                    image=Path(row[6]) if row[6] else None,
                     status=PostStatus(row[7]),
                 )
                 for row in rows

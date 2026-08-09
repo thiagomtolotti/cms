@@ -17,6 +17,6 @@ class Post(BaseModel):
     title: str
     author: str
     date: datetime
-    image: Path
+    image: Path | None
     file: Path
     status: PostStatus

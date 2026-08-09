@@ -11,6 +11,8 @@ export const Route = createFileRoute("/$slug/editar")({
   staleTime: 0,
   loader: async ({ params }): Promise<Post> =>
     fetchPost(params.slug, { markdown: true }),
+  pendingComponent: () => <p>Loading...</p>,
+  errorComponent: () => <p>Houve um erro ao carregar o post</p>,
 });
 
 function RouteComponent() {
@@ -18,8 +20,10 @@ function RouteComponent() {
 
   return (
     <ProtectedRoute>
-      <section className="flex flex-col gap-8 max-w-4xl mx-auto my-16 max-lg:px-8">
-        <h1 className="w-full mb-8">Editar post</h1>
+      <section className="flex flex-col gap-4 max-w-3xl mx-auto mt-0 my-4 px-6">
+        <h1 className="w-full text-xs uppercase font-semibold text-muted-foreground">
+          Editar post
+        </h1>
 
         <MaintainPostForm post={post} />
       </section>

@@ -141,6 +141,12 @@ class PostRouter(APIRouter):
     async def get_post_image(self, post_slug: str):
         path = self.service.get_post_image_path(post_slug, published_only=False)
 
+        if not path:
+            return JSONResponse(
+                status_code=404,
+                content={"message": "Post image not found."},
+            )
+
         return FileResponse(
             path=path,
             media_type="image/jpeg",
@@ -150,16 +156,18 @@ class PostRouter(APIRouter):
     def create_post(
         self,
         data: Annotated[Json[MaintainPostRequestDTO], Form()],
-        image: Annotated[UploadFile, File()],
         markdown: Annotated[UploadFile, File()],
+        image: Annotated[UploadFile | None, File()] = None,
     ):
         self.service.create_post(
             data,
-            FileDTO.from_upload_file(
+            image=FileDTO.from_upload_file(
                 image,
                 required_mime_types=["image/"],
-            ),
-            FileDTO.from_upload_file(
+            )
+            if image
+            else None,
+            markdown=FileDTO.from_upload_file(
                 markdown,
                 required_mime_types=["text/markdown"],
             ),
@@ -175,13 +183,13 @@ class PostRouter(APIRouter):
     ):
         self.service.update_post(
             data,
-            FileDTO.from_upload_file(
+            image=FileDTO.from_upload_file(
                 image,
                 required_mime_types=["image/"],
             )
             if image
             else None,
-            FileDTO.from_upload_file(
+            markdown=FileDTO.from_upload_file(
                 markdown,
                 required_mime_types=["text/markdown"],
             ),

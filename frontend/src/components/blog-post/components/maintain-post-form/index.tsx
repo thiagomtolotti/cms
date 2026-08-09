@@ -60,7 +60,7 @@ export default function MaintainPostForm({ post }: MaintainPostFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col gap-10"
+      className="flex flex-col gap-4"
       id="maintain-post-form"
     >
       <ImageInput defaultValue={post?.imageUrl} />
@@ -69,18 +69,21 @@ export default function MaintainPostForm({ post }: MaintainPostFormProps) {
         <Input
           type="text"
           placeholder="Título do post"
-          className="w-full text-3xl! border-none outline-none my-8"
+          className="w-full text-4xl! border-none font-semibold outline-none mt-8"
           name="title"
           defaultValue={post?.title}
           required
         />
 
-        <div className="flex gap-6 my-4">
+        <div className="flex gap-4 my-4 max-md:flex-wrap">
           <FieldInput
             type="date"
             name="date"
             placeholder="Data de publicação"
-            defaultValue={post?.date.toISOString().split("T")[0]}
+            defaultValue={
+              post?.date.toISOString().split("T")[0] ||
+              new Date().toISOString().split("T")[0]
+            }
             required
           />
           <FieldInput

@@ -20,8 +20,10 @@ function RouteComponent() {
 
 function CreatePostPage() {
   return (
-    <section className="flex flex-col gap-8 max-w-4xl mx-auto my-16">
-      <h1 className="w-full mb-8">Crie um novo post</h1>
+    <section className="flex flex-col gap-4 max-w-3xl mx-auto mb-4 px-6">
+      <h1 className="w-full text-xs uppercase font-semibold text-muted-foreground">
+        Criar post
+      </h1>
 
       <MaintainPostForm />
     </section>

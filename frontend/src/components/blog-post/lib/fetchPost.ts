@@ -2,7 +2,7 @@ import type { Post } from "../types/post";
 
 import fetchMetadata from "./fetchMetadata";
 import fetchPostContent from "./fetchPostContent";
-import getPostImage from "./fetchPostImage";
+import fetchPostImage from "./fetchPostImage";
 
 export default async function fetchPost(
   slug: string,
@@ -11,22 +11,21 @@ export default async function fetchPost(
   const promises = await Promise.all([
     fetchMetadata(slug),
     fetchPostContent(slug, config),
-    getPostImage(slug),
   ]);
 
-  promises.forEach((promise) => {
-    if (promise instanceof Error) {
-      throw new Error(
-        `Error fetching post data for slug "${slug}": ${promise.message}`,
-      );
-    }
-  });
+  let imageUrl: string | null = null;
+  try {
+    const imageBlob = await fetchPostImage(slug);
+    imageUrl = URL.createObjectURL(imageBlob);
+  } catch (e) {
+    console.error("Error fetching post image:", e);
+  }
 
   return {
     author: promises[0].author,
     content: promises[1]!,
     date: new Date(promises[0].date),
-    imageUrl: promises[2]!,
+    imageUrl: imageUrl,
     slug: slug,
     title: promises[0].title,
     status: promises[0].status,

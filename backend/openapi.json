@@ -371,21 +371,27 @@
             },
             "title": "Data"
           },
-          "image": {
-            "type": "string",
-            "contentMediaType": "application/octet-stream",
-            "title": "Image"
-          },
           "markdown": {
             "type": "string",
             "contentMediaType": "application/octet-stream",
             "title": "Markdown"
+          },
+          "image": {
+            "anyOf": [
+              {
+                "type": "string",
+                "contentMediaType": "application/octet-stream"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image"
           }
         },
         "type": "object",
         "required": [
           "data",
-          "image",
           "markdown"
         ],
         "title": "Body_create_post_api_posts__post"

@@ -20,3 +20,11 @@ class MaintainTransactionRequestDTO(BaseModel):
             date=dto.date,
             type=dto.type,
         )
+
+
+class ListTransactionsResponseDTO(BaseModel):
+    transactions: list[Transaction]
+
+    @classmethod
+    def from_domain(cls, transactions: list[Transaction]) -> Self:
+        return cls(transactions=transactions)

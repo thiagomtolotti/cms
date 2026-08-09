@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 
 from src.modules.finances.application.transaction_service import TransactionService
 
-from .types import MaintainTransactionRequestDTO
+from .types import ListTransactionsResponseDTO, MaintainTransactionRequestDTO
 
 
 class FinancesRouter(APIRouter):
@@ -21,6 +21,7 @@ class FinancesRouter(APIRouter):
             "",
             self._list_transactions,
             response_class=JSONResponse,
+            response_model=ListTransactionsResponseDTO,
             methods=["GET"],
         )
 
@@ -28,6 +29,7 @@ class FinancesRouter(APIRouter):
             "/",
             self._list_transactions,
             response_class=JSONResponse,
+            response_model=ListTransactionsResponseDTO,
             methods=["GET"],
         )
 
@@ -59,8 +61,8 @@ class FinancesRouter(APIRouter):
             methods=["DELETE"],
         )
 
-    def _list_transactions(self):
-        return {"message": "List of transactions"}
+    def _list_transactions(self) -> ListTransactionsResponseDTO:
+        return ListTransactionsResponseDTO.from_domain(self.service.list_transactions())
 
     def _create_transaction(self, request: MaintainTransactionRequestDTO):
         self.service.create_transaction(request.to_domain(request))

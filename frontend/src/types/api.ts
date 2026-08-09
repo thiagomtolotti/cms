@@ -229,6 +229,11 @@ export interface components {
             /** Posts */
             posts: components["schemas"]["PostMetadataResponseDTO"][];
         };
+        /** ListTransactionsResponseDTO */
+        ListTransactionsResponseDTO: {
+            /** Transactions */
+            transactions: components["schemas"]["Transaction"][];
+        };
         /** MaintainPostRequestDTO */
         MaintainPostRequestDTO: {
             /** Title */
@@ -274,6 +279,24 @@ export interface components {
          * @enum {string}
          */
         PostStatus: "draft" | "published";
+        /** Transaction */
+        Transaction: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id?: string;
+            /** Description */
+            description: string;
+            /** Amount */
+            amount: number;
+            /**
+             * Date
+             * Format: date-time
+             */
+            date: string;
+            type: components["schemas"]["TransactionType"];
+        };
         /**
          * TransactionType
          * @enum {string}
@@ -584,7 +607,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["ListTransactionsResponseDTO"];
                 };
             };
         };
@@ -637,7 +660,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["ListTransactionsResponseDTO"];
                 };
             };
         };

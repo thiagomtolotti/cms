@@ -8,7 +8,7 @@ http:
   url: "{{api_url}}/finance/:id"
   params:
     - name: id
-      value: "1234"
+      value: e6a2f766-4cc1-40c3-9541-a0edad0e3d51
       type: path
   body:
     type: json

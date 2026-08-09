@@ -317,7 +317,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/ListTransactionsResponseDTO"
+                }
               }
             }
           }
@@ -373,7 +375,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/ListTransactionsResponseDTO"
+                }
               }
             }
           }
@@ -662,6 +666,22 @@
         ],
         "title": "ListPostsResponseDTO"
       },
+      "ListTransactionsResponseDTO": {
+        "properties": {
+          "transactions": {
+            "items": {
+              "$ref": "#/components/schemas/Transaction"
+            },
+            "type": "array",
+            "title": "Transactions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "transactions"
+        ],
+        "title": "ListTransactionsResponseDTO"
+      },
       "MaintainPostRequestDTO": {
         "properties": {
           "title": {
@@ -762,6 +782,39 @@
           "published"
         ],
         "title": "PostStatus"
+      },
+      "Transaction": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "amount": {
+            "type": "integer",
+            "title": "Amount"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Date"
+          },
+          "type": {
+            "$ref": "#/components/schemas/TransactionType"
+          }
+        },
+        "type": "object",
+        "required": [
+          "description",
+          "amount",
+          "date",
+          "type"
+        ],
+        "title": "Transaction"
       },
       "TransactionType": {
         "type": "string",

@@ -305,6 +305,97 @@
         }
       }
     },
+    "/api/finance": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "<Lambda>",
+        "operationId": "_lambda__api_finance_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/finance/": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "<Lambda>",
+        "operationId": "_lambda__api_finance__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "<Lambda>",
+        "operationId": "_lambda__api_finance__post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/finance/{transaction_id}": {
+      "put": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "<Lambda>",
+        "operationId": "_lambda__api_finance__transaction_id__put",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "<Lambda>",
+        "operationId": "_lambda__api_finance__transaction_id__delete",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/": {
       "get": {
         "summary": "Ping",

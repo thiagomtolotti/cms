@@ -6,7 +6,7 @@ from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 
 from .core.constants import DATA_PATH
 from .core.db.migrate import migrate_sqlite
-from .core.dependencies import post_router
+from .core.dependencies import finances_router, post_router
 from .core.exceptions import DomainError
 
 migrate_sqlite()
@@ -15,6 +15,7 @@ app = FastAPI(redirect_slashes=False)
 
 api_router = APIRouter(prefix="/api")
 api_router.include_router(post_router)
+api_router.include_router(finances_router)
 
 
 @api_router.get("/")

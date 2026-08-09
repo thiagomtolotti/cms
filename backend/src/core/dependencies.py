@@ -5,6 +5,7 @@ from src.modules.blog.application.post_service import PostService
 from src.modules.blog.domain.post_repository import PostRepository
 from src.modules.blog.infra.post_repository_impl import SQLitePostRepository
 from src.modules.blog.presentation.router import PostRouter
+from src.modules.finances.presentation.router import FinancesRouter
 
 from .auth.keycloak import KeycloakAuthRepository
 from .file.disk import DiskFileRepository
@@ -20,3 +21,5 @@ file_repo: FileRepository = DiskFileRepository()
 
 post_service = PostService(repo, file_repo)
 post_router = PostRouter(post_service, auth_repo)
+
+finances_router = FinancesRouter()

@@ -3,8 +3,7 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import useMaintainTransaction from "../hooks/useMaintainTransaction";
-
-import type { TransactionType } from "../types/transaction";
+import type { components } from "@/types/api";
 
 export default function MaintainTransactionForm() {
   const { mutateAsync } = useMaintainTransaction();
@@ -16,13 +15,15 @@ export default function MaintainTransactionForm() {
     const description = formData.get("description") as string;
     const amount = parseFloat(formData.get("amount") as string);
     const date = new Date(formData.get("date") as string);
-    const transactionType = formData.get("transactionType") as TransactionType;
+    const transactionType = formData.get(
+      "transactionType",
+    ) as components["schemas"]["Transaction"]["type"];
 
     await mutateAsync({
       description,
       amount,
-      date,
-      transactionType,
+      date: date.toISOString(),
+      type: transactionType,
     });
   }
 

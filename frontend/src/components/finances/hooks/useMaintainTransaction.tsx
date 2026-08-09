@@ -1,11 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import createTransaction from "../lib/createTransaction";
-
-import type { Transaction } from "../types/transaction";
+import type { components } from "@/types/api";
 
 export default function useMaintainTransaction() {
   return useMutation({
-    mutationFn: async (transaction: Transaction) =>
+    mutationFn: async (transaction: components["schemas"]["Transaction"]) =>
       createTransaction(transaction),
   });
 }

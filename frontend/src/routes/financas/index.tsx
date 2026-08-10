@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 
 import MaintainTransactionForm from "@/components/finances/components/maintain_transaction_form";
+import { useState } from "react";
 
 export const Route = createFileRoute("/financas/")({
   component: RouteComponent,
@@ -32,9 +33,11 @@ function RouteComponent() {
 }
 
 function AddTransaction() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div className="col-span-1 col-start-12 mt-12">
-      <Dialog>
+      <Dialog onOpenChange={setIsOpen} open={isOpen}>
         <DialogTrigger>
           <Button>
             <Plus />
@@ -45,7 +48,7 @@ function AddTransaction() {
           <DialogHeader>
             <DialogTitle>Criar Transação</DialogTitle>
 
-            <MaintainTransactionForm />
+            <MaintainTransactionForm onSuccess={() => setIsOpen(false)} />
           </DialogHeader>
         </DialogContent>
       </Dialog>

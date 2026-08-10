@@ -5,7 +5,13 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import useMaintainTransaction from "../hooks/useMaintainTransaction";
 import type { components } from "@/types/api";
 
-export default function MaintainTransactionForm() {
+interface MaintainTransactionFormProps {
+  onSuccess?: (transaction: components["schemas"]["Transaction"]) => void;
+}
+
+export default function MaintainTransactionForm({
+  onSuccess,
+}: MaintainTransactionFormProps) {
   const { mutateAsync } = useMaintainTransaction();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -15,16 +21,22 @@ export default function MaintainTransactionForm() {
     const description = formData.get("description") as string;
     const amount = parseFloat(formData.get("amount") as string);
     const date = new Date(formData.get("date") as string);
-    const transactionType = formData.get(
+    const type = formData.get(
       "transactionType",
     ) as components["schemas"]["Transaction"]["type"];
 
-    await mutateAsync({
+    const transaction: components["schemas"]["Transaction"] = {
       description,
       amount,
       date: date.toISOString(),
-      type: transactionType,
-    });
+      type,
+    };
+
+    await mutateAsync(transaction);
+
+    if (onSuccess) {
+      onSuccess(transaction);
+    }
   }
 
   return (

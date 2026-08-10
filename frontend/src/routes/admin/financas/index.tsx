@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 
 import ProtectedRoute from "@/components/auth/components/protected-route";
@@ -14,7 +15,7 @@ import {
 } from "@/components/ui/dialog";
 
 import MaintainTransactionForm from "@/components/finances/components/maintain_transaction_form";
-import { useState } from "react";
+import SankeyCustomNodeExample from "@/components/finances/components/transaction_chart";
 
 export const Route = createFileRoute("/admin/financas/")({
   component: RouteComponent,
@@ -30,6 +31,8 @@ function RouteComponent() {
             Gestão de Finanças Pessoais
           </h2>
         </div>
+
+        <SankeyCustomNodeExample />
 
         <AddTransaction />
 

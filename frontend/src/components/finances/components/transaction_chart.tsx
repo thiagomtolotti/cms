@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import {
   ResponsiveContainer,
   Sankey,
@@ -7,28 +8,10 @@ import {
   Rectangle,
 } from "recharts";
 
-// #region Sample data
-const data0 = {
-  nodes: [
-    { name: "Salário" },
-    { name: "VA" },
-    { name: "Entradas" },
-    { name: "Aluguel" },
-    { name: "Contas" },
-    { name: "Cartão de crédito" },
-    { name: "Terapia" },
-    { name: "Terapia de casal" },
-  ],
-  links: [
-    { source: 0, target: 2, value: 4800 },
-    { source: 1, target: 2, value: 600 },
-    { source: 2, target: 3, value: 1363 },
-    { source: 2, target: 4, value: 0 },
-    { source: 2, target: 5, value: 0 },
-    { source: 2, target: 6, value: 400 },
-    { source: 2, target: 7, value: 120 },
-  ],
-};
+interface RechartsSankeyData {
+  nodes: { name: string }[];
+  links: { source: number; target: number; value: number }[];
+}
 
 function MyCustomSankeyNode({ x, y, width, height, index, payload }: any) {
   const containerWidth = useChartWidth();
@@ -72,20 +55,115 @@ function MyCustomSankeyNode({ x, y, width, height, index, payload }: any) {
   );
 }
 
-const SankeyCustomNodeExample = () => (
-  <ResponsiveContainer width="100%" aspect={2} className="px-12 my-8">
-    <Sankey
-      data={data0}
-      node={MyCustomSankeyNode}
-      nodePadding={50}
-      margin={{
-        bottom: 30,
-      }}
-      link={{ stroke: "var(--color-muted-foreground)" }}
-    >
-      <Tooltip />
-    </Sankey>
-  </ResponsiveContainer>
-);
+const SankeyCustomNodeExample = () => {
+  const { data } = useSankeyData();
+
+  if (!data) return "Carregando...";
+
+  return (
+    <ResponsiveContainer width="100%" aspect={2} className="px-12 my-8">
+      <Sankey
+        data={data}
+        node={MyCustomSankeyNode}
+        nodePadding={50}
+        margin={{
+          bottom: 30,
+        }}
+        link={{ stroke: "var(--color-muted-foreground)" }}
+      >
+        <Tooltip />
+      </Sankey>
+    </ResponsiveContainer>
+  );
+};
 
 export default SankeyCustomNodeExample;
+
+function useSankeyData() {
+  return useQuery({
+    queryKey: ["sankeyData"],
+    queryFn: async () => await mockFetchSankeyData(),
+    select: (data) => transformSankeyData(data),
+  });
+}
+
+// TODO: handle 'Faltante' and 'Excedente'
+
+interface SankeyEndpointResponse {
+  nodes: {
+    id: string;
+    label: string;
+    targets?: {
+      id: string;
+      value: number;
+    }[];
+  }[];
+}
+
+function mockFetchSankeyData(): Promise<SankeyEndpointResponse> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        nodes: [
+          {
+            id: "salario",
+            label: "Salário",
+            targets: [{ id: "entradas", value: 4800 }],
+          },
+          {
+            id: "va",
+            label: "VA",
+            targets: [{ id: "entradas", value: 600 }],
+          },
+          {
+            id: "entradas",
+            label: "Entradas",
+            targets: [
+              { id: "aluguel", value: 1363 },
+              { id: "contas", value: 350 },
+              { id: "terapia", value: 520 },
+            ],
+          },
+          {
+            id: "contas",
+            label: "Contas",
+            targets: [
+              { id: "luz", value: 150 },
+              { id: "internet", value: 200 },
+            ],
+          },
+          { id: "aluguel", label: "Aluguel" },
+          { id: "luz", label: "Luz" },
+          { id: "internet", label: "Internet" },
+        ],
+      });
+    }, 500);
+  });
+}
+
+function transformSankeyData(
+  apiData: SankeyEndpointResponse,
+): RechartsSankeyData {
+  const nodeMap: Record<string, number> = {};
+  const nodes: { name: string }[] = [];
+  const links: { source: number; target: number; value: number }[] = [];
+
+  apiData.nodes.forEach((node, index) => {
+    nodeMap[node.id] = index;
+    nodes.push({ name: node.label });
+  });
+
+  apiData.nodes.forEach((node) => {
+    if (node.targets) {
+      node.targets.forEach((target) => {
+        links.push({
+          source: nodeMap[node.id],
+          target: nodeMap[target.id],
+          value: target.value,
+        });
+      });
+    }
+  });
+
+  return { nodes, links };
+}

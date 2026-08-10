@@ -60,7 +60,10 @@ export default function MaintainTransactionForm({
         name="date"
         type="date"
         placeholder="Data"
-        defaultValue={transaction?.date}
+        defaultValue={
+          transaction?.date?.split("T")[0] ??
+          new Date().toISOString().split("T")[0]
+        }
         required
       />
 

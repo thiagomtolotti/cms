@@ -32,6 +32,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import MaintainTransactionForm from "./maintain_transaction_form";
+import { Badge } from "@/components/ui/badge";
 
 export default function TransactionList() {
   const { data } = useListTransactions();
@@ -76,7 +77,9 @@ TransactionList.Item = ({
       <TableCell>
         {new Date(transaction.date).toLocaleDateString("pt-BR")}
       </TableCell>
-      <TableCell>{transaction.type}</TableCell>
+      <TableCell>
+        <TransactionTypeBadge type={transaction.type} />
+      </TableCell>
       <TableCell className="flex gap-2">
         <EditTransaction transaction={transaction} />
         <DeleteTransaction id={transaction.id!} />
@@ -153,3 +156,29 @@ function DeleteTransaction({ id }: DeleteTransactionProps) {
     </AlertDialog>
   );
 }
+
+interface TransactionTypeBadgeProps {
+  type: components["schemas"]["Transaction"]["type"];
+}
+
+function TransactionTypeBadge({ type }: TransactionTypeBadgeProps) {
+  const props: Record<
+    components["schemas"]["Transaction"]["type"],
+    React.HTMLProps<unknown>["className"]
+  > = {
+    expense: "bg-red-100 text-red-700 border-red-300",
+    income: "bg-green-100 text-green-800 border-green-300",
+  };
+
+  return (
+    <Badge className={props[type]}>{humanReadableTransactionType[type]}</Badge>
+  );
+}
+
+const humanReadableTransactionType: Record<
+  components["schemas"]["Transaction"]["type"],
+  string
+> = {
+  expense: "Despesa",
+  income: "Receita",
+};

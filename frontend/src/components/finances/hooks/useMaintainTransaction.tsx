@@ -8,10 +8,15 @@ import { toast } from "sonner";
 
 import type { components } from "@/types/api";
 
+import toCents from "../lib/toCents";
+
 export default function useMaintainTransaction(id?: string) {
   const update = useMutation({
     mutationFn: async (transaction: components["schemas"]["Transaction"]) =>
-      updateTransaction(id!, transaction),
+      updateTransaction(id!, {
+        ...transaction,
+        amount: toCents(transaction.amount),
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
       toast.success("Transação atualizada com sucesso!");
@@ -24,7 +29,10 @@ export default function useMaintainTransaction(id?: string) {
 
   const create = useMutation({
     mutationFn: async (transaction: components["schemas"]["Transaction"]) =>
-      createTransaction(transaction),
+      createTransaction({
+        ...transaction,
+        amount: toCents(transaction.amount),
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
       toast.success("Transação criada com sucesso!");

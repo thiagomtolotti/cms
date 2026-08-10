@@ -38,16 +38,16 @@ export default function TransactionList() {
   const { data } = useListTransactions();
 
   return (
-    <div className="col-span-full p-4 rounded-lg border border-border">
+    <div className="rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground">
       <Table>
-        <TableCaption></TableCaption>
+        <TableCaption>Lista de transações</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>Descrição</TableHead>
             <TableHead>Valor</TableHead>
             <TableHead>Data</TableHead>
             <TableHead>Tipo</TableHead>
-            <TableHead>Ações</TableHead>
+            <TableHead className="w-0">Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -59,7 +59,7 @@ export default function TransactionList() {
           ))}
 
           {data?.length === 0 && (
-            <TableRow>
+            <TableRow className="hover:bg-transparent">
               <TableCell
                 colSpan={5}
                 className="text-center text-muted-foreground py-12"

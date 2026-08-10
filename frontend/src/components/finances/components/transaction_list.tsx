@@ -10,7 +10,7 @@ import {
 import useListTransactions from "../hooks/useListTransactions";
 import type { components } from "@/types/api";
 import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
+import { Edit, Trash } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,6 +24,14 @@ import {
 } from "@/components/ui/alert-dialog";
 import useDeleteTransaction from "../hooks/useDeleteTransaction";
 import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import MaintainTransactionForm from "./maintain_transaction_form";
 
 export default function TransactionList() {
   const { data } = useListTransactions();
@@ -69,13 +77,41 @@ TransactionList.Item = ({
         {new Date(transaction.date).toLocaleDateString("pt-BR")}
       </TableCell>
       <TableCell>{transaction.type}</TableCell>
-      <TableCell>
-        <button className="text-blue-500 hover:underline">Editar</button>
+      <TableCell className="flex gap-2">
+        <EditTransaction transaction={transaction} />
         <DeleteTransaction id={transaction.id!} />
       </TableCell>
     </TableRow>
   );
 };
+
+interface EditTransactionProps {
+  transaction: components["schemas"]["Transaction"];
+}
+
+function EditTransaction({ transaction }: EditTransactionProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <Dialog onOpenChange={setIsOpen} open={isOpen}>
+      <DialogTrigger>
+        <Button variant="secondary" size="icon">
+          <Edit />
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Editar Transação</DialogTitle>
+
+          <MaintainTransactionForm
+            transaction={transaction}
+            onSuccess={() => setIsOpen(false)}
+          />
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 interface DeleteTransactionProps {
   id: string;

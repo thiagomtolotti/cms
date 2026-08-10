@@ -6,10 +6,12 @@ import useMaintainTransaction from "../hooks/useMaintainTransaction";
 import type { components } from "@/types/api";
 
 interface MaintainTransactionFormProps {
+  transaction?: components["schemas"]["Transaction"];
   onSuccess?: (transaction: components["schemas"]["Transaction"]) => void;
 }
 
 export default function MaintainTransactionForm({
+  transaction,
   onSuccess,
 }: MaintainTransactionFormProps) {
   const { mutateAsync } = useMaintainTransaction();
@@ -45,11 +47,24 @@ export default function MaintainTransactionForm({
         name="description"
         placeholder="Descrição"
         className="col-span-2"
+        defaultValue={transaction?.description}
         required
       />
-      <Input name="amount" placeholder="Valor" required />
-      <Input name="date" type="date" placeholder="Data" required />
-      <TransactionTypeSelect />
+      <Input
+        name="amount"
+        placeholder="Valor"
+        defaultValue={transaction?.amount}
+        required
+      />
+      <Input
+        name="date"
+        type="date"
+        placeholder="Data"
+        defaultValue={transaction?.date}
+        required
+      />
+
+      <TransactionTypeSelect defaultValue={transaction?.type} />
 
       <div className="col-span-2 ml-auto mt-4">
         <Button type="submit">Criar</Button>
@@ -58,11 +73,15 @@ export default function MaintainTransactionForm({
   );
 }
 
-function TransactionTypeSelect() {
+interface TransactionTypeSelectProps {
+  defaultValue?: components["schemas"]["Transaction"]["type"];
+}
+
+function TransactionTypeSelect({ defaultValue }: TransactionTypeSelectProps) {
   return (
     <RadioGroup
       className="flex gap-8 col-start-2"
-      defaultValue="income"
+      defaultValue={defaultValue || "income"}
       name="transactionType"
       required
     >

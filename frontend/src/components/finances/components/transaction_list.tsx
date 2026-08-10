@@ -9,6 +9,21 @@ import {
 } from "@/components/ui/table";
 import useListTransactions from "../hooks/useListTransactions";
 import type { components } from "@/types/api";
+import { Button } from "@/components/ui/button";
+import { Trash } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import useDeleteTransaction from "../hooks/useDeleteTransaction";
+import { useState } from "react";
 
 export default function TransactionList() {
   const { data } = useListTransactions();
@@ -56,8 +71,49 @@ TransactionList.Item = ({
       <TableCell>{transaction.type}</TableCell>
       <TableCell>
         <button className="text-blue-500 hover:underline">Editar</button>
-        <button className="text-red-500 hover:underline ml-2">Excluir</button>
+        <DeleteTransaction id={transaction.id!} />
       </TableCell>
     </TableRow>
   );
 };
+
+interface DeleteTransactionProps {
+  id: string;
+}
+
+function DeleteTransaction({ id }: DeleteTransactionProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const { mutateAsync } = useDeleteTransaction();
+
+  async function handleDelete() {
+    await mutateAsync(id);
+
+    setIsOpen(false);
+  }
+
+  return (
+    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+      <AlertDialogTrigger>
+        <Button variant="destructive" size="icon">
+          <Trash />
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Excluir transação</AlertDialogTitle>
+          <AlertDialogDescription>
+            Você tem certeza que deseja excluir esta transação? Esta ação não
+            pode ser desfeita.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+          <AlertDialogAction variant="destructive" onClick={handleDelete}>
+            Excluir
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}

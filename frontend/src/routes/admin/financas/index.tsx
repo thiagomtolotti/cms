@@ -16,14 +16,14 @@ import {
 import MaintainTransactionForm from "@/components/finances/components/maintain_transaction_form";
 import { useState } from "react";
 
-export const Route = createFileRoute("/financas/")({
+export const Route = createFileRoute("/admin/financas/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
   return (
     <ProtectedRoute>
-      <main className="grid grid-cols-12 gap-4 max-w-5xl mx-auto">
+      <main className="grid gap-8 mx-auto">
         <AddTransaction />
 
         <TransactionList />
@@ -36,7 +36,7 @@ function AddTransaction() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="col-span-1 col-start-12 mt-12">
+    <div className="ml-auto col-span-1 mt-12">
       <Dialog onOpenChange={setIsOpen} open={isOpen}>
         <DialogTrigger>
           <Button>

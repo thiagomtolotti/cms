@@ -12,7 +12,7 @@ function RouteComponent() {
   return (
     <ProtectedRoute>
       <main className="mx-auto grid min-h-dvh w-full max-w-7xl gap-6 p-4 md:grid-cols-[280px_minmax(0,1fr)] md:p-8">
-        <aside className="rounded-2xl border border-border bg-muted/40 p-6">
+        <aside className="rounded-2xl border border-border bg-background p-6">
           <p className="text-sm font-medium text-muted-foreground">Admin</p>
           <h1 className="mt-2 text-2xl font-semibold">Dashboard</h1>
 

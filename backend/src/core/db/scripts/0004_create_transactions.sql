@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS transactions (
+	id TEXT PRIMARY KEY,
+	amount INTEGER NOT NULL,
+	date TEXT NOT NULL,
+	type TEXT NOT NULL,
+	description TEXT NOT NULL
+)

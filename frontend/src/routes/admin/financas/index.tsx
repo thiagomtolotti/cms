@@ -24,6 +24,13 @@ function RouteComponent() {
   return (
     <ProtectedRoute>
       <main className="grid gap-8 mx-auto">
+        <div className="flex flex-col gap-2">
+          <p className="text-sm font-medium text-muted-foreground">Workspace</p>
+          <h2 className="text-3xl font-semibold tracking-tight">
+            Gestão de Finanças Pessoais
+          </h2>
+        </div>
+
         <AddTransaction />
 
         <TransactionList />

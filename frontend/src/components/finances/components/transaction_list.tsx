@@ -38,7 +38,7 @@ export default function TransactionList() {
   const { data } = useListTransactions();
 
   return (
-    <div className="col-span-full">
+    <div className="col-span-full p-4 rounded-lg border border-border">
       <Table>
         <TableCaption></TableCaption>
         <TableHeader>
@@ -57,6 +57,17 @@ export default function TransactionList() {
               transaction={transaction}
             />
           ))}
+
+          {data?.length === 0 && (
+            <TableRow>
+              <TableCell
+                colSpan={5}
+                className="text-center text-muted-foreground py-12"
+              >
+                Nenhuma transação encontrada.
+              </TableCell>
+            </TableRow>
+          )}
 
           <TableRow />
         </TableBody>

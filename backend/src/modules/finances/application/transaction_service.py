@@ -1,38 +1,28 @@
 from uuid import UUID
 
+from src.core.exceptions import EntityNotFoundError
 from src.modules.finances.domain.transaction import Transaction
+from src.modules.finances.domain.transaction_repository import TransactionRepository
 
 
 class TransactionService:
-    def __init__(self):
-        self.transactions: list[Transaction] = []
+    def __init__(self, repo: TransactionRepository):
+        self.repo = repo
 
-    def list_transactions(self):
-        return self.transactions
+    def list_(self):
+        return self.repo.list_()
 
-    def create_transaction(self, transaction: Transaction):
-        self.transactions.append(transaction)
+    def create(self, transaction: Transaction):
+        self.repo.create(transaction)
 
-        return transaction
+    def update(self, transaction: Transaction):
+        if not self.repo.exists(transaction.id):
+            raise EntityNotFoundError("Transaction not found.")
 
-    def update_transaction(
-        self,
-        transaction_id: UUID,
-        updated_transaction: Transaction,
-    ):
-        for index, transaction in enumerate(self.transactions):
-            if transaction.id == transaction_id:
-                self.transactions[index] = updated_transaction
+        self.repo.update(transaction)
 
-                return updated_transaction
+    def delete(self, id: UUID):
+        if not self.repo.exists(id):
+            raise EntityNotFoundError("Transaction not found.")
 
-        raise ValueError(f"Transaction with ID {transaction_id} not found.")
-
-    def delete_transaction(self, transaction_id: UUID):
-        for index, transaction in enumerate(self.transactions):
-            if transaction.id == transaction_id:
-                del self.transactions[index]
-
-                return
-
-        raise ValueError(f"Transaction with ID {transaction_id} not found.")
+        self.repo.delete(id)

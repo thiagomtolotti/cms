@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 
 from src.modules.finances.application.transaction_service import TransactionService
 
+from ..domain.transaction import Transaction
 from .types import ListTransactionsResponseDTO, MaintainTransactionRequestDTO
 
 
@@ -62,24 +63,29 @@ class FinancesRouter(APIRouter):
         )
 
     def _list_transactions(self) -> ListTransactionsResponseDTO:
-        return ListTransactionsResponseDTO.from_domain(self.service.list_transactions())
+        return ListTransactionsResponseDTO.from_domain(self.service.list_())
 
     def _create_transaction(self, request: MaintainTransactionRequestDTO):
-        self.service.create_transaction(request.to_domain(request))
+        self.service.create(request.to_domain(request))
 
         return {"message": "New transaction created"}
 
     def _update_transaction(
         self, transaction_id: UUID, request: MaintainTransactionRequestDTO
     ):
-        self.service.update_transaction(
-            transaction_id,
-            request.to_domain(request),
+        self.service.update(
+            Transaction(
+                amount=request.amount,
+                date=request.date,
+                description=request.description,
+                type=request.type,
+                id=transaction_id,
+            )
         )
 
         return {"message": f"Transaction {transaction_id} updated"}
 
     def _delete_transaction(self, transaction_id: UUID):
-        self.service.delete_transaction(transaction_id)
+        self.service.delete(transaction_id)
 
         return {"message": f"Transaction {transaction_id} deleted"}

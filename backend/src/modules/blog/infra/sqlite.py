@@ -1,20 +1,10 @@
 from datetime import datetime
 from pathlib import Path
 
-from src.core.constants import DATA_PATH
+from src.core.db.get_connection import get_connection
 from src.core.exceptions import EntityNotFoundError
 from src.modules.blog.domain.post import Post, PostStatus
 from src.modules.blog.domain.post_repository import PostRepository
-
-
-def get_connection():
-    import sqlite3
-
-    DB_PATH = DATA_PATH / "database.db"
-
-    conn = sqlite3.connect(DB_PATH)
-
-    return conn
 
 
 class SQLitePostRepository(PostRepository):

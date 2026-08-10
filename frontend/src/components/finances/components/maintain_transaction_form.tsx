@@ -22,7 +22,9 @@ export default function MaintainTransactionForm({
 
     const formData = new FormData(event.currentTarget);
     const description = formData.get("description") as string;
-    const amount = parseFloat(formData.get("amount") as string);
+    const amount = parseFloat(
+      (formData.get("amount") as string).replace(/,/g, "."),
+    );
     const date = new Date(formData.get("date") as string);
     const type = formData.get(
       "transactionType",
@@ -103,13 +105,19 @@ function TransactionTypeSelect({ defaultValue }: TransactionTypeSelectProps) {
 
 function MonetaryInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
   const [value, setValue] = useState(props.defaultValue || "");
-  const maskValue = value.toString().replace(/[^\d.]/g, "");
+  const [integer, ...decimals] = value
+    .toString()
+    .replace(".", ",")
+    .replace(/[^\d,]/g, "")
+    .split(",");
+  const maskedValue =
+    decimals.length > 0 ? `${integer},${decimals.join("")}` : integer;
 
   return (
     <span className="flex gap-2 items-center">
       <p className=" text-muted-foreground font-semibold tracking-wider">R$</p>
       <Input
-        value={maskValue}
+        value={maskedValue}
         onChange={(e) => {
           setValue(e.target.value);
           props.onChange?.(e);

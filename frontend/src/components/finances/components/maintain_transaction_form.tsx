@@ -17,6 +17,8 @@ export default function MaintainTransactionForm({
 }: MaintainTransactionFormProps) {
   const { mutateAsync } = useMaintainTransaction(transaction?.id);
 
+  const buttonLabel = transaction ? "Atualizar" : "Criar";
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -45,7 +47,7 @@ export default function MaintainTransactionForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="my-4 mt-8 grid grid-cols-2 gap-6">
+    <form onSubmit={handleSubmit} className="mt-8 grid grid-cols-2 gap-6">
       <Input
         name="description"
         placeholder="Descrição"
@@ -72,8 +74,8 @@ export default function MaintainTransactionForm({
 
       <TransactionTypeSelect defaultValue={transaction?.type} />
 
-      <div className="col-span-2 ml-auto mt-4">
-        <Button type="submit">Criar</Button>
+      <div className="col-span-2 ml-auto">
+        <Button type="submit">{buttonLabel}</Button>
       </div>
     </form>
   );

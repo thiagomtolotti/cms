@@ -14,7 +14,7 @@ export default function MaintainTransactionForm({
   transaction,
   onSuccess,
 }: MaintainTransactionFormProps) {
-  const { mutateAsync } = useMaintainTransaction();
+  const { mutateAsync } = useMaintainTransaction(transaction?.id);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();

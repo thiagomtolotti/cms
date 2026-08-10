@@ -73,7 +73,10 @@ TransactionList.Item = ({
   return (
     <TableRow>
       <TableCell>{transaction.description}</TableCell>
-      <TableCell>{transaction.amount}</TableCell>
+      <TableCell>
+        <span>R$</span> {"  "}
+        {transaction.amount}
+      </TableCell>
       <TableCell>
         {new Date(transaction.date).toLocaleDateString("pt-BR")}
       </TableCell>

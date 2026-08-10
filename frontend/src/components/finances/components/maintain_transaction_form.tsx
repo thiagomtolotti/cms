@@ -4,6 +4,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import useMaintainTransaction from "../hooks/useMaintainTransaction";
 import type { components } from "@/types/api";
+import { useState } from "react";
 
 interface MaintainTransactionFormProps {
   transaction?: components["schemas"]["Transaction"];
@@ -50,7 +51,7 @@ export default function MaintainTransactionForm({
         defaultValue={transaction?.description}
         required
       />
-      <Input
+      <MonetaryInput
         name="amount"
         placeholder="Valor"
         defaultValue={transaction?.amount}
@@ -97,5 +98,24 @@ function TransactionTypeSelect({ defaultValue }: TransactionTypeSelectProps) {
         <label htmlFor="expense">Saída</label>
       </div>
     </RadioGroup>
+  );
+}
+
+function MonetaryInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
+  const [value, setValue] = useState(props.defaultValue || "");
+  const maskValue = value.toString().replace(/[^\d.]/g, "");
+
+  return (
+    <span className="flex gap-2 items-center">
+      <p className=" text-muted-foreground font-semibold tracking-wider">R$</p>
+      <Input
+        value={maskValue}
+        onChange={(e) => {
+          setValue(e.target.value);
+          props.onChange?.(e);
+        }}
+        {...props}
+      />
+    </span>
   );
 }

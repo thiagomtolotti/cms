@@ -1,8 +1,14 @@
+import math
 from uuid import UUID
 
 from src.core.exceptions import EntityNotFoundError
-from src.modules.finances.domain.transaction import Transaction
+from src.modules.finances.domain.transaction import Transaction, TransactionType
 from src.modules.finances.domain.transaction_repository import TransactionRepository
+from src.modules.finances.presentation.types import (
+    GetSankeyResponseDTO,
+    SankeyNodeDTO,
+    SankeyNodeTargetDTO,
+)
 
 
 class TransactionService:
@@ -26,3 +32,34 @@ class TransactionService:
             raise EntityNotFoundError("Transaction not found.")
 
         self.repo.delete(id)
+
+    def get_sankey_data(self) -> GetSankeyResponseDTO:
+        # Entradas devem apontar para salário
+        transactions = self.repo.list_()
+        income_transactions = [
+            t for t in transactions if t.type == TransactionType.INCOME
+        ]
+
+        res = GetSankeyResponseDTO(
+            nodes=[
+                SankeyNodeDTO(
+                    id=str(t.id),
+                    label=t.description,
+                    targets=[
+                        SankeyNodeTargetDTO(
+                            id="entradas", value=math.floor(t.amount / 100)
+                        ),
+                    ],
+                )
+                for t in income_transactions
+            ]
+            + [
+                SankeyNodeDTO(
+                    id="entradas",
+                    label="Entradas",
+                    targets=[],
+                ),
+            ],
+        )
+
+        return res

@@ -8,6 +8,7 @@ export default function useDeleteTransaction() {
     mutationFn: async (id: string) => await deleteTransaction(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["sankey"] });
       toast.success("Transação excluída com sucesso!");
     },
     onError: (error: Error) => {

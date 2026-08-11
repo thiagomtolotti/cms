@@ -19,6 +19,7 @@ export default function useMaintainTransaction(id?: string) {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["sankey"] });
       toast.success("Transação atualizada com sucesso!");
     },
     onError: (error: Error) => {
@@ -35,6 +36,7 @@ export default function useMaintainTransaction(id?: string) {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["sankey"] });
       toast.success("Transação criada com sucesso!");
     },
     onError: (error: Error) => {

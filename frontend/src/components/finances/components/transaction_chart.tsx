@@ -91,7 +91,7 @@ export default SankeyCustomNodeExample;
 
 function useSankeyData() {
   return useQuery({
-    queryKey: ["sankeyData"],
+    queryKey: ["sankey"],
     queryFn: async () => await fetchSankeyData(),
     select: (data) => transformSankeyData(data),
   });

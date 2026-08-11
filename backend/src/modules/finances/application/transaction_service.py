@@ -39,6 +39,9 @@ class TransactionService:
         income_transactions = [
             t for t in transactions if t.type == TransactionType.INCOME
         ]
+        expense_transactions = [
+            t for t in transactions if t.type == TransactionType.EXPENSE
+        ]
 
         res = GetSankeyResponseDTO(
             nodes=[
@@ -57,9 +60,23 @@ class TransactionService:
                 SankeyNodeDTO(
                     id="entradas",
                     label="Entradas",
-                    targets=[],
+                    targets=[
+                        SankeyNodeTargetDTO(
+                            id=str(t.id),
+                            value=math.floor(t.amount / 100),
+                        )
+                        for t in expense_transactions
+                    ],
                 ),
-            ],
+            ]
+            + [
+                SankeyNodeDTO(
+                    id=str(t.id),
+                    label=t.description,
+                    targets=[],
+                )
+                for t in expense_transactions
+            ]
         )
 
         return res

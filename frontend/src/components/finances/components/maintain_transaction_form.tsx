@@ -31,7 +31,8 @@ export default function MaintainTransactionForm({
     const type = formData.get(
       "transactionType",
     ) as components["schemas"]["Transaction"]["type"];
-    const category = formData.get("category") as string | null;
+    let category: string | null = formData.get("category") as string;
+    category = category === "" ? null : category;
 
     const transaction: components["schemas"]["Transaction"] = {
       description,

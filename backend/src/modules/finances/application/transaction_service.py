@@ -42,6 +42,23 @@ class TransactionService:
         expense_transactions = [
             t for t in transactions if t.type == TransactionType.EXPENSE
         ]
+        category_and_end_node_targets: list[SankeyNodeTargetDTO] = [
+            SankeyNodeTargetDTO(
+                id=str(t.id),
+                value=math.floor(t.amount / 100),
+            )
+            for t in expense_transactions
+            if t.category is None
+        ]
+        category_and_end_nodes: list[SankeyNodeDTO] = [
+            SankeyNodeDTO(
+                id=str(t.id),
+                label=t.description,
+                targets=[],
+            )
+            for t in expense_transactions
+            if t.category is None
+        ]
 
         res = GetSankeyResponseDTO(
             nodes=[
@@ -50,7 +67,8 @@ class TransactionService:
                     label=t.description,
                     targets=[
                         SankeyNodeTargetDTO(
-                            id="entradas", value=math.floor(t.amount / 100)
+                            id="entradas",
+                            value=math.floor(t.amount / 100),
                         ),
                     ],
                 )
@@ -60,23 +78,10 @@ class TransactionService:
                 SankeyNodeDTO(
                     id="entradas",
                     label="Entradas",
-                    targets=[
-                        SankeyNodeTargetDTO(
-                            id=str(t.id),
-                            value=math.floor(t.amount / 100),
-                        )
-                        for t in expense_transactions
-                    ],
+                    targets=category_and_end_node_targets,
                 ),
             ]
-            + [
-                SankeyNodeDTO(
-                    id=str(t.id),
-                    label=t.description,
-                    targets=[],
-                )
-                for t in expense_transactions
-            ]
+            + category_and_end_nodes
         )
 
         return res

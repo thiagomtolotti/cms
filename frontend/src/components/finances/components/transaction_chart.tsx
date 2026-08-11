@@ -1,6 +1,3 @@
-import type { components } from "@/types/api";
-import client from "@/types/client";
-import { useQuery } from "@tanstack/react-query";
 import {
   ResponsiveContainer,
   Sankey,
@@ -11,10 +8,7 @@ import {
 } from "recharts";
 import type { NodeProps } from "recharts/types/chart/Sankey";
 
-interface RechartsSankeyData {
-  nodes: { name: string }[];
-  links: { source: number; target: number; value: number }[];
-}
+import useSankeyData from "../hooks/useSankeyData";
 
 function MyCustomSankeyNode({
   x,
@@ -88,61 +82,3 @@ const SankeyCustomNodeExample = () => {
 };
 
 export default SankeyCustomNodeExample;
-
-function useSankeyData() {
-  return useQuery({
-    queryKey: ["sankey"],
-    queryFn: async () => await fetchSankeyData(),
-    select: (data) => transformSankeyData(data),
-  });
-}
-
-// TODO: handle 'Faltante' and 'Excedente'
-
-interface SankeyEndpointResponse {
-  nodes: {
-    id: string;
-    label: string;
-    targets?: {
-      id: string;
-      value: number;
-    }[];
-  }[];
-}
-
-async function fetchSankeyData(): Promise<
-  components["schemas"]["GetSankeyResponseDTO"]
-> {
-  const { data } = await client.GET("/api/finance/sankey");
-
-  return data!;
-}
-
-function transformSankeyData(
-  apiData: SankeyEndpointResponse,
-): RechartsSankeyData {
-  const nodeMap: Record<string, number> = {};
-  const nodes: { name: string }[] = [];
-  const links: { source: number; target: number; value: number }[] = [];
-
-  apiData.nodes.forEach((node, index) => {
-    nodeMap[node.id] = index;
-    nodes.push({ name: node.label });
-  });
-
-  apiData.nodes.forEach((node) => {
-    if (node.targets) {
-      node.targets.forEach((target) => {
-        links.push({
-          source: nodeMap[node.id],
-          target: nodeMap[target.id],
-          value: target.value,
-        });
-      });
-    }
-  });
-
-  return { nodes, links };
-}
-
-// Entradas (tipo) -> Entradas (categorias) -> Saídas (categorias) -> Saídas (tipo)

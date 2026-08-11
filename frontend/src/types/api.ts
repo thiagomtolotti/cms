@@ -283,6 +283,8 @@ export interface components {
              */
             date: string;
             type: components["schemas"]["TransactionType"];
+            /** Category */
+            category: string | null;
         };
         /** PostMetadataResponseDTO */
         PostMetadataResponseDTO: {
@@ -334,6 +336,8 @@ export interface components {
              */
             date: string;
             type: components["schemas"]["TransactionType"];
+            /** Category */
+            category: string | null;
         };
         /**
          * TransactionType

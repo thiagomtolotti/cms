@@ -11,6 +11,7 @@ class MaintainTransactionRequestDTO(BaseModel):
     amount: int
     date: datetime
     type: TransactionType
+    category: str | None
 
     @classmethod
     def to_domain(cls, dto: Self) -> Transaction:
@@ -19,6 +20,7 @@ class MaintainTransactionRequestDTO(BaseModel):
             amount=dto.amount,
             date=dto.date,
             type=dto.type,
+            category=dto.category,
         )
 
 

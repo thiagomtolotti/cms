@@ -92,6 +92,7 @@ class FinancesRouter(APIRouter):
                 description=request.description,
                 type=request.type,
                 id=transaction_id,
+                category=request.category,
             )
         )
 

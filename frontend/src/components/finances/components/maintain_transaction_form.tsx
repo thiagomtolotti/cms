@@ -31,12 +31,14 @@ export default function MaintainTransactionForm({
     const type = formData.get(
       "transactionType",
     ) as components["schemas"]["Transaction"]["type"];
+    const category = formData.get("category") as string | null;
 
     const transaction: components["schemas"]["Transaction"] = {
       description,
       amount,
       date: date.toISOString(),
       type,
+      category,
     };
 
     await mutateAsync(transaction);
@@ -72,9 +74,15 @@ export default function MaintainTransactionForm({
         required
       />
 
+      <Input
+        name="category"
+        placeholder="Categoria"
+        defaultValue={transaction?.category ?? undefined}
+      />
+
       <TransactionTypeSelect defaultValue={transaction?.type} />
 
-      <div className="col-span-2 ml-auto">
+      <div className="col-span-2 ml-auto mt-4">
         <Button type="submit">{buttonLabel}</Button>
       </div>
     </form>
@@ -88,7 +96,7 @@ interface TransactionTypeSelectProps {
 function TransactionTypeSelect({ defaultValue }: TransactionTypeSelectProps) {
   return (
     <RadioGroup
-      className="flex gap-8 col-start-2"
+      className="flex gap-8"
       defaultValue={defaultValue || "income"}
       name="transactionType"
       required

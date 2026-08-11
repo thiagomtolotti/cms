@@ -16,3 +16,4 @@ class Transaction(BaseModel):
     amount: int
     date: datetime
     type: TransactionType
+    category: str | None

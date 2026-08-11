@@ -769,6 +769,17 @@
           },
           "type": {
             "$ref": "#/components/schemas/TransactionType"
+          },
+          "category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category"
           }
         },
         "type": "object",
@@ -776,7 +787,8 @@
           "description",
           "amount",
           "date",
-          "type"
+          "type",
+          "category"
         ],
         "title": "MaintainTransactionRequestDTO"
       },
@@ -886,6 +898,17 @@
           },
           "type": {
             "$ref": "#/components/schemas/TransactionType"
+          },
+          "category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category"
           }
         },
         "type": "object",
@@ -893,7 +916,8 @@
           "description",
           "amount",
           "date",
-          "type"
+          "type",
+          "category"
         ],
         "title": "Transaction"
       },

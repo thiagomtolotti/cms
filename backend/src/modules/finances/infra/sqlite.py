@@ -9,7 +9,7 @@ from ..domain.transaction_repository import TransactionRepository
 class SQLiteTransactionRepository(TransactionRepository):
     def list_(self) -> list[Transaction]:
         query = """
-            SELECT id, amount, date, description, type
+            SELECT id, amount, date, description, type, category
             FROM transactions
         """
 
@@ -25,6 +25,7 @@ class SQLiteTransactionRepository(TransactionRepository):
                     date=row[2],
                     description=row[3],
                     type=row[4],
+                    category=row[5],
                 )
                 for row in rows
             ]

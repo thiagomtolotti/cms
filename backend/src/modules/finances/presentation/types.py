@@ -28,3 +28,18 @@ class ListTransactionsResponseDTO(BaseModel):
     @classmethod
     def from_domain(cls, transactions: list[Transaction]) -> Self:
         return cls(transactions=transactions)
+
+
+class SankeyNodeTargetDTO(BaseModel):
+    id: str
+    value: int
+
+
+class SankeyNodeDTO(BaseModel):
+    id: str
+    label: str
+    targets: list[SankeyNodeTargetDTO]
+
+
+class GetSankeyResponseDTO(BaseModel):
+    nodes: list[SankeyNodeDTO]

@@ -1,3 +1,5 @@
+import type { components } from "@/types/api";
+import client from "@/types/client";
 import { useQuery } from "@tanstack/react-query";
 import {
   ResponsiveContainer,
@@ -7,13 +9,21 @@ import {
   Layer,
   Rectangle,
 } from "recharts";
+import type { NodeProps } from "recharts/types/chart/Sankey";
 
 interface RechartsSankeyData {
   nodes: { name: string }[];
   links: { source: number; target: number; value: number }[];
 }
 
-function MyCustomSankeyNode({ x, y, width, height, index, payload }: any) {
+function MyCustomSankeyNode({
+  x,
+  y,
+  width,
+  height,
+  index,
+  payload,
+}: NodeProps) {
   const containerWidth = useChartWidth();
 
   if (containerWidth == null) {
@@ -82,7 +92,7 @@ export default SankeyCustomNodeExample;
 function useSankeyData() {
   return useQuery({
     queryKey: ["sankeyData"],
-    queryFn: async () => await mockFetchSankeyData(),
+    queryFn: async () => await fetchSankeyData(),
     select: (data) => transformSankeyData(data),
   });
 }
@@ -100,45 +110,12 @@ interface SankeyEndpointResponse {
   }[];
 }
 
-function mockFetchSankeyData(): Promise<SankeyEndpointResponse> {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        nodes: [
-          {
-            id: "salario",
-            label: "Salário",
-            targets: [{ id: "entradas", value: 4800 }],
-          },
-          {
-            id: "va",
-            label: "VA",
-            targets: [{ id: "entradas", value: 600 }],
-          },
-          {
-            id: "entradas",
-            label: "Entradas",
-            targets: [
-              { id: "aluguel", value: 1363 },
-              { id: "contas", value: 350 },
-              { id: "terapia", value: 520 },
-            ],
-          },
-          {
-            id: "contas",
-            label: "Contas",
-            targets: [
-              { id: "luz", value: 150 },
-              { id: "internet", value: 200 },
-            ],
-          },
-          { id: "aluguel", label: "Aluguel" },
-          { id: "luz", label: "Luz" },
-          { id: "internet", label: "Internet" },
-        ],
-      });
-    }, 500);
-  });
+async function fetchSankeyData(): Promise<
+  components["schemas"]["GetSankeyResponseDTO"]
+> {
+  const { data } = await client.GET("/api/finance/sankey");
+
+  return data!;
 }
 
 function transformSankeyData(
@@ -167,3 +144,5 @@ function transformSankeyData(
 
   return { nodes, links };
 }
+
+// Entradas (tipo) -> Entradas (categorias) -> Saídas (categorias) -> Saídas (tipo)

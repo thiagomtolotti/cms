@@ -511,6 +511,27 @@
         }
       }
     },
+    "/api/finance/sankey": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Get Sankey",
+        "operationId": "get_sankey_api_finance_sankey_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetSankeyResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/": {
       "get": {
         "summary": "Ping",
@@ -636,6 +657,22 @@
           "markdown"
         ],
         "title": "Body_update_post_api_posts__put"
+      },
+      "GetSankeyResponseDTO": {
+        "properties": {
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/SankeyNodeDTO"
+            },
+            "type": "array",
+            "title": "Nodes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "nodes"
+        ],
+        "title": "GetSankeyResponseDTO"
       },
       "HTTPValidationError": {
         "properties": {
@@ -782,6 +819,50 @@
           "published"
         ],
         "title": "PostStatus"
+      },
+      "SankeyNodeDTO": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "targets": {
+            "items": {
+              "$ref": "#/components/schemas/SankeyNodeTargetDTO"
+            },
+            "type": "array",
+            "title": "Targets"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "targets"
+        ],
+        "title": "SankeyNodeDTO"
+      },
+      "SankeyNodeTargetDTO": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "value": {
+            "type": "integer",
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "value"
+        ],
+        "title": "SankeyNodeTargetDTO"
       },
       "Transaction": {
         "properties": {

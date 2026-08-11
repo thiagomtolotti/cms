@@ -163,6 +163,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/finance/sankey": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Sankey */
+        get: operations["get_sankey_api_finance_sankey_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/": {
         parameters: {
             query?: never;
@@ -218,6 +235,11 @@ export interface components {
             markdown: string;
             /** Image */
             image?: string | null;
+        };
+        /** GetSankeyResponseDTO */
+        GetSankeyResponseDTO: {
+            /** Nodes */
+            nodes: components["schemas"]["SankeyNodeDTO"][];
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -279,6 +301,22 @@ export interface components {
          * @enum {string}
          */
         PostStatus: "draft" | "published";
+        /** SankeyNodeDTO */
+        SankeyNodeDTO: {
+            /** Id */
+            id: string;
+            /** Label */
+            label: string;
+            /** Targets */
+            targets: components["schemas"]["SankeyNodeTargetDTO"][];
+        };
+        /** SankeyNodeTargetDTO */
+        SankeyNodeTargetDTO: {
+            /** Id */
+            id: string;
+            /** Value */
+            value: number;
+        };
         /** Transaction */
         Transaction: {
             /**
@@ -760,6 +798,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_sankey_api_finance_sankey_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetSankeyResponseDTO"];
                 };
             };
         };

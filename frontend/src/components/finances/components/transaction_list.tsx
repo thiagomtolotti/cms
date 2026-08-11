@@ -47,6 +47,7 @@ export default function TransactionList() {
             <TableHead>Valor</TableHead>
             <TableHead>Data</TableHead>
             <TableHead>Tipo</TableHead>
+            <TableHead>Categoria</TableHead>
             <TableHead className="w-0">Ações</TableHead>
           </TableRow>
         </TableHeader>
@@ -96,6 +97,7 @@ TransactionList.Item = ({
       <TableCell>
         <TransactionTypeBadge type={transaction.type} />
       </TableCell>
+      <TableCell>{transaction.category}</TableCell>
       <TableCell className="flex gap-2">
         <EditTransaction transaction={transaction} />
         <DeleteTransaction id={transaction.id!} />

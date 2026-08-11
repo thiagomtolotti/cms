@@ -34,8 +34,8 @@ class SQLiteTransactionRepository(TransactionRepository):
 
     def create(self, transaction: Transaction) -> None:
         query = """
-            INSERT INTO transactions (id, amount, date, description, type)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO transactions (id, amount, date, description, type, category)
+            VALUES (?, ?, ?, ?, ?, ?)
         """
 
         with get_connection() as conn:
@@ -48,6 +48,7 @@ class SQLiteTransactionRepository(TransactionRepository):
                     transaction.date,
                     transaction.description,
                     transaction.type.value,
+                    transaction.category,
                 ),
             )
             conn.commit()
@@ -55,7 +56,7 @@ class SQLiteTransactionRepository(TransactionRepository):
     def update(self, transaction: Transaction) -> None:
         query = """
             UPDATE transactions
-            SET amount = ?, date = ?, description = ?, type = ?
+            SET amount = ?, date = ?, description = ?, type = ?, category = ?
             WHERE id = ?
         """
 
@@ -68,6 +69,7 @@ class SQLiteTransactionRepository(TransactionRepository):
                     transaction.date,
                     transaction.description,
                     transaction.type.value,
+                    transaction.category,
                     str(transaction.id),
                 ),
             )

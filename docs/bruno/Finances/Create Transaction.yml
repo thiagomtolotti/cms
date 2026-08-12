@@ -1,0 +1,24 @@
+info:
+  name: Create Transaction
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{api_url}}/finance"
+  body:
+    type: json
+    data: |-
+      {
+        "description": "",
+        "amount": 4200,
+        "date": "2026-08-09T00:00:00.000Z",
+        "type": "income"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

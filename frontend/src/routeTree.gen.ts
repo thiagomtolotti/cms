@@ -17,6 +17,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as CreateIndexRouteImport } from './routes/create/index'
 import { Route as LogoutIndexRouteImport } from './routes/logout/index'
 import { Route as QrCodeIndexRouteImport } from './routes/qr-code/index'
+import { Route as AdminFinancasIndexRouteImport } from './routes/admin/financas/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -58,6 +59,11 @@ const QrCodeIndexRoute = QrCodeIndexRouteImport.update({
   path: '/qr-code/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminFinancasIndexRoute = AdminFinancasIndexRouteImport.update({
+  id: '/financas/',
+  path: '/financas/',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -68,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/create/': typeof CreateIndexRoute
   '/logout/': typeof LogoutIndexRoute
   '/qr-code/': typeof QrCodeIndexRoute
+  '/admin/financas/': typeof AdminFinancasIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -77,6 +84,7 @@ export interface FileRoutesByTo {
   '/create': typeof CreateIndexRoute
   '/logout': typeof LogoutIndexRoute
   '/qr-code': typeof QrCodeIndexRoute
+  '/admin/financas': typeof AdminFinancasIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   '/create/': typeof CreateIndexRoute
   '/logout/': typeof LogoutIndexRoute
   '/qr-code/': typeof QrCodeIndexRoute
+  '/admin/financas/': typeof AdminFinancasIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -100,6 +109,7 @@ export interface FileRouteTypes {
     | '/create/'
     | '/logout/'
     | '/qr-code/'
+    | '/admin/financas/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/create'
     | '/logout'
     | '/qr-code'
+    | '/admin/financas'
   id:
     | '__root__'
     | '/'
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/create/'
     | '/logout/'
     | '/qr-code/'
+    | '/admin/financas/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -189,15 +201,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QrCodeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/financas/': {
+      id: '/admin/financas/'
+      path: '/financas'
+      fullPath: '/admin/financas/'
+      preLoaderRoute: typeof AdminFinancasIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminFinancasIndexRoute: typeof AdminFinancasIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
+  AdminFinancasIndexRoute: AdminFinancasIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)

@@ -1,0 +1,28 @@
+info:
+  name: Update Transaction
+  type: http
+  seq: 3
+
+http:
+  method: PUT
+  url: "{{api_url}}/finance/:id"
+  params:
+    - name: id
+      value: e6a2f766-4cc1-40c3-9541-a0edad0e3d51
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "description": "",
+        "amount": 4200,
+        "date": "2026-08-09T00:00:00.000Z",
+        "type": "income"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

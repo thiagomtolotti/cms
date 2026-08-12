@@ -109,6 +109,77 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/finance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Transactions */
+        get: operations["_list_transactions_api_finance_get"];
+        put?: never;
+        /** Create Transaction */
+        post: operations["_create_transaction_api_finance_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/finance/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Transactions */
+        get: operations["_list_transactions_api_finance__get"];
+        put?: never;
+        /** Create Transaction */
+        post: operations["_create_transaction_api_finance__post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/finance/{transaction_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Update Transaction */
+        put: operations["_update_transaction_api_finance__transaction_id__put"];
+        post?: never;
+        /** Delete Transaction */
+        delete: operations["_delete_transaction_api_finance__transaction_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/finance/sankey": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Sankey */
+        get: operations["get_sankey_api_finance_sankey_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/": {
         parameters: {
             query?: never;
@@ -165,6 +236,13 @@ export interface components {
             /** Image */
             image?: string | null;
         };
+        /** GetSankeyResponseDTO */
+        GetSankeyResponseDTO: {
+            /** Nodes */
+            nodes: components["schemas"]["SankeyNodeDTO"][];
+            /** Links */
+            links: components["schemas"]["SankeyLinkDTO"][];
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -174,6 +252,11 @@ export interface components {
         ListPostsResponseDTO: {
             /** Posts */
             posts: components["schemas"]["PostMetadataResponseDTO"][];
+        };
+        /** ListTransactionsResponseDTO */
+        ListTransactionsResponseDTO: {
+            /** Transactions */
+            transactions: components["schemas"]["Transaction"][];
         };
         /** MaintainPostRequestDTO */
         MaintainPostRequestDTO: {
@@ -189,6 +272,21 @@ export interface components {
             /** Slug */
             slug: string;
             status: components["schemas"]["PostStatus"];
+        };
+        /** MaintainTransactionRequestDTO */
+        MaintainTransactionRequestDTO: {
+            /** Description */
+            description: string;
+            /** Amount */
+            amount: number;
+            /**
+             * Date
+             * Format: date-time
+             */
+            date: string;
+            type: components["schemas"]["TransactionType"];
+            /** Category */
+            category: string | null;
         };
         /** PostMetadataResponseDTO */
         PostMetadataResponseDTO: {
@@ -207,6 +305,47 @@ export interface components {
          * @enum {string}
          */
         PostStatus: "draft" | "published";
+        /** SankeyLinkDTO */
+        SankeyLinkDTO: {
+            /** Source */
+            source: string;
+            /** Target */
+            target: string;
+            /** Value */
+            value: number;
+        };
+        /** SankeyNodeDTO */
+        SankeyNodeDTO: {
+            /** Id */
+            id: string;
+            /** Label */
+            label: string;
+        };
+        /** Transaction */
+        Transaction: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id?: string;
+            /** Description */
+            description: string;
+            /** Amount */
+            amount: number;
+            /**
+             * Date
+             * Format: date-time
+             */
+            date: string;
+            type: components["schemas"]["TransactionType"];
+            /** Category */
+            category: string | null;
+        };
+        /**
+         * TransactionType
+         * @enum {string}
+         */
+        TransactionType: "income" | "expense";
         /** ValidationError */
         ValidationError: {
             /** Location */
@@ -493,6 +632,198 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    _list_transactions_api_finance_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListTransactionsResponseDTO"];
+                };
+            };
+        };
+    };
+    _create_transaction_api_finance_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MaintainTransactionRequestDTO"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    _list_transactions_api_finance__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListTransactionsResponseDTO"];
+                };
+            };
+        };
+    };
+    _create_transaction_api_finance__post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MaintainTransactionRequestDTO"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    _update_transaction_api_finance__transaction_id__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                transaction_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MaintainTransactionRequestDTO"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    _delete_transaction_api_finance__transaction_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                transaction_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_sankey_api_finance_sankey_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetSankeyResponseDTO"];
                 };
             };
         };

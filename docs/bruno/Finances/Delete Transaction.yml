@@ -1,0 +1,19 @@
+info:
+  name: Delete Transaction
+  type: http
+  seq: 4
+
+http:
+  method: DELETE
+  url: "{{api_url}}/finance/:id"
+  params:
+    - name: id
+      value: 44f5631e-2f56-4fa8-80dd-22d79e5898b9
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

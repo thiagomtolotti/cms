@@ -48,7 +48,7 @@ function RouteComponent() {
           </nav>
         </aside>
 
-        <section className="min-w-0 rounded-2xl border border-border bg-background p-2 xl:p-6 md:p-8 col-span-2 xl:col-span-1">
+        <section className="min-w-0 rounded-2xl border border-border bg-background p-6 md:p-8 col-span-2 xl:col-span-1">
           <Outlet />
         </section>
       </main>

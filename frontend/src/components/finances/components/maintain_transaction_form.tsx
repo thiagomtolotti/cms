@@ -50,11 +50,14 @@ export default function MaintainTransactionForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-8 grid grid-cols-2 gap-6">
+    <form
+      onSubmit={handleSubmit}
+      className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6"
+    >
       <Input
         name="description"
         placeholder="Descrição"
-        className="col-span-2"
+        className="md:col-span-2"
         defaultValue={transaction?.description}
         required
       />
@@ -83,7 +86,7 @@ export default function MaintainTransactionForm({
 
       <TransactionTypeSelect defaultValue={transaction?.type} />
 
-      <div className="col-span-2 ml-auto mt-4">
+      <div className="md:col-span-2 ml-auto mt-4">
         <Button type="submit">{buttonLabel}</Button>
       </div>
     </form>
@@ -97,7 +100,7 @@ interface TransactionTypeSelectProps {
 function TransactionTypeSelect({ defaultValue }: TransactionTypeSelectProps) {
   return (
     <RadioGroup
-      className="flex gap-8"
+      className="flex gap-8 justify-end"
       defaultValue={defaultValue || "income"}
       name="transactionType"
       required

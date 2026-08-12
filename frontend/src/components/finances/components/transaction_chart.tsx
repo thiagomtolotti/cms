@@ -54,7 +54,7 @@ function MyCustomSankeyNode({
         x={isOut ? x - 6 : x + width + 6}
         y={y + height / 2}
         fontSize="14"
-        stroke={"var(--color-muted-foreground)"}
+        fill={"var(--color-muted-foreground)"}
       >
         {payload.name}
       </text>
@@ -63,8 +63,7 @@ function MyCustomSankeyNode({
         x={isOut ? x - 6 : x + width + 6}
         y={y + height / 2 + 13}
         fontSize="12"
-        stroke={"var(--color-muted-foreground)"}
-        strokeOpacity="0.5"
+        fill={"var(--color-muted-foreground)"}
       >
         {`R$ ${payload.value}`}
       </text>
@@ -82,7 +81,7 @@ const SankeyCustomNodeExample = () => {
       <Sankey
         data={data}
         node={MyCustomSankeyNode}
-        nodePadding={50 - data.links.length * 4}
+        nodePadding={Math.max(30, 50 - data.links.length * 4)}
         margin={{
           bottom: 30,
         }}

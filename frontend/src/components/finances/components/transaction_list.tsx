@@ -38,8 +38,8 @@ export default function TransactionList() {
   const { data } = useListTransactions();
 
   return (
-    <div className="rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground">
-      <Table>
+    <div className="rounded-xl border border-dashed border-border p-2 xl:p-6 text-sm text-muted-foreground w-full">
+      <Table className="text-xs xl:text-sm xl:[&_td]:px-0 max-md:hidden">
         <TableCaption>Lista de transações</TableCaption>
         <TableHeader>
           <TableRow>

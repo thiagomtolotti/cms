@@ -9,6 +9,7 @@ import {
 import type { NodeProps } from "recharts/types/chart/Sankey";
 
 import useSankeyData from "../hooks/useSankeyData";
+import useScreenWidth from "@/hooks/useScreenWidth";
 
 function MyCustomSankeyNode({
   x,
@@ -54,7 +55,7 @@ function MyCustomSankeyNode({
         x={isOut ? x - 6 : x + width + 6}
         y={y + height / 2}
         fontSize="14"
-        stroke={"var(--color-muted-foreground)"}
+        fill={"var(--color-muted-foreground)"}
       >
         {payload.name}
       </text>
@@ -63,8 +64,7 @@ function MyCustomSankeyNode({
         x={isOut ? x - 6 : x + width + 6}
         y={y + height / 2 + 13}
         fontSize="12"
-        stroke={"var(--color-muted-foreground)"}
-        strokeOpacity="0.5"
+        fill={"var(--color-muted-foreground)"}
       >
         {`R$ ${payload.value}`}
       </text>
@@ -72,17 +72,44 @@ function MyCustomSankeyNode({
   );
 }
 
+const graphRatio: Record<number, number> = {
+  480: 0.5,
+  768: 1,
+  1080: 2,
+};
+
+function getGraphRatio(width: number = window.innerWidth): number {
+  const breakpoints = Object.keys(graphRatio)
+    .map((key) => parseInt(key))
+    .sort((a, b) => a - b);
+
+  for (const breakpoint of breakpoints) {
+    if (width <= breakpoint) {
+      return graphRatio[breakpoint];
+    }
+  }
+
+  return 2;
+}
+
 const SankeyCustomNodeExample = () => {
+  const screenWidth = useScreenWidth();
+  const aspectRatio = getGraphRatio(screenWidth);
+
   const { data } = useSankeyData();
 
   if (!data) return "Carregando...";
 
   return (
-    <ResponsiveContainer width="100%" aspect={2} className="px-12 my-8">
+    <ResponsiveContainer
+      width="100%"
+      className="px-2 lg:px-12 my-8 overflow-hidden"
+      aspect={aspectRatio}
+    >
       <Sankey
         data={data}
         node={MyCustomSankeyNode}
-        nodePadding={50}
+        nodePadding={Math.max(30, 50 - data.links.length * 4)}
         margin={{
           bottom: 30,
         }}

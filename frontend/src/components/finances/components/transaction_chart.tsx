@@ -71,13 +71,38 @@ function MyCustomSankeyNode({
   );
 }
 
+const graphRatio: Record<number, number> = {
+  480: 0.5,
+  768: 0.75,
+  1080: 2,
+};
+
 const SankeyCustomNodeExample = () => {
   const { data } = useSankeyData();
+
+  function getGraphRatio() {
+    const width = window.innerWidth;
+    const breakpoints = Object.keys(graphRatio)
+      .map((key) => parseInt(key))
+      .sort((a, b) => a - b);
+
+    for (const breakpoint of breakpoints) {
+      if (width <= breakpoint) {
+        return graphRatio[breakpoint];
+      }
+    }
+
+    return 2;
+  }
 
   if (!data) return "Carregando...";
 
   return (
-    <ResponsiveContainer width="100%" aspect={2} className="px-12 my-8">
+    <ResponsiveContainer
+      width="100%"
+      aspect={getGraphRatio()}
+      className="px-2 lg:px-12 my-8 overflow-hidden"
+    >
       <Sankey
         data={data}
         node={MyCustomSankeyNode}

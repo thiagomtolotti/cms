@@ -17,16 +17,12 @@ export default function transformSankeyData(
     nodes.push({ name: node.label });
   });
 
-  apiData.nodes.forEach((node) => {
-    if (node.targets) {
-      node.targets.forEach((target) => {
-        links.push({
-          source: nodeMap[node.id],
-          target: nodeMap[target.id],
-          value: target.value,
-        });
-      });
-    }
+  apiData.links.forEach((link) => {
+    links.push({
+      source: nodeMap[link.source],
+      target: nodeMap[link.target],
+      value: link.value,
+    });
   });
 
   return { nodes, links };

@@ -32,16 +32,17 @@ class ListTransactionsResponseDTO(BaseModel):
         return cls(transactions=transactions)
 
 
-class SankeyNodeTargetDTO(BaseModel):
-    id: str
-    value: int
-
-
 class SankeyNodeDTO(BaseModel):
     id: str
     label: str
-    targets: list[SankeyNodeTargetDTO]
+
+
+class SankeyLinkDTO(BaseModel):
+    source: str
+    target: str
+    value: int
 
 
 class GetSankeyResponseDTO(BaseModel):
     nodes: list[SankeyNodeDTO]
+    links: list[SankeyLinkDTO]

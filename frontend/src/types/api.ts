@@ -240,6 +240,8 @@ export interface components {
         GetSankeyResponseDTO: {
             /** Nodes */
             nodes: components["schemas"]["SankeyNodeDTO"][];
+            /** Links */
+            links: components["schemas"]["SankeyLinkDTO"][];
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -303,21 +305,21 @@ export interface components {
          * @enum {string}
          */
         PostStatus: "draft" | "published";
+        /** SankeyLinkDTO */
+        SankeyLinkDTO: {
+            /** Source */
+            source: string;
+            /** Target */
+            target: string;
+            /** Value */
+            value: number;
+        };
         /** SankeyNodeDTO */
         SankeyNodeDTO: {
             /** Id */
             id: string;
             /** Label */
             label: string;
-            /** Targets */
-            targets: components["schemas"]["SankeyNodeTargetDTO"][];
-        };
-        /** SankeyNodeTargetDTO */
-        SankeyNodeTargetDTO: {
-            /** Id */
-            id: string;
-            /** Value */
-            value: number;
         };
         /** Transaction */
         Transaction: {

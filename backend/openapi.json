@@ -666,11 +666,19 @@
             },
             "type": "array",
             "title": "Nodes"
+          },
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/SankeyLinkDTO"
+            },
+            "type": "array",
+            "title": "Links"
           }
         },
         "type": "object",
         "required": [
-          "nodes"
+          "nodes",
+          "links"
         ],
         "title": "GetSankeyResponseDTO"
       },
@@ -832,6 +840,29 @@
         ],
         "title": "PostStatus"
       },
+      "SankeyLinkDTO": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "target": {
+            "type": "string",
+            "title": "Target"
+          },
+          "value": {
+            "type": "integer",
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source",
+          "target",
+          "value"
+        ],
+        "title": "SankeyLinkDTO"
+      },
       "SankeyNodeDTO": {
         "properties": {
           "id": {
@@ -841,40 +872,14 @@
           "label": {
             "type": "string",
             "title": "Label"
-          },
-          "targets": {
-            "items": {
-              "$ref": "#/components/schemas/SankeyNodeTargetDTO"
-            },
-            "type": "array",
-            "title": "Targets"
           }
         },
         "type": "object",
         "required": [
           "id",
-          "label",
-          "targets"
+          "label"
         ],
         "title": "SankeyNodeDTO"
-      },
-      "SankeyNodeTargetDTO": {
-        "properties": {
-          "id": {
-            "type": "string",
-            "title": "Id"
-          },
-          "value": {
-            "type": "integer",
-            "title": "Value"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "value"
-        ],
-        "title": "SankeyNodeTargetDTO"
       },
       "Transaction": {
         "properties": {

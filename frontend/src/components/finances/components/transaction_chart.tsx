@@ -74,6 +74,7 @@ const SankeyCustomNodeExample = () => {
           bottom: 30,
         }}
         link={{ stroke: "var(--color-muted-foreground)" }}
+        align="left"
       >
         <Tooltip />
       </Sankey>

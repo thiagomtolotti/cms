@@ -82,7 +82,7 @@ const SankeyCustomNodeExample = () => {
       <Sankey
         data={data}
         node={MyCustomSankeyNode}
-        nodePadding={50}
+        nodePadding={50 - data.links.length * 4}
         margin={{
           bottom: 30,
         }}

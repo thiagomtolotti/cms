@@ -28,7 +28,7 @@ export default function MaintainTransaction({
     <Dialog onOpenChange={setIsOpen} open={isOpen}>
       <DialogTrigger render={render} />
 
-      <DialogContent className="max-sm:w-screen max-sm:h-screen max-sm:max-w-none! max-sm:rounded-none">
+      <DialogContent className="max-sm:w-dvw max-sm:h-dvh max-sm:max-w-none! max-sm:rounded-none">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
 

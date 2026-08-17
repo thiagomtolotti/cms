@@ -541,7 +541,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/PingResponseDTO"
+                }
               }
             }
           }
@@ -799,6 +801,24 @@
           "category"
         ],
         "title": "MaintainTransactionRequestDTO"
+      },
+      "PingResponseDTO": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version"
+          }
+        },
+        "type": "object",
+        "required": [
+          "message",
+          "version"
+        ],
+        "title": "PingResponseDTO"
       },
       "PostMetadataResponseDTO": {
         "properties": {

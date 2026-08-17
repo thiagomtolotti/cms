@@ -8,6 +8,8 @@ from .core.constants import DATA_PATH
 from .core.db.migrate import migrate_sqlite
 from .core.dependencies import finances_router, post_router
 from .core.exceptions import DomainError
+from .core.settings import settings
+from .types import PingResponseDTO
 
 migrate_sqlite()
 
@@ -19,8 +21,11 @@ api_router.include_router(finances_router)
 
 
 @api_router.get("/")
-def ping():
-    return {"message": "CMS service is alive!"}
+def ping() -> PingResponseDTO:
+    return PingResponseDTO(
+        message="CMS service is alive!",
+        version=settings.app_version,
+    )
 
 
 app.include_router(api_router)

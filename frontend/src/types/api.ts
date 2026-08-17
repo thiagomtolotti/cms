@@ -288,6 +288,13 @@ export interface components {
             /** Category */
             category: string | null;
         };
+        /** PingResponseDTO */
+        PingResponseDTO: {
+            /** Message */
+            message: string;
+            /** Version */
+            version: string;
+        };
         /** PostMetadataResponseDTO */
         PostMetadataResponseDTO: {
             /** Title */
@@ -843,7 +850,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["PingResponseDTO"];
                 };
             };
         };

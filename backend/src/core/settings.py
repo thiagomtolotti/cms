@@ -5,6 +5,8 @@ from src.core.constants import ROOT_PATH
 
 
 class Settings(BaseSettings):
+    app_version: str = Field(validation_alias="APP_VERSION")
+
     keycloak_base_url: str = Field(validation_alias="VITE_KEYCLOAK_BASE_URL")
     keycloak_realm: str = Field(validation_alias="VITE_KEYCLOAK_REALM")
     keycloak_client_id: str = Field(validation_alias="VITE_KEYCLOAK_CLIENT_ID")
